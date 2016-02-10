@@ -5,3 +5,17 @@
   <li>Password is {{u.password}}</li>
 {% endfor %}
 </ul>
+<!--
+  @param form_user_name will be used to check the username in the database
+  @param orm_password will be used to check for a password  for this username
+-->
+<form method="post">
+  {% csrf_token %}
+  <label for="sign_in">Username</label>
+  <input type="text" placeholder="Username" name="username" >
+</br>
+  <label for="sign_in">Password</label>
+  <input type="password" placeholder="Password" name="password" >
+</br>
+  <button type="submit">Submit</button>
+</form>
