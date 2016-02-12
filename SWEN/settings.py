@@ -32,7 +32,6 @@ ALLOWED_HOSTS = []
 INSTALLED_APPS = [
     'HealthNet.apps.HealthnetConfig',
     'django.contrib.admin',
-    'twitter_bootstrap',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
