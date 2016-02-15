@@ -38,7 +38,6 @@ for user_name,patient in zip(patient_user_name,patient_data):
             'first_name':patient['first_name'],
             'last_name':patient['last_name'],
             'password':str(uuid.uuid1()).split("-")[0],
-            'user_id':str(uuid.uuid1()),
             'username':user_name,
         }
         json.dump(names,out,indent=2)
@@ -50,7 +49,6 @@ for user_name,doctor in zip(doctor_user_name,doctor_data):
             'first_name':doctor['first_name'],
             'last_name':doctor['last_name'],
             'password':str(uuid.uuid1()).split("-")[0],
-            'user_id':str(uuid.uuid1()),
             'username':user_name,
         }
         json.dump(name,out,indent=2)
