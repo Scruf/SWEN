@@ -1,0 +1,13 @@
+<ul>
+  {% for u in users %}
+    <li>{{u.user_name}}</li>
+    <li>{{u.password}}</li>
+  {%endfor%}
+</ul>
+
+<form method="POST" action="thankyou/">
+  {%csrf_token%}
+  User Name<input type="text" name="username">
+  Password<input type="password" name="password">
+  <button type="submit">Log In</button>
+</form>
