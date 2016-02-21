@@ -44,7 +44,7 @@ for patient in patient_user_name:
 
 for user_name,patient in zip(patient_user_name,patient_data):
     random_int = random.randint(0,len(diases_data)-1)
-    random_hospital = random.randint(0,len(hospital_names))
+    random_hospital = random.randint(0,len(hospital_names)-1)
     with open('patient_data.json','a') as out:
 
         names ={
@@ -57,7 +57,7 @@ for user_name,patient in zip(patient_user_name,patient_data):
             'cell_phone':cell_phone(),
             'diases':diases_data[random_int]['disease_name'],
             'symptoms':diases_data[random_int]['symptoms'],
-            'hospital_name':''.join(hospital_names[random_hospital]),
+            'hospital_name':''.join(hospital_names[random_hospital]['name']),
         }
         json.dump(names,out,indent=2)
 
@@ -72,6 +72,6 @@ for user_name,doctor in zip(doctor_user_name,doctor_data):
             'password':str(uuid.uuid1()).split("-")[0],
             'username':user_name,
             'cell_phone':cell_phone(),
-            'hospital_name':''.join(hospital_names[random_int]),
+            'hospital_name':''.join(hospital_names[random_int]['name']),
         }
         json.dump(name,out,indent=2)

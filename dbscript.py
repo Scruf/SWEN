@@ -2,12 +2,17 @@ import json
 from pprint import pprint
 import sqlite3
 
-with  open('log.json') as data_file:
-    data = json.load(data_file)
+
+data_list = []
+with  open('patient_data.json') as data_file:
+    data_list = json.load(data_file)
 
 
-print data
+
 conn = sqlite3.connect('db.sqlite3')
 cursor = conn.cursor()
-for data in cursor.execute('SELECT * from HealthNet_patient'):
-    print data
+cursor.execute("SELECT name FROM sqlite_master WHERE type='table';")
+print(cursor.fetchall())
+for enterie in data_list:
+    print enterie
+    # cursor.execute("INSERT INTO HealthNet_patien VALUES()")
