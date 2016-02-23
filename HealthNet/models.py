@@ -20,4 +20,9 @@ class  Patient(models.Model):
     def __str__(self):
         return self.user_name+"-"+self.password
 
+
+class Hospital(models.Model):
+    hospital_name = models.CharField(max_length=20)
+    patients =  models.CharField(max_length=60)
+
 # Create your models here.

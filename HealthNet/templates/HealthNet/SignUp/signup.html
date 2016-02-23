@@ -1,0 +1,27 @@
+<link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+ <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
+ <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+
+
+<form method="POST" action="register/">
+  {%csrf_token%}
+    User Name<input type="text" name="username"><br>
+    Password<input type="text" placeholder="password" name="password"><br>
+    First Name<input type="text" name="first_name"><br>
+    Last Name<input type="text" name="last_name"><br>
+    Email<input type="text" name="email"><br>
+    Cellphone<input type="text" name="cell_phone"><br>
+    Symptoms<input type="text" name="symptoms"><br>
+    <button type="Submit" class="btn btn-primary dropdown-toggle">Register</button>
+</form>
+    <!--<div class="dropdown">
+    <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">Hospitals
+    <span class="caret"></span></button>
+      <ul class="dropdown-menu">
+        {%for h in hospitals%}
+          <li>{{h.hospital_name}}</li>
+        {%endfor%}
+      </ul>
+        <button type="Submit" class="btn btn-primary dropdown-toggle">Register</button>
+    </div>
+  -->

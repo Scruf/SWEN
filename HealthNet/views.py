@@ -1,8 +1,11 @@
-from django.shortcuts import render,get_object_or_404
+from django.shortcuts import render,get_object_or_404,redirect
 from django.http import HttpResponse
 from django.template import loader
-from .models import Patient
+from .models import Patient,Hospital
 from django.contrib.auth import authenticate, login
+import random
+import uuid
+
 
 # Create your views here.
 
@@ -33,6 +36,7 @@ def thankyou(request):
     if request.method=='POST':
         user_name = request.POST.get('username',None)
         password = request.POST.get('password',None)
+        hospital_data = []
         try:
             t = Patient.objects.get(user_name=user_name,password=password)
             context ={
@@ -46,3 +50,27 @@ def thankyou(request):
             }
             failure_template = loader.get_template('HealthNet/failure.html')
             return HttpResponse(failure_template.render(context,request))
+
+def signup(request):
+    sign_up_template = loader.get_template('HealthNet/SignUp/signup.html')
+    hospital = Hospital.objects.all()
+    context = {
+        "hospitals":hospital,
+    }
+    return HttpResponse(sign_up_template.render(context,request))
+
+def register(request):
+    if request.method == 'POST':
+        username = request.POST.get('username',None)
+        password = request.POST.get('password',None)
+        first_name = request.POST.get('first_name',None)
+        last_name = request.POST.get('last_name',None)
+        email = request.POST.get('email',None)
+        cell_phone = request.POST.get('cell_phone',None)
+        symptoms = request.POST.get('symptoms',None)
+        hostpitals = Hospital.objects.all()
+        random_hospital = random.randint(0,len(hostpitals)-1)
+        hospital_name = Hospital.objects.get(pk=random_hospital).hospital_name
+        p = Patient(user_name=username,password=password,first_name=first_name,last_name=last_name,email=email,user_id=uuid.uuid1(),diases_name=" ",symptoms=symptoms,cell_phone=cell_phone,hospital_name=hospital_name)
+        p.save()
+        return redirect('/HealthNet/',None)
