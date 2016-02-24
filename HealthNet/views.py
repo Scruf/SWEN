@@ -5,7 +5,7 @@ from .models import Patient,Hospital
 from django.contrib.auth import authenticate, login
 import random
 import uuid
-
+import json
 
 # Create your views here.
 
@@ -22,6 +22,7 @@ def index(request):
 #on fail it will gennerate fail message
 #on succes it will generate succes
 def sign_in(request):
+
     sign_in_template = loader.get_template('HealthNet/signin.html')
     users = Patient.objects.all()
     context={
@@ -54,6 +55,7 @@ def thankyou(request):
 def signup(request):
     sign_up_template = loader.get_template('HealthNet/SignUp/signup.html')
     hospital = Hospital.objects.all()
+
     context = {
         "hospitals":hospital,
     }
