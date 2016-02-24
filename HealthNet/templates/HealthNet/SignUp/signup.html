@@ -6,13 +6,16 @@
 <form method="POST" action="register/">
   {%csrf_token%}
     User Name<input type="text" name="username"><br>
-    Password<input type="text" placeholder="password" name="password"><br>
+    Password<input type="password"  name="password"><br>
     First Name<input type="text" name="first_name"><br>
     Last Name<input type="text" name="last_name"><br>
     Email<input type="text" name="email"><br>
     Cellphone<input type="text" name="cell_phone"><br>
     Symptoms<input type="text" name="symptoms"><br>
-    
+    Hospital<br>
+      {%for h in hospitals%}
+        <input type="radio" name="hospital" value="{{h.hospital_name}}">{{h.hospital_name}}<br>
+      {%endfor%}
     <button type="Submit" class="btn btn-primary dropdown-toggle">Register</button>
 </form>
     <!--<div class="dropdown">

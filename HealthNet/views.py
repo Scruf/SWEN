@@ -1,3 +1,4 @@
+
 from django.shortcuts import render,get_object_or_404,redirect
 from django.http import HttpResponse
 from django.template import loader
@@ -12,6 +13,27 @@ import json
 #Its is not index  I just created this controller to test sign in
 def index(request):
     users = Patient.objects.all()
+
+    hospitals = Hospital.objects.all()
+    hospital_list = []
+    for h in hospitals:
+        hospital_list.append(h.hospital_name)
+
+    for patient in users:
+        random_hospital = random.randint(0,len(hospital_list)-1)
+        if patient.hospital_name not in hospital_list:
+            patient = Patient(user_name = patient.user_name, \
+                              password = patient.password, \
+                              first_name = patient.first_name, \
+                              last_name = patient.last_name, \
+                              email = patient.email, \
+                              user_id = patient.user_id, \
+                              diases_name = patient.diases_name, \
+                              symptoms = patient.symptoms, \
+                              cell_phone = patient.cell_phone, \
+                              hospital_name = hospital_list[random_hospital])
+            patient.save()
+
     template = loader.get_template('HealthNet/index.html')
     context = {
         'users':users,
@@ -55,7 +77,6 @@ def thankyou(request):
 def signup(request):
     sign_up_template = loader.get_template('HealthNet/SignUp/signup.html')
     hospital = Hospital.objects.all()
-
     context = {
         "hospitals":hospital,
     }
@@ -70,9 +91,7 @@ def register(request):
         email = request.POST.get('email',None)
         cell_phone = request.POST.get('cell_phone',None)
         symptoms = request.POST.get('symptoms',None)
-        hostpitals = Hospital.objects.all()
-        random_hospital = random.randint(0,len(hostpitals)-1)
-        hospital_name = Hospital.objects.get(pk=random_hospital).hospital_name
+        hospital_name = request.POST.get('hospital',None)
         p = Patient(user_name=username,password=password,first_name=first_name,last_name=last_name,email=email,user_id=uuid.uuid1(),diases_name=" ",symptoms=symptoms,cell_phone=cell_phone,hospital_name=hospital_name)
         p.save()
         return redirect('/HealthNet/',None)
