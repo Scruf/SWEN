@@ -13,27 +13,6 @@ import json
 #Its is not index  I just created this controller to test sign in
 def index(request):
     users = Patient.objects.all()
-
-    hospitals = Hospital.objects.all()
-    hospital_list = []
-    for h in hospitals:
-        hospital_list.append(h.hospital_name)
-
-    for patient in users:
-        random_hospital = random.randint(0,len(hospital_list)-1)
-        if patient.hospital_name not in hospital_list:
-            patient = Patient(user_name = patient.user_name, \
-                              password = patient.password, \
-                              first_name = patient.first_name, \
-                              last_name = patient.last_name, \
-                              email = patient.email, \
-                              user_id = patient.user_id, \
-                              diases_name = patient.diases_name, \
-                              symptoms = patient.symptoms, \
-                              cell_phone = patient.cell_phone, \
-                              hospital_name = hospital_list[random_hospital])
-            patient.save()
-
     template = loader.get_template('HealthNet/index.html')
     context = {
         'users':users,

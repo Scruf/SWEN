@@ -1,24 +1,79 @@
 <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
- <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
- <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
+<script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+{% load staticfiles %}
+<link rel="stylesheet" type="text/css" href="{% static 'HealthNet/css/sign_up' %}">
 
+<div class="container">
+    <div class="row centered-form">
+        <div class="col-xs-12 col-sm-8 col-md-4 col-sm-offset-2 col-md-offset-4">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h3 class="panel-title">Please sign Up <small>It's free!</small></h3>
+                </div>
+                <div class="panel-body">
+                    <form method="POST" action="register/" role="form">
+                          {%csrf_token%}
+                        <div class="form-group">
+                            <input type="text" name="username" id="username" class="form-control input sm" placeholder="Username">
+                        </div>
+                        <div class="row">
+                            <div class="col-xs-6 col-sm-6 col-md-6">
+                                <div class="form-group">
+                                    <input type="text" name="first_name" id="first_name" class="form-control input-sm" placeholder="First Name">
+                                </div>
+                            </div>
+                            <div class="col-xs-6 col-sm-6 col-md-6">
+                                <div class="form-group">
+                                    <input type="text" name="last_name" id="last_name" class="form-control input-sm" placeholder="Last Name">
+                                </div>
+                            </div>
+                        </div>
 
-<form method="POST" action="register/">
-  {%csrf_token%}
-    User Name<input type="text" name="username"><br>
-    Password<input type="password"  name="password"><br>
-    First Name<input type="text" name="first_name"><br>
-    Last Name<input type="text" name="last_name"><br>
-    Email<input type="text" name="email"><br>
-    Cellphone<input type="text" name="cell_phone"><br>
-    Symptoms<input type="text" name="symptoms"><br>
-    Hospital<br>
-      {%for h in hospitals%}
-        <input type="radio" name="hospital" value="{{h.hospital_name}}">{{h.hospital_name}}<br>
-      {%endfor%}
-    <button type="Submit" class="btn btn-primary dropdown-toggle">Register</button>
-</form>
-    <!--<div class="dropdown">
+                        <div class="form-group">
+                            <input type="email" name="email" id="email" class="form-control input-sm" placeholder="Email Address">
+                        </div>
+
+                        <div class="row">
+                            <div class="col-xs-6 col-sm-6 col-md-6">
+                                <div class="form-group">
+                                    <input type="password" name="password" id="password" class="form-control input-sm" placeholder="Password">
+                                </div>
+                            </div>
+                            <div class="col-xs-6 col-sm-6 col-md-6">
+                                <div class="form-group">
+                                    <input type="password" name="password_confirmation" id="password_confirmation" class="form-control input-sm" placeholder="Confirm Password">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <input type="text" name="cell_phone" id="cell_phone" class="form-control input-sm" placeholder="Cell Phone Number">
+                        </div>
+                        <div class="form-group">
+                            <input type="text" name="symptoms" id="symptoms" class="form-control input-sm" placeholder="Symptoms">
+                        </div>
+                        <div class="form-group">
+                            <div class="dropdown">
+                                <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                                    Hospitals
+                                    <span class="caret"></span>
+                                </button>
+                                <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
+                                  {%for h in hospitals%}
+                                    <input type="radio" name="hospital" value="{{h.hospital_name}}">{{h.hospital_name}}<br>
+                                  {%endfor%}
+                                </ul>
+                            </div>
+                        </div>
+                        <input type="submit" value="Register" class="btn btn-info btn-block">
+
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!--<div class="dropdown">
     <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">Hospitals
     <span class="caret"></span></button>
       <ul class="dropdown-menu">
