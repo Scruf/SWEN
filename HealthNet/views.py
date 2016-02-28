@@ -14,7 +14,7 @@ import json
 def index(request):
     users = Patient.objects.all()
     template = loader.get_template('HealthNet/index.html')
-    hospitals = Hospital.objects.all()
+    hospital_list = []
     context = {
         'users':users,
     }
@@ -72,6 +72,12 @@ def register(request):
         cell_phone = request.POST.get('cell_phone',None)
         symptoms = request.POST.get('symptoms',None)
         hospital_name = request.POST.get('hospital',None)
-        p = Patient(user_name=username,password=password,first_name=first_name,last_name=last_name,email=email,user_id=uuid.uuid1(),diases_name=" ",symptoms=symptoms,cell_phone=cell_phone,hospital_name=hospital_name)
-        
+        hospital_keys = []
+        hospital = Hospitals.objects.all()
+        for h in hospital:
+            hospital_keys.append(h.id)
+        random_hospital = random.randint(0,len(hospital_keys)-1)
+        p = Patient(user_name=username,password=password,first_name=first_name,last_name=last_name,email=email,user_id=uuid.uuid1(),diases_name=" ",symptoms=symptoms,cell_phone=cell_phone,hospital_name=hospital.get(pk=random_hospital).hospital_name)
+        p.save()
+
         return redirect('/HealthNet/',None)
