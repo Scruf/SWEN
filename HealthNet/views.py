@@ -55,7 +55,7 @@ def thankyou(request):
             return HttpResponse(failure_template.render(context,request))
 
 def signup(request):
-    sign_up_template = loader.get_template('HealthNet/SignUp/signup.html')
+    sign_up_template = loader.get_template('HealthNet/signup.html')
     hospital = Hospital.objects.all()
     context = {
         "hospitals":hospital,
@@ -72,12 +72,15 @@ def register(request):
         cell_phone = request.POST.get('cell_phone',None)
         symptoms = request.POST.get('symptoms',None)
         hospital_name = request.POST.get('hospital',None)
+        address = request.POST.get('address',None)
+        insuarance = request.POST.get('insuarance_number',None)
         hospital_keys = []
-        hospital = Hospitals.objects.all()
+        hospital = Hospital.objects.all()
         for h in hospital:
             hospital_keys.append(h.id)
         random_hospital = random.randint(0,len(hospital_keys)-1)
-        p = Patient(user_name=username,password=password,first_name=first_name,last_name=last_name,email=email,user_id=uuid.uuid1(),diases_name=" ",symptoms=symptoms,cell_phone=cell_phone,hospital_name=hospital.get(pk=random_hospital).hospital_name)
-        p.save()
+        p = Patient(user_name=username,password=password,first_name=first_name,last_name=last_name,email=email,user_id=uuid.uuid1(),diases_name=" ",symptoms=symptoms,cell_phone=cell_phone,hospital_name=hospital.get(pk=hospital_keys[random_hospital]).hospital_name,\
+                    address = address,insuarance_number=insuarance)
+        #p.save()
 
         return redirect('/HealthNet/',None)
