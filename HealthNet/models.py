@@ -27,5 +27,9 @@ class Hospital(models.Model):
     doctors = models.TextField()
     stuff = models.TextField()
 
+    def __str__(self):
+        return self.hospital_name+"-"+self.patients
+
+
 
 # Create your models here.
