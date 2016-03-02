@@ -17,6 +17,8 @@ class  Patient(models.Model):
     hospital_name = models.CharField(max_length=250)
     address = models.CharField(max_length=250)
     insuarance_number = models.CharField(max_length=250)
+    gender = models.CharField(max_length=250)
+    
     def __str__(self):
         return self.user_name+"-"+self.password
 
