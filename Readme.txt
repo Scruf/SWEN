@@ -1,5 +1,5 @@
 Healthnet is a web application which makes interactions with various activities at hospitals much easier.
-
+//jdjsakldjklsajkltesting
 Some of its many functions from a patient end are as follows:
 -Allows a patient to interact with the doctors and nurses online via notifications.
 -Allows patients to schedule, edit, cancel appointments with the doctors.
@@ -45,5 +45,3 @@ Administrator access:
 --daily income
 -list of staff
 administrators need not to create a profile or sign up.
-
-
