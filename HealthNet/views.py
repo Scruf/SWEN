@@ -54,6 +54,8 @@ def thankyou(request):
             failure_template = loader.get_template('HealthNet/failure.html')
             return HttpResponse(failure_template.render(context,request))
 
+#signup prompts the user to sign up with their name and contact information and to provide
+#a unique username and password for their account
 def signup(request):
     sign_up_template = loader.get_template('HealthNet/signup.html')
     hospital = Hospital.objects.all()
@@ -62,6 +64,8 @@ def signup(request):
     }
     return HttpResponse(sign_up_template.render(context,request))
 
+#register takes in the user's information given in signup and creates a new user
+#with the information provided
 def register(request):
     if request.method == 'POST':
         username = request.POST.get('username',None)
