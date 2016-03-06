@@ -1,3 +1,8 @@
+first run python manage.py migrate
+after you can log in with an email:groot@groot.com
+                             password:"root"(without quotation marks)
+Sign Up is working but its not verifying
+Do not touch it yet
 Healthnet is a web application which makes interactions with various activities at hospitals much easier.
 
 Some of its many functions from a patient end are as follows:

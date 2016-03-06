@@ -26,33 +26,24 @@ def index(request):
 def sign_in(request):
 
     sign_in_template = loader.get_template('HealthNet/signin.html')
-    users = Patient.objects.all()
-    context={
-        'users':users,
-    }
-    return HttpResponse(sign_in_template.render(context,request))
+    return HttpResponse(sign_in_template.render(None,request))
 
 
 #thank you controller will check if the user is valid
 #In future it will alsoe validate if the login person is a doctor or a Patient
 def thankyou(request):
     if request.method=='POST':
-        user_name = request.POST.get('username',None)
+        email = request.POST.get('email',None)
         password = request.POST.get('password',None)
-        hospital_data = []
         try:
-            t = Patient.objects.get(user_name=user_name,password=password)
+            t = Patient.objects.get(email=email,password=password)
             context ={
-                'user_name':user_name,
+                'user_name':email,
             }
             success_template = loader.get_template('HealthNet/success.html')
             return HttpResponse(success_template.render(context,request))
         except Patient.DoesNotExist:
-            context = {
-                'user_name':user_name,
-            }
-            failure_template = loader.get_template('HealthNet/failure.html')
-            return HttpResponse(failure_template.render(context,request))
+            return HttpResponse(str(email))
 
 #signup prompts the user to sign up with their name and contact information and to provide
 #a unique username and password for their account
@@ -85,6 +76,6 @@ def register(request):
         random_hospital = random.randint(0,len(hospital_keys)-1)
         p = Patient(user_name=username,password=password,first_name=first_name,last_name=last_name,email=email,user_id=uuid.uuid1(),diases_name=" ",symptoms=symptoms,cell_phone=cell_phone,hospital_name=hospital.get(pk=hospital_keys[random_hospital]).hospital_name,\
                     address = address,insuarance_number=insuarance)
-        #p.save()
+        p.save()
 
         return redirect('/HealthNet/',None)

@@ -33,13 +33,14 @@
           <a class="navbar-brand" href="#">HealthNet</a>
         </div>
         <div id="navbar" class="navbar-collapse collapse">
+
           <form method="POST" action="thankyou/" class="navbar-form navbar-right">
           {%csrf_token%}
             <div class="form-group">
-              <input type="text" placeholder="Email" class="form-control" name="username">
+              <input name="email" type="text" placeholder="Email" class="form-control">
             </div>
             <div class="form-group">
-              <input type="password" placeholder="Password" class="form-control" name="password">
+              <input name="password" type="password" placeholder="Password" class="form-control">
             </div>
             <button type="submit" class="btn btn-success">Sign in</button>
 
