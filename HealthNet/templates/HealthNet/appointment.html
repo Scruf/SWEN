@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>HealthNet</title>
+</head>
+<body>
+
+<div class="col-md-4">
+<div class="well">
+
+    <div class="well-header">Book your appointment online</div>
+    <hr>
+   <p class="header_p">Even though walk-ins are welcome,
+    we encourage you to contact us via the form below to
+    set your appointment. You will be contacted within 24 hours
+    for confirmation.</p>
+    <hr>
+
+    <!-- Contact by Input -->
+    <div class="form-group1">
+      <label for="Select">Contact by:</label>
+      <select id="Select" class="form-control"><option>Email</option><option>Phone</option></select>
+    </div>
+
+    <!-- fullname Input -->
+    <div class="form-group1">
+        <label for="inputfullname"></label>
+        <input type="fullname" class="form-control" id="inputFullname" placeholder="Your Name">
+    </div>
+
+    <!-- email address Input -->
+    <div class="form-group1">
+        <label for="inputemail"></label>
+        <input type="email" class="form-control" id="inputemail" placeholder="Your Email">
+    </div>
+
+   <!-- Phone Input -->
+     <div class="form-group1">
+        <label for="inputphone"></label>
+        <input type="phone" class="form-control" id="inputphone" placeholder="Your Phone">
+    </div>
+    <hr>
+  <!-- Appointment date -->
+    <p>Appointment Date:</p>
+
+ <!-- 1st Choice Input -->
+
+
+
+<div class="form-group">
+    <label for="datepicer">1st Choice:</label>
+    <div class="input-group date" id="datetimepicker8">
+    <input type="text" class="form-control">
+    <span class="input-group-addon"><span class="fa fa-calendar"></span></span>
+</div>
+</div>
+
+<style = text/css>
+    .well {
+    width: 100%;
+    border: solid 2px #1A2F34;
+    background-color :#EEEEEE;
+    content:"";
+    z-index:-1;
+
+}
+
+.well-header {
+    font-size: 2em;
+    font-weight: bold;
+    font-family: helvetica Neue;
+    color: #1E2749;
+
+}
+
+#disabledSelect{
+    height: 30px;
+}
+/*
+.form-control {
+    height: 30px;
+}
+*/
+.form-group1 {
+    padding-bottom: 45px;
+    height: 5px;
+}
+
+
+
+#disabledSelect{
+    padding-bottom: 25px;
+}
+
+.input-group-addon,.fa> fa-calendar {
+    color: #1A2F34;
+    background: #1E2749;
+    border: solid 1px #1E2749;
+}
+
+p, label, checkbox {
+    font-size: 1em;
+    font-weight: bold;
+    color: #1E2749;
+
+}
+
+.header_p {
+    font-size: 1.1em;
+}
+
+.btn{
+    color: rgba(198, 156, 0, 1);
+    background: #1E2749;
+    border: solid 1px #1E2749;
+    ;
+}
+
+.help-block {
+    color: #1E2749;
+}
+</style>
+
+
+ <!-- 2nd Choice Input -->
+<div class="form-group">
+    <label for="datepicer">2nd Choice:</label>
+    <div class="input-group date" id="datetimepicker8">
+    <input type="text" class="form-control"><span class="input-group-addon"><span class="fa fa-calendar"></span></span>
+    </div>
+</div>
+
+
+<!-- Service Input -->
+<div class="form-group">
+    <label class="">Reason for Appointment</label>
+</div>
+
+<div class="form-group">
+    <textarea class="form-control" type="textarea" id="message" maxlength="140" rows="7" style="width: 16%"></textarea>
+
+</div>
+
+<!-- Button Area-->
+    <button type="submit" class="btn">Submit</button>
+    <button type="submit" class="btn">Cancel</button><hr>
+
+
+ <!-- form end -->
+</div><!-- well end -->
+</div>
+</body>
+</html>

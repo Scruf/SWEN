@@ -3,7 +3,7 @@ import uuid
 from django.db import models
 
 
-
+#Patient is the model that holds all of a patient's information
 class  Patient(models.Model):
     user_name = models.CharField(max_length=50)
     password = models.CharField(max_length=50)
@@ -22,7 +22,7 @@ class  Patient(models.Model):
     def __str__(self):
         return self.user_name+"-"+self.password
 
-
+#Hospital is the class that holds all of the information about a hospital
 class Hospital(models.Model):
     hospital_name = models.CharField(max_length=20)
     patients =  models.TextField()
@@ -32,6 +32,7 @@ class Hospital(models.Model):
     def __str__(self):
         return self.hospital_name+"-"+self.patients
 
+#Doctor is the class that holds all of the information about a doctor
 class Doctor(models.Model):
     username = models.CharField(max_length=250)
     first_name = models.CharField(max_length=250)
@@ -45,7 +46,7 @@ class Doctor(models.Model):
     def __str__(self):
         return self.username+"-"+self.patients
 
-
+#Apoitment is the class that holds all of the information about appointments
 class Apoitment(models.Model):
     date = models.DateTimeField()
     patients = models.CharField(max_length=250)
