@@ -45,5 +45,3 @@ Administrator access:
 --daily income
 -list of staff
 administrators need not to create a profile or sign up.
-
-
