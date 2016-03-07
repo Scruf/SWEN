@@ -45,7 +45,7 @@
       <file leaf-file-name="profile.html" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/HealthNet/templates/HealthNet/profile.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.14591439">
+            <state vertical-scroll-proportion="2.0914397">
               <caret line="277" column="60" selection-start-line="277" selection-start-column="60" selection-end-line="277" selection-end-column="60" />
               <folding />
             </state>
@@ -642,7 +642,7 @@
     </history-entry>
   </component>
   <component name="ToolWindowManager">
-    <frame x="-10" y="0" width="1930" height="1030" extended-state="0" />
+    <frame x="-10" y="0" width="1930" height="1030" extended-state="1" />
     <editor active="true" />
     <layout>
       <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
@@ -758,7 +758,7 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/HealthNet/templates/HealthNet/profile.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.14591439">
+        <state vertical-scroll-proportion="2.0914397">
           <caret line="277" column="60" selection-start-line="277" selection-start-column="60" selection-end-line="277" selection-end-column="60" />
           <folding />
         </state>
