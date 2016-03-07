@@ -25,8 +25,8 @@ class  Patient(models.Model):
 #Hospital is the class that holds all of the information about a hospital
 class Hospital(models.Model):
     hospital_name = models.CharField(max_length=20)
-    patients =  models.ForeignKey(Patient)
-    doctors = models.ForeignKey(Doctor)
+  #  patients =  models.ForeignKey(Patient)
+  #  doctors = models.ForeignKey(Doctor)
     stuff = models.TextField()
 
     def __str__(self):

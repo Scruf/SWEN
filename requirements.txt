@@ -1,1 +1,0 @@
-django-twitter-bootstrap==3.3.0
