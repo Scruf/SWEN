@@ -125,4 +125,4 @@ STATICFILES_DIRS = [
     #'HealthNet/static/HealthNet',
 ]
 
-STATIC_ROOT = os.path.join(BASE_DIR, "static_cdn")
+STATIC_ROOT = os.path.join(BASE_DIR, "HealthNet/static")
