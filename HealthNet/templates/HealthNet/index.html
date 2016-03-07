@@ -1,27 +1,42 @@
 <!-- index displays the homepage, where users can sign in or sign up -->
 <!DOCTYPE html>
 <html lang="en">
-  <head>
+
+<head>
+
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
     <meta name="description" content="">
     <meta name="author" content="">
 
-
     <title>HealthNet</title>
-    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
-    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap-theme.min.css">
 
+    <!-- Bootstrap Core CSS - Uses Bootswatch Flatly Theme: http://bootswatch.com/flatly/ -->
+    <link href="../static/HealthNet/css/bootstrap.min.css" rel="stylesheet">
 
+    <!-- Custom CSS -->
+    <link href="../static/HealthNet/css/freelancer.css" rel="stylesheet">
+    <link href="../static/HealthNet/css/nolan.css" rel="stylesheet">
 
+    <!-- Custom Fonts -->
+    <link href="../static/HealthNet/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+    <link href="http://fonts.googleapis.com/css?family=Montserrat:400,700" rel="stylesheet" type="text/css">
+    <link href="http://fonts.googleapis.com/css?family=Lato:400,700,400italic,700italic" rel="stylesheet" type="text/css">
 
-  </head>
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
 
-  <body>
+</head>
 
-    <nav class="navbar navbar-inverse navbar-fixed-top">
+<body id="page-top" class="index">
+
+    <!-- Start of MODIFIED NAVBAR -->
+    <nav class="navbar navbar-default navbar-fixed-top">
       <div class="container">
         <div class="navbar-header">
           <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
@@ -33,95 +48,132 @@
           <a class="navbar-brand" href="#">HealthNet</a>
         </div>
         <div id="navbar" class="navbar-collapse collapse">
-
           <form method="POST" action="thankyou/" class="navbar-form navbar-right">
-          {%csrf_token%}
             <div class="form-group">
-              <input name="email" type="text" placeholder="Email" class="form-control">
+              <input type="text" placeholder="Email" class="form-control" name="username">
             </div>
             <div class="form-group">
-              <input name="password" type="password" placeholder="Password" class="form-control">
+              <input type="password" placeholder="Password" class="form-control" name="password">
             </div>
-            <button type="submit" class="btn btn-success">Sign in</button>
-
-              <button type="submit" class ="btn btn-success"><a href="{% url 'signup'%}">Sign Up</a></button>
+            <button type="submit" class="btn btn-success"><a href="{% url 'signup'%}" style="color: white;text-decoration:none;">Sign in</a></button>
+            <button type="submit" class ="btn btn-success"><a href="{% url 'signup'%}" style="color: white;text-decoration:none;">Sign Up</a></button>
           </form>
 
         </div><!--/.navbar-collapse -->
       </div>
     </nav>
+    <!-- End of MODIFIED NAVBAR -->
 
-    <!-- Main jumbotron for a primary marketing message or call to action -->
-    <div class="jumbotron">
-      <div class="container">
-        <h1>Carousel</h1>
-        <p>This is a template for a simple marketing or informational website. It includes a large callout called a jumbotron and three supporting pieces of content. Use it as a starting point to create something more unique.</p>
-        <p><a class="btn btn-primary btn-lg" href="#" role="button">Learn more &raquo;</a></p>
-      </div>
+    <!-- Carousel
+        ================================================== -->
+        <section style="padding: 0 0;"><div class="row" style="padding-top: 110px;">
+        <div id="myCarousel" class="carousel slide">
+          <div class="carousel-inner">
+            <div class="item active">
+              <img src="http://www.pamf.org/findadoctor/feature-locations.jpg">
+              <div class="container">
+                <div class="carousel-caption-new">
+                  <h1>Doctors.</h1>
+                  <p class="lead">HealthNet allows doctors to use a variety of functionalities on healthnet to make their work easy.</p>
+                </div>
+              </div>
+            </div>
+            <div class="item">
+              <img src="https://www.visareporter.com/media-library/foreign-caretakers-nurses-benefit-special-visa-status.jpg" alt="">
+              <div class="container">
+                <div class="carousel-caption-new">
+                  <h1>Nurses.</h1>
+                  <p class="lead">Nurses can access most of the functions on this software but not all.</p>
+                </div>
+              </div>
+            </div>
+            <div class="item">
+              <img src="http://jlewisresearch.com/wp-content/uploads/2014/08/Jordan-River-Patient-3-500x300.jpg" alt="">
+              <div class="container">
+                <div class="carousel-caption-new">
+                  <h1>Patients.</h1>
+                  <p class="lead">The software allows patients to communicate, set appointments and check their lab results, everything through the internet.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+          <a class="left carousel-control" href="#myCarousel" data-slide="prev">‹</a>
+          <a class="right carousel-control" href="#myCarousel" data-slide="next">›</a>
+        </div><!-- /.carousel -->
+        </div></section>
+
+
+    <!-- About Section -->
+    <section class="success" id="about">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12 text-center">
+                    <h2>About</h2>
+                    <hr class="star-light">
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-4 col-lg-offset-2">
+                    <p>HealthNet is a new and efficient way for doctors, nurses, and patients to interact with each other.</p>
+                </div>
+                <div class="col-lg-4">
+                    <p>Whether you're a patient who is looking for a doctor or trying to set an appointment with one, a doctor who can communicate with all the users and create and update medical information, or a nurse who can communicate with doctors and patients to help modify medical information, this template is the perfect starting point!</p>
+                </div>
+                <div class="col-lg-8 col-lg-offset-2 text-center">
+
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- Footer -->
+    <footer class="text-center">
+        <div class="footer-above">
+            <div class="container">
+                <div class="row">
+
+                    <div class="footer-col col-md-4">
+                        <h3>About HealthNet</h3>
+                        <p>Everything is explained in the About section.<a href="http://startbootstrap.com">Healthnet</a>.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="footer-below">
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-12">
+                        Copyright &copy; Your Website 2016
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Scroll to Top Button (Only visible on small and extra-small screen sizes) -->
+    <div class="scroll-top page-scroll visible-xs visible-sm">
+        <a class="btn btn-primary" href="#page-top">
+            <i class="fa fa-chevron-up"></i>
+        </a>
     </div>
 
-    <div class="container">
-      <!-- Example row of columns -->
-      <div class="row">
-        <div class="col-md-4">
-          <h2>Heading</h2>
-          <p>Donec id elit non mi porta gravida at eget metus. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus. Etiam porta sem malesuada magna mollis euismod. Donec sed odio dui. </p>
-          <p><a class="btn btn-default" href="#" role="button">View details &raquo;</a></p>
-        </div>
-        <div class="col-md-4">
-          <h2>Heading</h2>
-          <p>Donec id elit non mi porta gravida at eget metus. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus. Etiam porta sem malesuada magna mollis euismod. Donec sed odio dui. </p>
-          <p><a class="btn btn-default" href="#" role="button">View details &raquo;</a></p>
-       </div>
-        <div class="col-md-4">
-          <h2>Heading</h2>
-          <p>Donec sed odio dui. Cras justo odio, dapibus ac facilisis in, egestas eget quam. Vestibulum id ligula porta felis euismod semper. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus.</p>
-          <p><a class="btn btn-default" href="#" role="button">View details &raquo;</a></p>
-        </div>
-      </div>
+    <!-- jQuery -->
+    <script src="../static/HealthNet/js/jquery.js"></script>
 
-      <hr>
+    <!-- Bootstrap Core JavaScript -->
+    <script src="../static/HealthNet/js/bootstrap.min.js"></script>
 
-      <footer>
-        <p>&copy; 2015 Company, Inc.</p>
-      </footer>
-    </div> <!-- /container -->
+    <!-- Plugin JavaScript -->
+    <script src="http://cdnjs.cloudflare.com/ajax/libs/jquery-easing/1.3/jquery.easing.min.js"></script>
+    <script src="../static/HealthNet/js/classie.js"></script>
+    <script src="../static/HealthNet/js/cbpAnimatedHeader.js"></script>
 
+    <!-- Contact Form JavaScript -->
+    <script src="../static/HealthNet/js/jqBootstrapValidation.js"></script>
+    <script src="../static/HealthNet/js/contact_me.js"></script>
 
-    <!-- Bootstrap core JavaScript
-    ================================================== -->
-    <!-- Placed at the end of the document so the pages load faster -->
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
-    <script>window.jQuery || document.write('<script src="../../assets/js/vendor/jquery.min.js"><\/script>')</script>
+    <!-- Custom Theme JavaScript -->
+    <script src="../static/HealthNet/js/freelancer.js"></script>
 
-  </body>
-</html>
-
-
-
-<!--
-<head>
-
-</head>
-<body>
---->
-<!--
-<h1>Hello From index page cunt!</h1>
-<ul>
-{%for u in users%}
-  <li>User name is {{u.user_name}}</li>
-  <li>Password is {{u.password}}</li>
-{% endfor %}
-</ul>
--->
-<!--
-  @param form_user_name will be used to check the username in the database
-  @param orm_password will be used to check for a password  for this username
--->
-<!--
-<form method="POST" action="sign/">
-  {% csrf_token %}
-    <input type="text" name="username">
-    <button type="submit" class="btn btn-primary">Submit</button>
-  <form>
 </body>
+
+</html>
