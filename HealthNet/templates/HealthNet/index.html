@@ -49,13 +49,14 @@
         </div>
         <div id="navbar" class="navbar-collapse collapse">
           <form method="POST" action="thankyou/" class="navbar-form navbar-right">
+            {%csrf_token%}
             <div class="form-group">
-              <input type="text" placeholder="Email" class="form-control" name="username">
+              <input type="text" placeholder="Email" class="form-control" name="email">
             </div>
             <div class="form-group">
               <input type="password" placeholder="Password" class="form-control" name="password">
             </div>
-            <button type="submit" class="btn btn-success"><a href="{% url 'signup'%}" style="color: white;text-decoration:none;">Sign in</a></button>
+            <button type="submit" class="btn btn-success">Sign in</button>
             <button type="submit" class ="btn btn-success"><a href="{% url 'signup'%}" style="color: white;text-decoration:none;">Sign Up</a></button>
           </form>
 
