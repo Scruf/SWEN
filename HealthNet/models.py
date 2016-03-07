@@ -35,12 +35,22 @@ class Doctor(models.Model):
     def __str__(self):
         return self.username+"-"+self.patients
 
+class Stuff(models.Model):
+    hospital_name = models.CharField(max_length=250)
+    username = models.CharField(max_length=250)
+    first_name = models.CharField(max_length=250)
+    last_name = models.CharField(max_length=250)
+    cell_phone = models.CharField(max_length=250)
+    password = models.CharField(max_length=250)
+    email = models.CharField(max_length=250)
+    hospital_name = models.CharField(max_length=250)
+    patients = models.TextField(400)
 #Hospital is the class that holds all of the information about a hospital
 class Hospital(models.Model):
     hospital_name = models.CharField(max_length=20)
-    patients =  models.ForeignKey(Patient)
-    doctors = models.ForeignKey(Doctor)
-    stuff = models.TextField()
+    patients =  models.ManyToManyField(Patient)
+    doctors = models.ManyToManyField(Doctor)
+    stuff = models.ManyToManyField(Stuff)
 
     def __str__(self):
         return self.hospital_name+"-"+self.patients
