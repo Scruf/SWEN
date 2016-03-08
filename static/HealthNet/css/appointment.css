@@ -1,0 +1,57 @@
+.well {
+    width: 50%;
+    border: solid 2px #1A2F34;
+    background-color :#EEEEEE;
+    content:"";
+    z-index:-1;
+    color: #1E2749;
+    margin-left: 500px;
+}
+
+.well-header {
+    font-size: 2em;
+    font-weight: bold;
+    font-family: helvetica Neue;
+}
+
+#disabledSelect{
+    height: 30px;
+}
+
+.form-group1 {
+    padding-bottom: 45px;
+    height: 5px;
+    margin-left: 400px;
+}
+
+.form-group2{
+    margin-left: 400px;
+}
+
+#disabledSelect{
+    padding-bottom: 25px;
+}
+
+p, label {
+    font-size: 1em;
+    font-weight: bold;
+}
+
+.header_p {
+    font-size: 1.1em;
+}
+
+.btn1{
+    color: #EEEEEE;
+    background: #1E2749;
+    border: solid 10px #1E2749;
+    margin-left: 400px;
+    width: 84px;
+}
+
+.btn2{
+    color: #EEEEEE;
+    background: #1E2749;
+    border: solid 10px #1E2749;
+    width: 84px;
+}
