@@ -4,9 +4,9 @@ from django.http import HttpResponse
 from django.template import loader
 from .models import Patient,Hospital
 from django.contrib.auth import authenticate, login
-import random
+import re
 import uuid
-import json
+
 
 # Create your views here.
 
@@ -61,6 +61,8 @@ def register(request):
     if request.method == 'POST':
         try:
             username = request.POST.get('username',None)
+            if len(username)<4:
+                return HttpResponse("Length of the Username should be grater than 5")
             try:
                 test_patient = Patient.objects.get(user_name=username)
             except Patient.DoesNotExist:
@@ -71,6 +73,8 @@ def register(request):
         try:
             first_name = request.POST.get('first_name',None)
             last_name = request.POST.get('last_name',None)
+            if first_name==last_name or len(first_name)<2 or len(last_name)<2:
+                return HttpResponse("First or Last name of invalid length")
             try:
                 test_patient = Patient.objects.get(first_name=first_name,last_name=last_name)
             except Patient.DoesNotExist:
@@ -79,6 +83,8 @@ def register(request):
             return HttpResponse("Patient with this %s and %s is already registered"%(first_name,last_name))
         try:
             email = request.POST.get('email',None)
+            if not re.match(r'(\w+[.|\w])*@(\w+[.])*\w+', str(email)):
+                return HttpResponse("Email format is invalid")
             try:
                 test_patient = Patient.objects.get(email=email)
             except Patient.DoesNotExist:
@@ -88,6 +94,10 @@ def register(request):
         try:
             cell_phone = request.POST.get('cell_phone',None)
             try:
+                float(str(cell_phone.split("+")[1]))
+            except ValueError:
+                return HttpResponse("Cell phone number of Invalid format")
+            try:
                 test_patient = Patient.objects.get(cell_phone=cell_phone)
             except Patient.DoesNotExist:
                 print "Good"
@@ -95,9 +105,15 @@ def register(request):
             return HttpResponse("User with this cellphone %s number is registered in the system"%cell_phone)
         symptoms = request.POST.get('symptoms',None)
         hospital_name = request.POST.get('hospital',None)
+        if len(hospital_name)<2 or hospital_name is None:
+            return HttpResponse("Hospital field was left empty")
         address = request.POST.get('address',None)
+        if address is None or len(address)<5:
+            return HttpResponse("Address field was left empty")
         try:
             insuarance = request.POST.get('insuarance_number',None)
+            if len(insuarance)<5:
+                return HttpResponse("insuarance number is invalid")
             try:
                 test_patient = Patient.objects.get(insuarance_number=insuarance)
             except Patient.DoesNotExist:
