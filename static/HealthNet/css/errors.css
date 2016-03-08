@@ -1,0 +1,64 @@
+.username_exists {
+    width: 10%;
+    border: solid 2px #1A2F34;
+    background-color :#DC143C;
+    content:"";
+    z-index:-1;
+    color: white;
+    border-radius: 3px;
+    background-size: 40px;
+    font-size: large;
+    margin-left: 800px;
+}
+
+.first_last_name_exists {
+    width: 10%;
+    border: solid 2px #1A2F34;
+    background-color :#DC143C;
+    content:"";
+    z-index:-1;
+    color: white;
+    border-radius: 3px;
+    background-size: 40px;
+    font-size: large;
+    margin-left: 800px;
+}
+
+.email_exists {
+    width: 10%;
+    border: solid 2px #1A2F34;
+    background-color :#DC143C;
+    content:"";
+    z-index:-1;
+    color: white;
+    border-radius: 3px;
+    background-size: 40px;
+    font-size: large;
+    margin-left: 800px;
+}
+
+.phone_number_exists {
+    width: 10%;
+    border: solid 2px #1A2F34;
+    background-color :#DC143C;
+    content:"";
+    z-index:-1;
+    color: white;
+    border-radius: 3px;
+    background-size: 40px;
+    font-size: large;
+    margin-left: 800px;
+}
+
+.insurance_number_exists {
+    width: 10%;
+    border: solid 2px #1A2F34;
+    background-color :#DC143C;
+    content:"";
+    z-index:-1;
+    color: white;
+    border-radius: 3px;
+    background-size: 40px;
+    font-size: large;
+    margin-left: 800px;
+}

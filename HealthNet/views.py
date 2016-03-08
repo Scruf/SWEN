@@ -70,7 +70,7 @@ def register(request):
             try:
                 test_patient = Patient.objects.get(user_name=username)
             except Patient.DoesNotExist:
-                print "Good"
+                print ("Good")
         except Patient.MultipleObjectsReturned:
             return HttpResponse("Patient with the %s exists"%username)
         password = request.POST.get('password',None)
@@ -82,7 +82,7 @@ def register(request):
             try:
                 test_patient = Patient.objects.get(first_name=first_name,last_name=last_name)
             except Patient.DoesNotExist:
-                print "Good"
+                 print ("Good")
         except Patient.MultipleObjectsReturned:
             return HttpResponse("Patient with this %s and %s is already registered"%(first_name,last_name))
         try:
@@ -92,7 +92,7 @@ def register(request):
             try:
                 test_patient = Patient.objects.get(email=email)
             except Patient.DoesNotExist:
-                print "Good"
+                print ("Good")
         except Patient.MultipleObjectsReturned:
             return HttpResponse("User with thisn %s address is already in the system"%email)
         try:
@@ -104,7 +104,7 @@ def register(request):
             try:
                 test_patient = Patient.objects.get(cell_phone=cell_phone)
             except Patient.DoesNotExist:
-                print "Good"
+                print ("Good")
         except Patient.MultipleObjectsReturned:
             return HttpResponse("User with this cellphone %s number is registered in the system"%cell_phone)
         symptoms = request.POST.get('symptoms',None)
@@ -121,7 +121,7 @@ def register(request):
             try:
                 test_patient = Patient.objects.get(insuarance_number=insuarance)
             except Patient.DoesNotExist:
-                print "Good"
+                 print ("Good")
         except Patient.MultipleObjectsReturned:
             return HttpResponse("User with this insuarance number %s is already registered in the system"%insuarance_number)
         hospital_val = request.POST.get("hospital",None)
