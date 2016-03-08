@@ -68,7 +68,11 @@ def register(request):
     if request.method == 'POST':
         username = request.POST.get('username',None)
         if len(username)<4:
-            return HttpResponse("Length of the Username should be grater than 5")
+            multiple_object_template = loader.get_template('HealthNet/error/short_username.html')
+            context = {
+                "username":username,
+            }
+            return HttpResponse(multiple_object_template.render(context,request))
         else:
             try:
                 test_patient = Patient.objects.get(user_name=username)
@@ -86,7 +90,12 @@ def register(request):
         first_name = request.POST.get('first_name',None)
         last_name = request.POST.get('last_name',None)
         if first_name==last_name or len(first_name)<2 or len(last_name)<2:
-            return HttpResponse("First or Last name of invalid length")
+            multiple_object_template = loader.get_template('HealthNet/error/firstlastname_error.html')
+            context = {
+                "first":first_name
+                "last":last_name
+            }
+            return HttpResponse(multiple_object_template.render(context,request))
         else:
             try:
                 test_patient = Patient.objects.get(first_name=first_name,last_name=last_name)
@@ -104,6 +113,10 @@ def register(request):
 
         email = request.POST.get('email',None)
         if not re.match(r'(\w+[.|\w])*@(\w+[.])*\w+', str(email)):
+            multiple_object_template = loader.get_template('HealthNet/error/email_format_error.html')
+            context = {
+                "mail":email,
+            }
             return HttpResponse("Email format is invalid")
         else:
             try:
@@ -151,13 +164,28 @@ def register(request):
 
         hospital_name = request.POST.get('hospital',None)
         if len(hospital_name)<2:
-            return HttpResponse("Hospital field was left empty")
+            multiple_object_template = loader.get_template('HealthNet/error/hospital_error.html')
+            context = {
+                "hospital":hospital_name,
+            }
+
+            return HttpResponse(multiple_object_template.render(context,request))
         address = request.POST.get('address',None)
         if address is None or len(address)<5:
-            return HttpResponse("Address field was left empty")
+            multiple_object_template = loader.get_template('HealthNet/error/address_error.html')
+
+            context = {
+                "addr":address,
+            }
+
+            return HttpResponse(multiple_object_template.render(context,request))
         insuarance = request.POST.get('insuarance_number',None)
         if len(insuarance)<5:
-             return HttpResponse("insuarance number is invalid")
+            multiple_object_template = loader.get_template('HealthNet/error/insurance_error.html')
+            context = {
+                "insuarance":insuarance,
+            }
+            return HttpResponse(multiple_object_template.render(context,render))
         else:
             try:
                 test_patient = Patient.objects.get(insuarance_number=insuarance)
@@ -168,7 +196,7 @@ def register(request):
                 insur = request.POST.get('insuarance_number',None)
 
                 context = {
-                    "insuarance":insur
+                    "insuarance":insur,
                 }
 
                 return HttpResponse(multiple_object_template.render(context,request))
