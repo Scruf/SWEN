@@ -2,10 +2,11 @@
 from django.shortcuts import render,get_object_or_404,redirect
 from django.http import HttpResponse
 from django.template import loader
-from .models import Patient,Hospital
+from .models import Patient,Hospital,Logs
 from django.contrib.auth import authenticate, login
 import re
 import uuid
+import datetime
 
 
 # Create your views here.
@@ -14,7 +15,6 @@ import uuid
 def index(request):
     users = Patient.objects.all()
     template = loader.get_template('HealthNet/index.html')
-    hospital_list = []
     context = {
         'users':users,
     }
@@ -26,6 +26,7 @@ def index(request):
 def sign_in(request):
 
     sign_in_template = loader.get_template('HealthNet/signin.html')
+
     return HttpResponse(sign_in_template.render(None,request))
 
 
@@ -40,6 +41,9 @@ def thankyou(request):
             context ={
                 'user_name':email,
             }
+            user_name = Patient.objects.get(email=email,password=password).user_name
+            log = Logs(date=datetime.date.today(),action="Sign In",who_did=user_name,what_happened="Log In the System")
+            log.save()
             success_template = loader.get_template('HealthNet/success.html')
             return HttpResponse(success_template.render(context,request))
         except Patient.DoesNotExist:

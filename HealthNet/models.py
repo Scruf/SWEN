@@ -69,5 +69,12 @@ class Apoitment(models.Model):
 
     def __str__(self):
         return self.date+"-"+self.patients+"-"+self.doctor+"-"+self.reason
-
+#------------------------------------Logs----------------------------------
+class Logs(models.Model):
+    date = models.DateTimeField()
+    action = models.CharField(max_length=250)
+    who_did = models.CharField(max_length=250)
+    what_happened = models.CharField(max_length=250)
+    def __str__(self):
+        return self.action+"-"+self.who_did+"-"+self.what_happened
 # Create your models here.
