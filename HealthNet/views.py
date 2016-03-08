@@ -138,33 +138,11 @@ def register(request):
         user_profile = loader.get_template('/HealthNet/profile.html')
         h = Hospital.objects.get(hospital_name=hospital_val)
         return redirect('/HealthNet/%s'%username,None)
-        #
-        #
-        # if len(hospital_name)<2 or hospital_name is None:
-        #     return HttpResponse("Hospital field was left empty")
-        # address = request.POST.get('address',None)
-        # if address is None or len(address)<5:
-        #     return HttpResponse("Address field was left empty")
-        # try:
-        #     insuarance = request.POST.get('insuarance_number',None)
-        #     if len(insuarance)<5:
-        #         return HttpResponse("insuarance number is invalid")
-        #     try:
-        #         test_patient = Patient.objects.get(insuarance_number=insuarance)
-        #     except Patient.DoesNotExist:
-        #          print ("Good")
-        # except Patient.MultipleObjectsReturned:
-        #     return HttpResponse("User with this insuarance number %s is already registered in the system"%insuarance_number)
-        # hospital_val = request.POST.get("hospital",None)
-        # p = Patient(user_name=username,password=password,first_name=first_name,last_name=last_name,email=email,user_id=uuid.uuid1(),\
-        #             diases_name=" ",symptoms=symptoms,cell_phone=cell_phone,hospital_name=hospital_val,\
-        #             address = address,insuarance_number=insuarance)
-        # p.save()
-        # log = Logs(date=datetime.date.today(),action="Register",who_did=username,what_happened="Signing up to the system")
-        # log.save()
-        # user_profile = loader.get_template('/HealthNet/profile.html')
-        # h = Hospital.objects.get(hospital_name=hospital_val)
-        # return redirect('/HealthNet/%s'%username,None)
+
 def load_profile(request,user_name):
     user = Patient.objects.get(user_name=user_name)
-    return HttpResponse("Hello %s profiles"%user_name)
+    profile_template = loader.get_template('HealthNet/profile.html')
+    context={
+        'Patient':user,
+    }
+    return HttpResponse(profile_template.render(context,request))
