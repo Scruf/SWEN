@@ -269,6 +269,7 @@ def patien_to_save(request,hospital_name,user_name,doctor_user_name):
     logs = Logs(date=datetime.date.today(),action="Assigning Patient",who_did="%s"%doctor_user_name)
     logs.save()
     return redirect("/HealthNet/%s/%s/pool"%(hospital_name,user_name))
+
 def send_message(request,user_name):
     if request.method == 'POST':
         doctor_user_name = request.POST.get("doctor_email",None)
@@ -280,3 +281,31 @@ def send_message(request,user_name):
         else:
             print "Error in sending email"
     return HttpResponse("Message Was Send")
+
+
+def doctor_sign(request,hospital_name):
+    doctor_sign_template = loader.get_template("HealthNet/doctors_sign.html")
+    context = {
+        "Doctor":"Sign",
+    }
+    return HttpResponse(doctor_sign_template.render(context,request))
+
+
+def doctor_verify(request,hospital_name):
+    if request.method == 'POST':
+        email = request.POST.get("email",None)
+        password = request.POST.get('password',None)
+        try:
+            doctor = Doctor.objects.get(email=email,password=password)
+            profile_template = loader.get_template("HealthNet/doctors.html")
+            context={
+                "Doc":doctor,
+            }
+            return redirect(profile_template.render(context,request))
+        except Doctor.DoesNotExist:
+            return redirect("/HealthNet/%s/sign"%hospital_name)
+    else:
+        print "Why ??"
+
+def doctor_profile(request,doctor_user_name):
+    return HttpResponse("Hello")
