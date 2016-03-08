@@ -92,8 +92,8 @@ def register(request):
         if first_name==last_name or len(first_name)<2 or len(last_name)<2:
             multiple_object_template = loader.get_template('HealthNet/error/firstlastname_error.html')
             context = {
-                "first":first_name
-                "last":last_name
+                "first":first_name,
+                "last":last_name,
             }
             return HttpResponse(multiple_object_template.render(context,request))
         else:
