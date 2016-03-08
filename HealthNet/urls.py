@@ -10,6 +10,7 @@ urlpatterns =[
     url(r'^(?P<user_name>\w+)/$',views.load_profile, name='load_profile'),
     url(r'^(?P<hospital_name>\w+)/(?P<doctor_user_name>\w+)/pool/$',views.patient_pool,name='patient_pool'),
     url(r'^(?P<hospital_name>\w+)/(?P<doctor_user_name>\w+)/pool/(?P<user_name>\w+)/save/$',views.patien_to_save, name='patient_to_save'),
+    url(r'^(?P<user_name>\w+)/send/$',views.send_message,name='send'),
 
 
 ]

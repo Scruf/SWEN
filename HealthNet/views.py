@@ -6,6 +6,8 @@ from .models import Patient,Hospital,Logs,Doctor
 from django.contrib.auth import authenticate, login
 import re
 import uuid
+from django.template.context import RequestContext
+from django.core.mail import send_mail
 import datetime
 
 
@@ -210,7 +212,7 @@ def register(request):
         log = Logs(date=datetime.date.today(),action="Register",who_did=username,what_happened="Signing up to the system")
         log.save()
         user_profile = loader.get_template('/HealthNet/profile.html')
-        logs = Log(date=datetime.date.today(),action="Registering",who_did="%s"%username)
+        logs = Logs(date=datetime.date.today(),action="Registering",who_did="%s"%username)
         logs.save()
         h = Hospital.objects.get(hospital_name=hospital_val)
         h.patients.add(p)
@@ -252,7 +254,7 @@ def patient_pool(request,hospital_name,doctor_user_name):
         "Hospital":hospital_name,
         "Normailized_Hospital_Name":_hospital_name,
     }
-    logs = Log(date=datetime.date.today(),action="Browsing list of patients",who_did="%"%doctor_user_name)
+    logs = Logs(date=datetime.date.today(),action="Browsing list of patients",who_did="%s"%doctor_user_name)
     logs.save()
     pool_template = loader.get_template('HealthNet/free_pool.html')
     return HttpResponse(pool_template.render(context,request))
@@ -264,6 +266,17 @@ def patien_to_save(request,hospital_name,user_name,doctor_user_name):
     doctor = Doctor.objects.get(username=doctor_user_name)
     doctor.patients.add(patient)
     doctor.save()
-    logs = Log(date=datetime.date.today(),action="Assigning Patient",who_did="%s"%doctor_user_name)
+    logs = Logs(date=datetime.date.today(),action="Assigning Patient",who_did="%s"%doctor_user_name)
     logs.save()
     return redirect("/HealthNet/%s/%s/pool"%(hospital_name,user_name))
+def send_message(request,user_name):
+    if request.method == 'POST':
+        doctor_user_name = request.POST.get("doctor_email",None)
+        message = request.POST.get('message',None)
+        doctor_user_name = Doctor.objects.get(username=doctor_user_name).email
+        email_m = Patient.objects.get(user_name=user_name).email
+        if send_mail("You've got a message from %s"%user_name,message,"healthnettesting@gmail.com",['%s'%email_m],fail_silently=False)==1:
+            redirect('/HealthNet/%s'%user_name)
+        else:
+            print "Error in sending email"
+    return HttpResponse("Message Was Send")
