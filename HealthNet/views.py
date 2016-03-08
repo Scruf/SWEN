@@ -187,4 +187,8 @@ def register(request):
 
 def load_profile(request,user_name):
     user = Patient.objects.get(user_name=user_name)
-    return HttpResponse("Hello %s profiles"%user_name)
+    profile_template = loader.get_template('HealthNet/profile.html')
+    context={
+        'Patient':user,
+    }
+    return HttpResponse(profile_template.render(context,request))
