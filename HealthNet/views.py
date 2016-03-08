@@ -72,9 +72,16 @@ def register(request):
         else:
             try:
                 test_patient = Patient.objects.get(user_name=username)
+            except Patient.DoesNotExist:
+                print "Robert"
             except Patient.MultipleObjectsReturned:
-                return HttpResponse("Patient with the %s exists"%username)
-        return redirect(REDIRECT_URL)
+                multiple_object_template = loader.get_template('HealthNet/error/username_error.html')
+                username = request.POST.get('username',None)
+                context = {
+                    "user_name":username,
+                }
+                return HttpResponse(multiple_object_template.render(context,request))
+
         password = request.POST.get('password',None)
         first_name = request.POST.get('first_name',None)
         last_name = request.POST.get('last_name',None)
@@ -83,18 +90,36 @@ def register(request):
         else:
             try:
                 test_patient = Patient.objects.get(first_name=first_name,last_name=last_name)
+            except Patient.DoesNotExist:
+                print "Robert"
             except Patient.MultipleObjectsReturned:
-                return HttpResponse("Patient with this %s and %s is already registered"%(first_name,last_name))
-        return redirect(REDIRECT_URL)
+                 multiple_object_template = loader.get_template('HealthNet/error/firstlastname_error.html')
+                 first_name = request.POST.get('first_name',None)
+                 last_name = request.POST.get('last_name',None)
+                 context = {
+                    "first_name":first_name,
+                    "last_name":last_name,
+                 }
+                 return HttpResponse(multiple_object_template.render(context,request))
+
         email = request.POST.get('email',None)
         if not re.match(r'(\w+[.|\w])*@(\w+[.])*\w+', str(email)):
             return HttpResponse("Email format is invalid")
         else:
             try:
                 test_patient = Patient.objects.get(email=email)
+            except Patient.DoesNotExist:
+                print "Robert"
             except Patient.MultipleObjectsReturned:
-                return HttpResponse("User with thisn %s address is already in the system"%email)
-        return redirect(REDIRECT_URL)
+                multiple_object_template = loader.get_template('HealthNet/error/email_error.html')
+                email = request.POST.get('first_name',None)
+
+                context = {
+                    "email":email,
+                }
+
+                return HttpResponse(multiple_object_template.render(context,request))
+
         cell_phone = request.POST.get('cell_phone',None)
         if len(str(cell_phone.split("+")))<1 and str(cell_phone)[0] is not '1':
             cell_phone = '1'+cell_phone
@@ -102,7 +127,7 @@ def register(request):
                  float(str(cell_phone.split("+")[1]))
             except ValueError:
                  return HttpResponse("Cell phone number of Invalid format")
-        elif str(cell_phone)[0] is '1':
+        elif cell_phone[0] is '1':
             cell_phone = '+'+cell_phone
             try:
                 float(str(cell_phone.split("+")[1]))
@@ -111,24 +136,45 @@ def register(request):
         else:
             try:
                 cell_phone = request.POST.get('cell_phone',None)
+            except Patient.DoesNotExist:
+                print "Robert"
             except Patient.MultipleObjectsReturned:
-                return HttpResponse("User with this cellphone %s number is registered in the system"%cell_phone)
-        return redirect(REDIRECT_URL)
+                multiple_object_template = loader.get_template('HealthNet/error/phone_error.html')
+                phone = request.POST.get('cell_phone',None)
+
+                context = {
+                    "cell_phone":phone,
+                }
+
+
+                return HttpResponse(multiple_object_template.render(context,request))
+
         hospital_name = request.POST.get('hospital',None)
-        if len(hospital_name)<2 or hospital_name is None:
+        if len(hospital_name)<2:
             return HttpResponse("Hospital field was left empty")
         address = request.POST.get('address',None)
         if address is None or len(address)<5:
             return HttpResponse("Address field was left empty")
+        insuarance = request.POST.get('insuarance_number',None)
         if len(insuarance)<5:
              return HttpResponse("insuarance number is invalid")
         else:
             try:
                 test_patient = Patient.objects.get(insuarance_number=insuarance)
+            except Patient.DoesNotExist:
+                print "Robert"
             except Patient.MultipleObjectsReturned:
-                return HttpResponse("User with this insuarance number %s is already registered in the system"%insuarance_number)
-        return redirect(REDIRECT_URL)
+                multiple_object_template = loader.get_template('HealthNet/error/insurance_error.html')
+                insur = request.POST.get('insuarance_number',None)
+
+                context = {
+                    "insuarance":insur
+                }
+
+                return HttpResponse(multiple_object_template.render(context,request))
+
         hospital_val = request.POST.get("hospital",None)
+        symptoms = ' '
         p = Patient(user_name=username,password=password,first_name=first_name,last_name=last_name,email=email,user_id=uuid.uuid1(),\
                      diases_name=" ",symptoms=symptoms,cell_phone=cell_phone,hospital_name=hospital_val,\
                       address = address,insuarance_number=insuarance)
@@ -138,33 +184,7 @@ def register(request):
         user_profile = loader.get_template('/HealthNet/profile.html')
         h = Hospital.objects.get(hospital_name=hospital_val)
         return redirect('/HealthNet/%s'%username,None)
-        #
-        #
-        # if len(hospital_name)<2 or hospital_name is None:
-        #     return HttpResponse("Hospital field was left empty")
-        # address = request.POST.get('address',None)
-        # if address is None or len(address)<5:
-        #     return HttpResponse("Address field was left empty")
-        # try:
-        #     insuarance = request.POST.get('insuarance_number',None)
-        #     if len(insuarance)<5:
-        #         return HttpResponse("insuarance number is invalid")
-        #     try:
-        #         test_patient = Patient.objects.get(insuarance_number=insuarance)
-        #     except Patient.DoesNotExist:
-        #          print ("Good")
-        # except Patient.MultipleObjectsReturned:
-        #     return HttpResponse("User with this insuarance number %s is already registered in the system"%insuarance_number)
-        # hospital_val = request.POST.get("hospital",None)
-        # p = Patient(user_name=username,password=password,first_name=first_name,last_name=last_name,email=email,user_id=uuid.uuid1(),\
-        #             diases_name=" ",symptoms=symptoms,cell_phone=cell_phone,hospital_name=hospital_val,\
-        #             address = address,insuarance_number=insuarance)
-        # p.save()
-        # log = Logs(date=datetime.date.today(),action="Register",who_did=username,what_happened="Signing up to the system")
-        # log.save()
-        # user_profile = loader.get_template('/HealthNet/profile.html')
-        # h = Hospital.objects.get(hospital_name=hospital_val)
-        # return redirect('/HealthNet/%s'%username,None)
+
 def load_profile(request,user_name):
     user = Patient.objects.get(user_name=user_name)
     return HttpResponse("Hello %s profiles"%user_name)
