@@ -1,0 +1,48 @@
+<style>
+  th{
+    text-align: left;
+  }
+  td{
+    border: 1px solid black;
+  }
+  table{
+    border-collapse: collapse;
+    width: 100%;
+  }
+  #no_border{
+    border: 0px solid;
+  }
+</style>
+
+{% load staticfiles %}
+<link rel="stylesheet" type="text/css" href="{% static 'HealthNet/css/bootstrap.min.css'%}" />
+
+<link rel="stylesheet" type="text/css" href="{% static 'HealthNet/css/jumbotron.css' %}" />
+
+<link rel="stylesheet" type="text/css" href="{% static 'HealthNet/css/ie10-viewport-bug-workaround.css' %}" />
+
+<script src="{% static 'HealthNet/js/bootstrap.min.js'%} "></script>
+
+<script src="{% static 'HealthNet/js/ie10-viewport-bug-workaround.js'%}"></script>
+
+<script src="{% static 'HealthNet/js/ie-emulation-modes-warning.js' %}"> </script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.0/jquery.min.js"></script>
+<h1>{{Normailized_Hospital_Name}}</h1>
+<table>
+  <tr>
+    <td>Username</td>
+    <td>First Name</td>
+    <td>Last Name</td>
+  </tr>
+  {% for p  in Patient %}
+  <tr>
+
+    <td>{{p.patient_user_name}}</td>
+    <td>{{p.patient_first_name}}</td>
+    <td>{{p.patient_last_name}}</td>
+    <td><button><a href="{{p.patient_user_name}}/save">Save</button></td>
+  </tr>
+
+{%endfor%}
+</table>
+<br>
