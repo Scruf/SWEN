@@ -9,136 +9,100 @@
 <script type="tex/javascript" src="{% static 'HealthNet/js/sign_up.js' %}"></script>
 
 <div class="container">
-    <div class="row centered-form">
-        <div class="col-xs-12 col-sm-8 col-md-4 col-sm-offset-2 col-md-offset-4">
-            <div class="panel panel-default">
-                <div class="panel-heading">
-                    <h3 class="panel-title">Please sign Up <small>It's free!</small></h3>
-                </div>
-                <div class="panel-body">
-                    <form method="POST" action="register/" role="form" id ="sign_up" onsubmit="validate()">
-                          {%csrf_token%}
-                        <div class="form-group">
-                            <input type="text" name="username" id="username" class="form-control input sm" placeholder="Username">
-                        </div>
-                        <div class="row">
-                            <div class="col-xs-6 col-sm-6 col-md-6">
-                                <div class="form-group">
-                                    <input type="text" name="first_name" id="first_name" class="form-control input-sm" placeholder="First Name">
-                                </div>
-                            </div>
-                            <div class="col-xs-6 col-sm-6 col-md-6">
-                                <div class="form-group">
-                                    <input type="text" name="last_name" id="last_name" class="form-control input-sm" placeholder="Last Name">
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="form-group">
-                            <input type="email" name="email" id="email" class="form-control input-sm" placeholder="Email Address">
-                        </div>
-
-                        <div class="row">
-                            <div class="col-xs-6 col-sm-6 col-md-6">
-                                <div class="form-group">
-                                    <input type="password" name="password" id="password" class="form-control input-sm" placeholder="Password">
-                                </div>
-                            </div>
-                            <div class="col-xs-6 col-sm-6 col-md-6">
-                                <div class="form-group">
-                                    <input type="password" name="password_confirmation" id="password_confirmation" class="form-control input-sm" placeholder="Confirm Password">
-                                </div>
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <input type="text" name="cell_phone" id="cell_phone" class="form-control input-sm" placeholder="Cell Phone Number">
-                        </div>
-                        <div class="form-group">
-                            <input type="text" name="symptoms" id="symptoms" class="form-control input-sm" placeholder="Symptoms">
-                        </div>
-                        <div class="form-group">
-                            <input type="text" name="address" id="address" class="form-control input-sm" placeholder="Address">
-                        </div>
-                        <div class="form-group">
-                            <input type="text" name="insuarance_number" id="insuarance_number" class="form-control input-sm" placeholder="Insuarancew Number">
-                        </div>
-                        <div class="row">
-                            <div class="col-xs-6 col-sm-6 col-md-6">
-
-                                    <input type="radio" name="gender" id="gender" class="input-sm" placeholder="Male" value="Male">Male<br>
-
-                            </div>
-                            <div class="col-xs-6 col-sm-6 col-md-6">
-
-                                    <input type="radio" name="gender" id="gender" class="input-sm" placeholder="Female">Female<br>
-
-                            </div>
-                        </div>
-
-                        <input type="submit" value="Register" class="btn btn-info btn-block" >
-
-                    </form>
-                    <script>
-                    function check_email(val){
-                      if(val.length<1)
-                        return false;
-                      else{
-                      var re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-                        return re.test(val);
-                      }
-
-                    }
-                    function check_first_last_name(val){
-                    	if (val.length<1)
-                    		return false;
-                    	else{
-                    		var counter = 0;
-                    		val.split("").filter(function(v){
-                    			if (isNaN(v))
-                    				counter++;
-                    		});
-
-                    		return counter == val.length;
-                    	}
-
-
-                    }
-                    function check_password(val1,val2){
-                        if (val1.length<6)
-                            return false;
-                        if (val2.length<6)
-                            return false;
-                        else
-                            return val1===val2;
-                    }
-                    function check_symptoms(val){
-                        if(val.length<5)
-                            return false;
-                        else
-                            return true;
-                    }
-
-                    function validate(){
-                      var email = document.getElementById("email").value;
-                      var first_name = document.getElementById("first_name").value.toString()
-                      var first_password = document.getElementById("password").value.toString();
-                      var confirm_password = document.getElementById("confirm_password").value.toString();
-                      var symptoms  = document.getElementById("symptoms").value.toString();
-                      var last_name = document.getElementById('last_name').value.toString();
-                      if (!check_first_last_name(first_name.value.toString()));
-                        alert("Invalid First Name");
-                      if (!check_password(first_password,confirm_password))
-                        alert("Invalid Password");
-                      if(!check_first_last_name(last))
-                        alert('Invalid Last Name');
-                      if(!check_symptoms(symptoms))
-                        alert("Invalid symptoms");
-
-                    }
-
-                    </script>
-                </div>
-            </div>
+  <div class="row centered-form">
+    <div class="col-xs-12 col-sm-8 col-md-4 col-sm-offset-2 col-md-offset-4">
+      <div class="panel panel-default">
+        <div class="panel-heading">
+          <h3 class="panel-title">Please sign Up <small>It's free!</small></h3>
         </div>
+        <div class="panel-body">
+          <form method="POST" action="register/" role="form" id="sign_up" onsubmit="validate()">
+            {%csrf_token%}
+            <div class="form-group">
+              <input type="text" name="username" id="username" class="form-control input sm" placeholder="Username">
+            </div>
+            <div class="row">
+              <div class="col-xs-6 col-sm-6 col-md-6">
+                <div class="form-group">
+                  <input type="text" name="first_name" id="first_name" class="form-control input-sm" placeholder="First Name">
+                </div>
+              </div>
+              <div class="col-xs-6 col-sm-6 col-md-6">
+                <div class="form-group">
+                  <input type="text" name="last_name" id="last_name" class="form-control input-sm" placeholder="Last Name">
+                </div>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <input type="email" name="email" id="email" class="form-control input-sm" placeholder="Email Address">
+            </div>
+
+            <div class="row">
+              <div class="col-xs-6 col-sm-6 col-md-6">
+                <div class="form-group">
+                  <input type="password" name="password" id="password" class="form-control input-sm" placeholder="Password">
+                </div>
+              </div>
+              <div class="col-xs-6 col-sm-6 col-md-6">
+                <div class="form-group">
+                  <input type="password" name="password_confirmation" id="password_confirmation" class="form-control input-sm" placeholder="Confirm Password">
+                </div>
+              </div>
+            </div>
+            <div class="form-group">
+              <input type="text" name="cell_phone" id="cell_phone" class="form-control input-sm" placeholder="Cell Phone Number">
+            </div>
+            <div class="form-group">
+              <input type="text" name="symptoms" id="symptoms" class="form-control input-sm" placeholder="Symptoms">
+            </div>
+            <div class="form-group">
+              <input type="text" name="address" id="address" class="form-control input-sm" placeholder="Address">
+            </div>
+            <div class="form-group">
+              <input type="text" name="insuarance_number" id="insuarance_number" class="form-control input-sm" placeholder="Insuarancew Number">
+            </div>
+            <div class="row">
+              <div class="col-xs-6 col-sm-6 col-md-6">
+
+                <input type="radio" name="gender" id="gender" class="input-sm" placeholder="Male" value="Male">Male
+                <br>
+              </div>
+              <div class="col-xs-6 col-sm-6 col-md-6">
+                <input type="radio" name="gender" id="gender" class="input-sm" placeholder="Female">Female
+                <br>
+              </div>
+            </div>
+            <div class="form-group"><br>
+              <div class="dropdown">
+                <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                  Hospital
+                  <span class="caret"></span>
+                </button>
+                <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
+                  {%for h in hospitals%}
+                  <li class="hospitals"><input class="hospital_input" type="radio" name="hospital" value="{{h.hospital_name}}">{{h.hospital_name}}</li>
+                  {%endfor%}
+                </ul>
+              </div>
+            </div>
+
+            <input type="submit" value="Register" class="btn btn-info btn-block">
+
+          </form>
+          <script>
+            $(document).ready(function(){
+              $(".hospital_input").on("click", function(){
+
+                $("#dropdownMenu1").html($(".hospital_input:checked").val());
+                //Someone need to fix this
+                //So when it pressed it goes back
+              });
+            });
+          </script>
+
+        </div>
+      </div>
     </div>
+  </div>
 </div>

@@ -104,12 +104,9 @@ def register(request):
                 print "Good"
         except Patient.MultipleObjectsReturned:
             return HttpResponse("User with this insuarance number %s is already registered in the system"%insuarance_number)
-        hospital_keys = []
-        hospital = Hospital.objects.all()
-        for h in hospital:
-            hospital_keys.append(h.id)
-        random_hospital = random.randint(0,len(hospital_keys)-1)
-        p = Patient(user_name=username,password=password,first_name=first_name,last_name=last_name,email=email,user_id=uuid.uuid1(),diases_name=" ",symptoms=symptoms,cell_phone=cell_phone,hospital_name=hospital.get(pk=hospital_keys[random_hospital]).hospital_name,\
+        hospital_val = request.POST.get("hospital",None)
+        p = Patient(user_name=username,password=password,first_name=first_name,last_name=last_name,email=email,user_id=uuid.uuid1(),\
+                    diases_name=" ",symptoms=symptoms,cell_phone=cell_phone,hospital_name=hospital_val,\
                     address = address,insuarance_number=insuarance)
         p.save()
 

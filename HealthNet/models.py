@@ -45,6 +45,9 @@ class Stuff(models.Model):
     email = models.CharField(max_length=250)
     hospital_name = models.CharField(max_length=250)
     patients = models.TextField(400)
+
+    def __str__(self):
+        return self.username+"-"+self.password
 #Hospital is the class that holds all of the information about a hospital
 class Hospital(models.Model):
     hospital_name = models.CharField(max_length=20)
