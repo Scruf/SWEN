@@ -265,6 +265,8 @@ def patien_to_save(request,hospital_name,user_name,doctor_user_name):
     patient.save()
     doctor = Doctor.objects.get(username=doctor_user_name)
     doctor.patients.add(patient)
+    patient._doctor = doctor.username
+    patient.save()
     doctor.save()
     logs = Logs(date=datetime.date.today(),action="Assigning Patient",who_did="%s"%doctor_user_name)
     logs.save()
@@ -293,19 +295,16 @@ def doctor_sign(request,hospital_name):
 
 def doctor_verify(request,hospital_name):
     if request.method == 'POST':
-        email = request.POST.get("email",None)
+        email = request.POST.get('email',None)
         password = request.POST.get('password',None)
         try:
             doctor = Doctor.objects.get(email=email,password=password)
-            profile_template = loader.get_template("HealthNet/doctors.html")
-            context={
-                "Doc":doctor,
-            }
-            return redirect(profile_template.render(context,request))
+            return redirect("/HealthNet/%s/doctor/profile/"%doctor.username)
+            # return HttpResponse("HealthNet/%s/doctor/profile"%doctor.username)
         except Doctor.DoesNotExist:
-            return redirect("/HealthNet/%s/sign"%hospital_name)
-    else:
-        print "Why ??"
+            return HttpResponse("Hello")
+    # else:
+    #     return redirect(REDIRECT_URL)
 
-def doctor_profile(request,doctor_user_name):
+def doctor_profile(request,user_name):
     return HttpResponse("Hello")

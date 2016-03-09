@@ -37,6 +37,7 @@
     <div class="container">
 
       <form method="POST" action="doctor/" class="form-signin">
+      Request url   {{ request.get_full_path }}
         {%csrf_token%}
         <h2 class="form-signin-heading">Please sign in</h2>
         <label for="inputEmail" class="sr-only">Email address</label>
