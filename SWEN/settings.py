@@ -25,7 +25,12 @@ SECRET_KEY = '_+lvp-nfm2b@yw4^=qni$8xv%b1^$dfkdai7ti+e=rkj47xap!'
 DEBUG = True
 
 ALLOWED_HOSTS = []
-
+EMAIL_HOST='smtp.gmail.com'
+EMAIL_PORT=587
+EMAIL_USE_TLS=True
+EMAIL_HOST_USER='healthnettesting@gmail.com'
+EMAIL_HOST_PASSWORD='healthnet'
+EMAIL_BACKEND='django.core.mail.backends.smtp.EmailBackend'
 
 # Application definition
 
@@ -37,7 +42,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-]
+    ]
 
 MIDDLEWARE_CLASSES = [
     'django.middleware.security.SecurityMiddleware',

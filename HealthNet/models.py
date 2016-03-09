@@ -18,7 +18,9 @@ class  Patient(models.Model):
     address = models.CharField(max_length=250)
     insuarance_number = models.CharField(max_length=250)
     gender = models.CharField(max_length=250)
-    doctor = models.CharField(max_length=250)
+    _doctor = models.CharField(max_length=250)
+    assigned_doctor = models.BooleanField(default=False)
+
     def __str__(self):
         return self.user_name+"-"+self.password
 #Doctor is a model where all doctors are
@@ -30,7 +32,7 @@ class Doctor(models.Model):
     password = models.CharField(max_length=250)
     email = models.CharField(max_length=250)
     hospital_name = models.CharField(max_length=250)
-    patients = models.TextField(400)
+    patients = models.ManyToManyField(Patient)
 
     def __str__(self):
         return self.username+"-"+self.patients
@@ -44,19 +46,17 @@ class Stuff(models.Model):
     password = models.CharField(max_length=250)
     email = models.CharField(max_length=250)
     hospital_name = models.CharField(max_length=250)
-    patients = models.TextField(400)
+    patients_stuff_list = models.TextField(400)
 
     def __str__(self):
         return self.username+"-"+self.password
 #Hospital is the class that holds all of the information about a hospital
 class Hospital(models.Model):
     hospital_name = models.CharField(max_length=20)
-    patients =  models.ManyToManyField(Patient)
+    patients_list =  models.ManyToManyField(Patient)
     doctors = models.ManyToManyField(Doctor)
     stuff = models.ManyToManyField(Stuff)
 
-    def __str__(self):
-        return self.hospital_name+"-"+self.patients
 
 #Doctor is the class that holds all of the information about a doctor
 
