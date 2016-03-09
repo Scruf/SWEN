@@ -49,7 +49,7 @@ def thankyou(request):
             user_context = {
                 'user_name':user_name,
             }
-            success_template = loader.get_template('HealthNet/profile.html')
+
             return redirect('/HealthNet/%s'%user_name,None)
         except Patient.DoesNotExist:
             return HttpResponse("Patient with this credentials does not exists")
@@ -211,11 +211,11 @@ def register(request):
         p.save()
         log = Logs(date=datetime.date.today(),action="Register",who_did=username,what_happened="Signing up to the system")
         log.save()
-        user_profile = loader.get_template('/HealthNet/profile.html')
+
         logs = Logs(date=datetime.date.today(),action="Registering",who_did="%s"%username)
         logs.save()
         h = Hospital.objects.get(hospital_name=hospital_val)
-        h.patients.add(p)
+        h.patients_list.add(p)
         h.save()
         logs1 = Logs(date=datetime.date.today(),who_did="%s saved a patient with a %s"%(hospital_name,username))
         logs1.save()
@@ -271,13 +271,13 @@ def patien_to_save(request,hospital_name,user_name,doctor_user_name):
     logs = Logs(date=datetime.date.today(),action="Assigning Patient",who_did="%s"%doctor_user_name)
     logs.save()
     return redirect("/HealthNet/%s/%s/pool"%(hospital_name,user_name))
-
+#smpt fail
 def send_message(request,user_name):
     if request.method == 'POST':
         doctor_user_name = request.POST.get("doctor_email",None)
         message = request.POST.get('message',None)
-        doctor_user_name = Doctor.objects.get(username=doctor_user_name).email
-        email_m = Patient.objects.get(user_name=user_name).email
+        #doctor_user_name = Doctor.objects.get(username=doctor_user_name).email
+        email_m = doctor_user_name
         if send_mail("You've got a message from %s"%user_name,message,"healthnettesting@gmail.com",['%s'%email_m],fail_silently=False)==1:
             redirect('/HealthNet/%s'%user_name)
         else:
@@ -307,4 +307,30 @@ def doctor_verify(request,hospital_name):
     #     return redirect(REDIRECT_URL)
 
 def doctor_profile(request,user_name):
-    return HttpResponse("Hello")
+    try:
+        doctor = Doctor.objects.get(username=user_name)
+        doctor_template = loader.get_template('HealthNet/doctors.html')
+        patients = doctor.patients.all()
+        context ={
+            "doctor":doctor,
+            "patient_list":patients,
+        }
+        return HttpResponse(doctor_template.render(context,request))
+    except Doctor,DoesNotExist:
+        return redirect(REDIRECT_URL)
+
+
+def appoitment(request,user_name):
+    appoitment_template = loader.get_template('HealthNet/appointment.html')
+    context = {
+        'username':user_name,
+    }
+    return HttpResponse(appoitment_template.render(context,request))
+
+def confirm_appoitment(request,user_name):
+    if request.method == 'POST':
+        patient = Patient.objects.get(user_name=user_name)
+        doctor = Doctor.objects.get(patients=patient)
+        
+    else:
+        return HttpResponse("WWTF")

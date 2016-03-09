@@ -18,22 +18,45 @@
     set your appointment. You will be contacted within 24 hours
     for confirmation.</p>
     <hr>
-<form method="POST" action="confirm/">
-  {%csrf_token%}
+<form>
     <!-- Contact by Input -->
     <div class="form-group1">
       <label for="Select">Contact by:</label>
       <select id="Select" class="form-control"><option>Email</option><option>Phone</option></select>
     </div>
+
+    <!-- fullname Input -->
+    <div class="form-group1">
+        <label for="inputfullname"></label>
+        <input type="fullname" class="form-control" id="inputFullname" placeholder="Your Name">
+    </div>
+
+    <!-- email address Input -->
+    <div class="form-group1">
+        <label for="inputemail"></label>
+        <input type="email" class="form-control" id="inputemail" placeholder="Your Email">
+    </div>
+
+   <!-- Phone Input -->
+     <div class="form-group1">
+        <label for="inputphone"></label>
+        <input type="phone" class="form-control" id="inputphone" placeholder="Your Phone">
+    </div>
+    <hr>
+  <!-- Appointment date -->
+
 <div class="form-group2">
     <p>Appointment Date:</p>
     <div class="input-group date" id="datetimepicker8">
-    <input name="date" placeholder="YYYY-MM-DD" type="text" class="form-control">
+    <input type="text" class="form-control">
     </div>
 </div>
+
+<!-- Service Input -->
 <div class="form-group2">
     <label class="">Reason for Appointment</label>
 </div>
+
 <div class="form-group2">
     <textarea class="form-control" type="textarea" id="message" maxlength="140" rows="7" style="width: 30%"></textarea>
 </div>
