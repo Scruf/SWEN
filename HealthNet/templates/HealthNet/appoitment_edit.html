@@ -1,0 +1,57 @@
+<style>
+ table {
+    width:100%;
+}
+table, th, td {
+    border: 1px solid black;
+    border-collapse: collapse;
+}
+th, td {
+    padding: 5px;
+    text-align: left;
+}
+table#t01 tr:nth-child(even) {
+    background-color: #99ff99;
+}
+table#t01 tr:nth-child(odd) {
+   background-color:#00e6e6;
+}
+table#t01 th	{
+    background-color: #29a329;
+    color: white;
+}
+</style>
+
+{% load staticfiles %}
+<link rel="stylesheet" type="text/css" href="{% static 'HealthNet/css/bootstrap.min.css'%}" />
+
+<link rel="stylesheet" type="text/css" href="{% static 'HealthNet/css/jumbotron.css' %}" />
+
+<link rel="stylesheet" type="text/css" href="{% static 'HealthNet/css/ie10-viewport-bug-workaround.css' %}" />
+
+<script src="{% static 'HealthNet/js/bootstrap.min.js'%} "></script>
+
+<script src="{% static 'HealthNet/js/ie10-viewport-bug-workaround.js'%}"></script>
+
+<script src="{% static 'HealthNet/js/ie-emulation-modes-warning.js' %}"> </script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.0/jquery.min.js"></script>
+<h1>{{Normailized_Hospital_Name}}</h1>
+<table id="t01">
+  <tr>
+    <th>Date</th>
+    <th>Doctor</th>
+    <th>Reason</th>
+  </tr>
+  {% for ap in Appoitment_prop %}
+  <tr>
+
+    <td>{{ap.date}}</td>
+    <td>{{ap.doctor}}</td>
+    <td>{{ap.reason}}</td>
+    <th><button><a href="{{ap.id}}/">Edit</button></th>
+    <th><button><a href="/HealthNet/{{p.patient_user_name}}">Delete</a></button></th>
+  </tr>
+
+{%endfor%}
+</table>
+<br>

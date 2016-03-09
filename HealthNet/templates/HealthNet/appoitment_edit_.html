@@ -1,0 +1,73 @@
+<style>
+  table {
+    width: 100%;
+  }
+
+  table,
+  th,
+  td {
+    border: 1px solid black;
+    border-collapse: collapse;
+  }
+
+  th,
+  td {
+    padding: 5px;
+    text-align: left;
+  }
+
+  table#t01 tr:nth-child(even) {
+    background-color: #99ff99;
+  }
+
+  table#t01 tr:nth-child(odd) {
+    background-color: #00e6e6;
+  }
+
+  table#t01 th {
+    background-color: #29a329;
+    color: white;
+  }
+</style>
+
+{% load staticfiles %}
+<link rel="stylesheet" type="text/css" href="{% static 'HealthNet/css/bootstrap.min.css'%}" />
+
+<link rel="stylesheet" type="text/css" href="{% static 'HealthNet/css/jumbotron.css' %}" />
+
+<link rel="stylesheet" type="text/css" href="{% static 'HealthNet/css/ie10-viewport-bug-workaround.css' %}" />
+
+<script src="{% static 'HealthNet/js/bootstrap.min.js'%} "></script>
+
+<script src="{% static 'HealthNet/js/ie10-viewport-bug-workaround.js'%}"></script>
+
+<script src="{% static 'HealthNet/js/ie-emulation-modes-warning.js' %}">
+</script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.0/jquery.min.js"></script>
+<h1>You are editing your appoitment</h1>
+<table id="t01">
+  <tr>
+    <th>Date</th>
+    <th>Doctor</th>
+    <th>Reason</th>
+  </tr>
+  {% for ap in Appoitment_prop %}
+  <tr>
+    <form method="POST" action=apoitment_save/> {%csrf_token%}
+    <td>
+      <input type="text" placeholder="{{ap.date}}">
+    </td>
+    <td>{{ap.doctor}}</td>
+    <td>
+      <input type="text" name ="reason" value="{{ap.reason}}">
+    </td>
+    <th>
+      <button type="submit">Save</button></th>
+    <th><button><a href="/HealthNet/{{p.patient_user_name}}">Delete</a></button>
+    </th>
+    </form>
+  </tr>
+
+  {%endfor%}
+</table>
+<br>

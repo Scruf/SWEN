@@ -178,7 +178,7 @@
             <div class="col-lg-12 text-center">
             <u1 style="list-style-type:none">
               {%for p in patient_list%}
-                <li class="col-lg-12 text-center">{{p.first_name}} {{p.last_name}}</li>
+                <li class="col-lg-12 text-center"> <a href="/HealthNet/{{p.user_name}}">{{p.first_name}} {{p.last_name}}</a></li>
               {% endfor %}
             </u1>
             </div>

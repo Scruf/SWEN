@@ -285,7 +285,7 @@ def send_message(request,user_name):
     return HttpResponse("Message Was Send")
 
 
-def doctor_sign(request,hospital_name):
+def doctor_sign(request):
     doctor_sign_template = loader.get_template("HealthNet/doctors_sign.html")
     context = {
         "Doctor":"Sign",
@@ -293,7 +293,7 @@ def doctor_sign(request,hospital_name):
     return HttpResponse(doctor_sign_template.render(context,request))
 
 
-def doctor_verify(request,hospital_name):
+def doctor_verify(request):
     if request.method == 'POST':
         email = request.POST.get('email',None)
         password = request.POST.get('password',None)
@@ -343,3 +343,43 @@ def confirm_appoitment(request,user_name):
         return redirect("/HealthNet/%s"%user_name)
     else:
         return HttpResponse("WWTF")
+
+
+def edit_apoitment(request,user_name):
+    appoitment_edit_template = loader.get_template("HealthNet/appoitment_edit.html")
+    appoitment_list = Apoitment.objects.filter(patients=user_name)
+    user_name = Patient.objects.get(user_name=user_name)
+    context={
+        "user_name":user_name.user_name,
+        "Appoitment_prop":appoitment_list,
+    }
+    return HttpResponse(appoitment_edit_template.render(context,request))
+
+
+def edit_apoitment_(request,user_name,apoitment_id):
+    appoitment_edit_template = loader.get_template("HealthNet/appoitment_edit_.html")
+    appoitment_list = Apoitment.objects.filter(patients=user_name)
+    context={
+        "user_name":user_name,
+        "Appoitment_prop":appoitment_list,
+    }
+    return HttpResponse(appoitment_edit_template.render(context,request))
+
+
+def apoitment_save(request,apoitment_id):
+    if request.method == 'POST':
+        apoitment = Apoitment.objects.get(pk=apoitment_id)
+        return HttpResponse("Something")
+    # if request.method == 'POST':
+    #     reason = request.POST.get("reason",None)
+    #     return HttpResponse("%s"%reason)
+    # else:
+    #     return redirect(REDIRECT_URL)
+
+
+
+
+
+
+def save(request):
+    return HttpResponse("Saved")
