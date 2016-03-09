@@ -31,18 +31,28 @@
       <file leaf-file-name="Nurses.html" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/HealthNet/templates/HealthNet/Nurses.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="-10.294118">
+            <state vertical-scroll-proportion="0.0">
               <caret line="14" column="36" selection-start-line="14" selection-start-column="16" selection-end-line="14" selection-end-column="36" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="Log table.html" pinned="false" current-in-tab="true">
+      <file leaf-file-name="Log table.html" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/HealthNet/templates/HealthNet/Log table.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.18427518">
+            <state vertical-scroll-proportion="-4.4117646">
               <caret line="6" column="33" selection-start-line="6" selection-start-column="33" selection-end-line="6" selection-end-column="33" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="free_pool.html" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/HealthNet/templates/HealthNet/free_pool.html">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="0.42997542">
+              <caret line="38" column="16" selection-start-line="38" selection-start-column="16" selection-end-line="38" selection-end-column="16" />
               <folding />
             </state>
           </provider>
@@ -66,6 +76,7 @@
         <option value="$PROJECT_DIR$/HealthNet/templates/HealthNet/signup.html" />
         <option value="$PROJECT_DIR$/SWEN/urls.py" />
         <option value="$PROJECT_DIR$/HealthNet/templates/HealthNet/Log table.html" />
+        <option value="$PROJECT_DIR$/HealthNet/templates/HealthNet/free_pool.html" />
       </list>
     </option>
   </component>
@@ -105,7 +116,6 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
-      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <PATH>
@@ -152,7 +162,11 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
-              <option name="myItemId" value="static" />
+              <option name="myItemId" value="templates" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="HealthNet" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
@@ -173,13 +187,10 @@
               <option name="myItemId" value="static" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="HealthNet" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
           </PATH>
         </subPane>
       </pane>
+      <pane id="Scope" />
       <pane id="Scratches" />
     </panes>
   </component>
@@ -190,7 +201,7 @@
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="js-jscs-nodeInterpreter" value="C:\Program Files\nodejs\node.exe" />
   </component>
-  <component name="RunManager" selected="JavaScript Debug.Log table.html">
+  <component name="RunManager" selected="JavaScript Debug.free_pool.html">
     <configuration default="false" name="Test: HealthNet.templates.HealthNet.index.html" type="DjangoTestsConfigurationType" factoryName="Django tests" temporary="true">
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
@@ -209,24 +220,6 @@
       <option name="CUSTOM_SETTINGS" value="false" />
       <option name="USE_OPTIONS" value="false" />
       <option name="OPTIONS" value="" />
-      <method />
-    </configuration>
-    <configuration default="false" name="models" type="PythonConfigurationType" factoryName="Python" temporary="true">
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <envs>
-        <env name="PYTHONUNBUFFERED" value="1" />
-      </envs>
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/HealthNet" />
-      <option name="IS_MODULE_SDK" value="true" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <module name="SWEN" />
-      <EXTENSION ID="PythonCoverageRunConfigurationExtension" enabled="false" sample_coverage="true" runner="coverage.py" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/HealthNet/models.py" />
-      <option name="PARAMETERS" value="" />
-      <option name="SHOW_COMMAND_LINE" value="false" />
       <method />
     </configuration>
     <configuration default="false" name="manage" type="PythonConfigurationType" factoryName="Python" temporary="true">
@@ -268,6 +261,9 @@
       <method />
     </configuration>
     <configuration default="false" name="Log table.html" type="JavascriptDebugType" factoryName="JavaScript Debug" temporary="true" nameIsGenerated="true" uri="http://localhost:63342/SWEN/HealthNet/templates/HealthNet/Log table.html">
+      <method />
+    </configuration>
+    <configuration default="false" name="free_pool.html" type="JavascriptDebugType" factoryName="JavaScript Debug" temporary="true" nameIsGenerated="true" uri="http://localhost:63342/SWEN/HealthNet/templates/HealthNet/free_pool.html">
       <method />
     </configuration>
     <configuration default="true" type="DjangoTestsConfigurationType" factoryName="Django tests">
@@ -512,18 +508,18 @@
     <list size="6">
       <item index="0" class="java.lang.String" itemvalue="Django server.SWEN" />
       <item index="1" class="java.lang.String" itemvalue="Django tests.Test: HealthNet.templates.HealthNet.index.html" />
-      <item index="2" class="java.lang.String" itemvalue="Python.models" />
-      <item index="3" class="java.lang.String" itemvalue="Python.manage" />
-      <item index="4" class="java.lang.String" itemvalue="Django tests.Test: django-bootstrap-calendar.django_bootstrap_calendar.templates.base.html" />
-      <item index="5" class="java.lang.String" itemvalue="JavaScript Debug.Log table.html" />
+      <item index="2" class="java.lang.String" itemvalue="Python.manage" />
+      <item index="3" class="java.lang.String" itemvalue="Django tests.Test: django-bootstrap-calendar.django_bootstrap_calendar.templates.base.html" />
+      <item index="4" class="java.lang.String" itemvalue="JavaScript Debug.Log table.html" />
+      <item index="5" class="java.lang.String" itemvalue="JavaScript Debug.free_pool.html" />
     </list>
     <recent_temporary>
       <list size="5">
-        <item index="0" class="java.lang.String" itemvalue="JavaScript Debug.Log table.html" />
-        <item index="1" class="java.lang.String" itemvalue="Django tests.Test: django-bootstrap-calendar.django_bootstrap_calendar.templates.base.html" />
-        <item index="2" class="java.lang.String" itemvalue="Django tests.Test: HealthNet.templates.HealthNet.index.html" />
-        <item index="3" class="java.lang.String" itemvalue="Python.manage" />
-        <item index="4" class="java.lang.String" itemvalue="Python.models" />
+        <item index="0" class="java.lang.String" itemvalue="JavaScript Debug.free_pool.html" />
+        <item index="1" class="java.lang.String" itemvalue="JavaScript Debug.Log table.html" />
+        <item index="2" class="java.lang.String" itemvalue="Django tests.Test: django-bootstrap-calendar.django_bootstrap_calendar.templates.base.html" />
+        <item index="3" class="java.lang.String" itemvalue="Django tests.Test: HealthNet.templates.HealthNet.index.html" />
+        <item index="4" class="java.lang.String" itemvalue="Python.manage" />
       </list>
     </recent_temporary>
   </component>
@@ -623,6 +619,22 @@
     <entry file="file://$PROJECT_DIR$/HealthNet/templates/HealthNet/Nurses.html">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
+          <caret line="14" column="36" selection-start-line="14" selection-start-column="16" selection-end-line="14" selection-end-column="36" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/HealthNet/templates/HealthNet/Log table.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/HealthNet/templates/HealthNet/Nurses.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding />
         </state>
@@ -666,7 +678,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
           <caret line="8" column="84" selection-start-line="8" selection-start-column="84" selection-end-line="8" selection-end-column="84" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -707,7 +718,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -856,18 +866,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/errors.css">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/HealthNet/templates/HealthNet/signup.html">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
           <caret line="8" column="84" selection-start-line="8" selection-start-column="84" selection-end-line="8" selection-end-column="84" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -909,13 +911,12 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
           <caret line="80" column="0" selection-start-line="80" selection-start-column="0" selection-end-line="80" selection-end-column="0" />
-          <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/HealthNet/templates/HealthNet/Nurses.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-10.294118">
+        <state vertical-scroll-proportion="0.0">
           <caret line="14" column="36" selection-start-line="14" selection-start-column="16" selection-end-line="14" selection-end-column="36" />
           <folding />
         </state>
@@ -923,8 +924,16 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/HealthNet/templates/HealthNet/Log table.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.18427518">
+        <state vertical-scroll-proportion="-4.4117646">
           <caret line="6" column="33" selection-start-line="6" selection-start-column="33" selection-end-line="6" selection-end-column="33" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/HealthNet/templates/HealthNet/free_pool.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.42997542">
+          <caret line="38" column="16" selection-start-line="38" selection-start-column="16" selection-end-line="38" selection-end-column="16" />
           <folding />
         </state>
       </provider>
