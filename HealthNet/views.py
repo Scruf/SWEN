@@ -2,7 +2,7 @@
 from django.shortcuts import render,get_object_or_404,redirect
 from django.http import HttpResponse
 from django.template import loader
-from .models import Patient,Hospital,Logs,Doctor
+from .models import Patient,Hospital,Logs,Doctor,Apoitment
 from django.contrib.auth import authenticate, login
 import re
 import uuid
@@ -311,8 +311,10 @@ def doctor_profile(request,user_name):
         doctor = Doctor.objects.get(username=user_name)
         doctor_template = loader.get_template('HealthNet/doctors.html')
         patients = doctor.patients.all()
+        appoitment_list = Apoitment.objects.filter(doctor=user_name)
         context ={
             "doctor":doctor,
+            "appoitment_list":appoitment_list,
             "patient_list":patients,
         }
         return HttpResponse(doctor_template.render(context,request))
@@ -331,6 +333,13 @@ def confirm_appoitment(request,user_name):
     if request.method == 'POST':
         patient = Patient.objects.get(user_name=user_name)
         doctor = Doctor.objects.get(patients=patient)
-        
+        appoitment_date = request.POST.get("date",None)
+        reason_to = request.POST.get("reason",None)
+        apoitment = Apoitment(date=appoitment_date,patients=patient.user_name,\
+                                doctor=doctor.username,reason=reason_to)
+        apoitment.save()
+        logs = Logs(date=datetime.date.today(),action="Requestiong Appoitment",who_did=patient.user_name)
+        logs.save()
+        return redirect("/HealthNet/%s"%user_name)
     else:
         return HttpResponse("WWTF")

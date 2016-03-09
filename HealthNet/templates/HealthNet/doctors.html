@@ -151,21 +151,16 @@
             <u1 style="list-style-type:none">
                 <li class="col-lg-12 text-center">
                     <table>
+                      {%for apoitment in appoitment_list%}
                         <tr class="col-lg-12">
                             <td>Appointment</td>
-                            <td class="col-lg-12 text-center">3/9/2016</td>
-                            <td class="col-lg-12 text-center">12:00pm</td>
+                            <td class="col-lg-12 text-center">{{apoitment.date}}</td>
+                            <td class="col-lg-12 text-center">{{apoitment.patients}}</td>
+                            <td class="col-lg-12 text-center">{{apoitment.reason}}</td>
+                            <br>
                         </tr>
-                        <tr class="col-lg-12 text-center" style="width:100%">
-                            <td>Appointment</td>
-                            <td class="col-lg-12 text-center">3/9/2016</td>
-                            <td class="col-lg-12 text-center">1:30pm</td>
-                        </tr>
-                        <tr class="col-lg-12 text-center" style="width:100%">
-                            <td>Appointment</td>
-                            <td class="col-lg-12 text-center">3/9/2012</td>
-                            <td class="col-lg-12 text-center">4:00pm</td>
-                        </tr>
+                        {%endfor%}
+
                     </table>
                 </li>
             </u1>

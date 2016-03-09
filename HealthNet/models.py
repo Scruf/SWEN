@@ -68,7 +68,7 @@ class Apoitment(models.Model):
     reason = models.CharField(max_length=250)
 
     def __str__(self):
-        return self.date+"-"+self.patients+"-"+self.doctor+"-"+self.reason
+        return self.patients+"-"+self.doctor+"-"+self.reason
 #------------------------------------Logs----------------------------------
 class Logs(models.Model):
     date = models.DateTimeField()
