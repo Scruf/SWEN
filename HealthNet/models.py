@@ -76,5 +76,9 @@ class Logs(models.Model):
     who_did = models.CharField(max_length=250)
     what_happened = models.CharField(max_length=250)
     def __str__(self):
-        return self.action+"-"+self.who_did+"-"+self.what_happened
+        month = str(self.date.today().month)
+        _date=str(self.date.today().date)
+        year = str(self.date.today().year)
+        _date_ = month+"/"+_date+"/"+year
+        return _date_+" "+self.action+"-"+self.who_did+"-"+self.what_happened
 # Create your models here.
