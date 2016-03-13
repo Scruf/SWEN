@@ -24,11 +24,11 @@ SECRET_KEY = '_+lvp-nfm2b@yw4^=qni$8xv%b1^$dfkdai7ti+e=rkj47xap!'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 EMAIL_HOST='smtp.gmail.com'
 EMAIL_PORT=587
 EMAIL_USE_TLS=True
-EMAIL_HOST_USER='healthnettesting@gmail.com'
+EMAIL_HOST_USER='HealthNetTesting@gmail.com'
 EMAIL_HOST_PASSWORD='healthnet'
 EMAIL_BACKEND='django.core.mail.backends.smtp.EmailBackend'
 
@@ -36,6 +36,7 @@ EMAIL_BACKEND='django.core.mail.backends.smtp.EmailBackend'
 
 INSTALLED_APPS = [
     'HealthNet.apps.HealthnetConfig',
+    'SWEN.apps.SWENConfig',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
