@@ -19,7 +19,7 @@ MONGODB_URI ='mongodb://ek5442:NokiaLumia920@ds033875.mlab.com:33875/movies'
 
 
 def index(request):
-    sign_up_template = loader.get_template('SWEN/admin_sign_up.html')
+    sign_up_template = loader.get_template('SWEN/index.html')
     context = {
         "Loading":"Sign Up"
     }
