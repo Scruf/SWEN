@@ -1,9 +1,15 @@
 from __future__ import unicode_literals
 import uuid
 from django.db import models
-
+from django.contrib.auth.models import User
 
 #Patient is the model that holds all of a patient's information
+
+class Comments(models.Model):
+    user = models.ForeignKey(User)
+    text = models.CharField(max_length=255)
+
+
 class  Patient(models.Model):
     user_name = models.CharField(max_length=50)
     password = models.CharField(max_length=50)

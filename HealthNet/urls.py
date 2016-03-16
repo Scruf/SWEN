@@ -1,4 +1,4 @@
-from django.conf.urls import url
+from django.conf.urls import url,patterns,include
 from . import views
 
 urlpatterns =[
@@ -19,6 +19,6 @@ urlpatterns =[
     url(r'^(?P<user_name>\w+)/send/$',views.send_message,name='send'),
     url(r'^doctor/sign/$',views.doctor_sign,name='doctor_sign'),
     url(r'^doctor/sign/doctor/',views.doctor_verify,name="doctor_verify"),
-
+    
 
 ]
