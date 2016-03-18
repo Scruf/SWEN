@@ -37,6 +37,7 @@ EMAIL_BACKEND='django.core.mail.backends.smtp.EmailBackend'
 INSTALLED_APPS = [
     'HealthNet.apps.HealthnetConfig',
     'SWEN.apps.SWENConfig',
+    'fullcalendar',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',

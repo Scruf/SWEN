@@ -1,0 +1,22 @@
+{% load fullcalendar_tags %}
+
+ <!DOCTYPE html>
+ <head>
+
+     <title></title>
+
+     {% fullcalendar_css %}
+     {% fullcalendar_print_css %}
+     {% fullcalendar_jquery %}
+     {% fullcalendar_jquery_ui %}
+     {% fullcalendar_javascript %}
+
+     {% calendar_init event_url %}
+
+ </head>
+
+
+
+ <body>
+  {% calendar %}
+</body>

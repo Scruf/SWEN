@@ -17,6 +17,15 @@ import redis
 # Create your views here.
 REDIRECT_URL="http://dogr.io/wow/suchservice/muchtextsplitting/verydirectcompose.png"
 #Its is not index  I just created this controller to test sign in
+def fullcalendar(request):
+    calendar_template = loader.get_template('HealthNet/calendar.html')
+    context = {
+        "Woo":"Wee",
+    }
+    return HttpResponse(calendar_template.render(context,request))
+
+
+
 def index(request):
     users = Patient.objects.all()
     template = loader.get_template('HealthNet/index.html')
