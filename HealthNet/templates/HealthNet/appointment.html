@@ -1,49 +1,96 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <meta charset="UTF-8">
-    <title>HealthNet</title>
+  <meta charset="UTF-8">
+  <title>HealthNet</title>
+  <script src="{{STATIC_URL}}/static/HealthNet/js/jquery.js"></script>
+  <script src="{{STATIC_URL}}/static/HealthNet/js/moment.js"></script>
+  <script src="{{STATIC_URL}}/static/HealthNet/js/jquery-ui.js"></script>
 </head>
+
 <body>
   {%load staticfiles%}
-  <link rel="stylesheet" type="text/css" href="{%static 'HealthNet/css/appointment.css' %}" >
+  <link rel="stylesheet" type="text/css" href="{% static 'HealthNet/css/bootstrap-datepicker.css'%}">
+  <!-- <link rel="stylesheet" type="text/css" href="{% static 'HealthNet/css/bootstrap.min.css' %}"> -->
+  <!-- <link rel="stylesheet" type="text/css" href="{%static 'HealthNet/css/appointment.css' %}"> -->
 
-<div class="col-md-4">
-<div class="well">
 
-    <div class="well-header">Book your appointment online</div>
-    <hr>
-   <p class="header_p">Even though walk-ins are welcome,
-    we encourage you to contact us via the form below to
-    set your appointment. You will be contacted within 24 hours
-    for confirmation.</p>
-    <hr>
-<form method="POST" action="confirm/">
-  {%csrf_token%}
-    <!-- Contact by Input -->
-    <div class="form-group1">
-      <label for="Select">Contact by:</label>
-      <select id="Select" class="form-control"><option>Email</option><option>Phone</option></select>
+  <div class="col-md-4">
+    <div class="well">
+
+      <div class="well-header">Book your appointment online</div>
+      <hr>
+      <p class="header_p">Even though walk-ins are welcome, we encourage you to contact us via the form below to set your appointment. You will be contacted within 24 hours for confirmation.</p>
+      <hr>
+      <form method="POST" action="confirm/">
+        {%csrf_token%}
+        <!-- Contact by Input -->
+        <div class="form-group1">
+          <label for="Select">Contact by:</label>
+          <select id="Select" class="form-control">
+            <option>Email</option>
+            <option>Phone</option>
+          </select>
+        </div>
+        <div class="form-group2">
+          <div class="controls">
+            <div class="input-group">
+              <input id="date-picker-2" type="text" class="date-picker form-control" />
+              <label for="date-picker-2" class="input-group-addon btn"><span class="glyphicon glyphicon-calendar"></span>
+
+              </label>
+            </div>
+          </div>
+        </div>
+        <style>
+        @import url('https://netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css');
+          .date-form {
+            margin: 10px;
+          }
+
+          label.control-label span {
+            cursor: pointer;
+          }
+        </style>
+        <script type="text/javascript">
+          $(document).ready(function() {
+            $(".date-picker").datepicker();
+
+            $(".date-picker").on("change", function() {
+              var id = $(this).attr("id");
+              var val = $("label[for='" + id + "']").text();
+              $("#msg").text(val + " changed");
+            });
+          });
+        </script>
+        <div class="form-group2">
+          <label class="">Reason for Appointment</label>
+        </div>
+        <div class="form-group2">
+          <input name="reason" class="form-control" type="textarea" id="message" maxlength="140" rows="7" style="width: 30%"></input>
+        </div>
+
+        <!-- Button Area-->
+        <button type="submit" class="btn1">Submit</button>
+        <button type="submit" class="btn2">Cancel</button>
+        <hr>
+      </form>
+      <!-- form end -->
     </div>
-<div class="form-group2">
-    <p>Appointment Date:</p>
-    <div class="input-group date" id="datetimepicker8">
-    <input name="date" placeholder="YYYY-MM-DD" type="text" class="form-control">
-    </div>
-</div>
-<div class="form-group2">
-    <label class="">Reason for Appointment</label>
-</div>
-<div class="form-group2">
-    <input name="reason" class="form-control" type="textarea" id="message" maxlength="140" rows="7" style="width: 30%"></input>
-</div>
+    <!-- well end -->
 
-<!-- Button Area-->
-    <button type="submit" class="btn1">Submit</button>
-    <button type="submit" class="btn2">Cancel</button><hr>
-</form>
- <!-- form end -->
-</div><!-- well end -->
-</div>
 </body>
+
+
+<script src="{{STATIC_URL}}/static/HealthNet/js/classie.js"></script>
+<script src="{{STATIC_URL}}/static/HealthNet/js/cbpAnimatedHeader.js"></script>
+
+
+
+
+<!-- Contact Form JavaScript -->
+<script src="{{STATIC_URL}}/static/HealthNet/js/jqBootstrapValidation.js"></script>
+<script src="{{STATIC_URL}}/static/HealthNet/js/contact_me.js"></script>
+
 </html>
