@@ -23,7 +23,7 @@ def index(request):
     context = {
         "Loading":"Sign Up"
     }
-    return HttpResponse(sign_up_template.render(context,request))
+    return redirect('/HealthNet/')
 
 def sign_up(request):
     if request.method=='POST':
