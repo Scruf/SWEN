@@ -1,6 +1,6 @@
 
 from django.shortcuts import render,get_object_or_404,redirect
-from django.http import HttpResponse,HttpResponseServerError
+from django.http import HttpResponse,HttpResponseServerError,JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 from django.contrib.sessions.models import Session
 from django.contrib.auth.decorators import login_required
@@ -13,16 +13,24 @@ from django.template.context import RequestContext
 from django.core.mail import send_mail
 import datetime
 import redis
+import json
+
 
 # Create your views here.
 REDIRECT_URL="http://dogr.io/wow/suchservice/muchtextsplitting/verydirectcompose.png"
 #Its is not index  I just created this controller to test sign in
 def fullcalendar(request):
     calendar_template = loader.get_template('HealthNet/calendar.html')
+    data = {
+        'title':"I am batman",
+        'start':'2015-03-17',
+        'end':'2015-03-25',
+    }
     context = {
         "Woo":"Wee",
     }
-    return HttpResponse(calendar_template.render(context,request))
+    return render(request,'HealthNet/calendar.html',{'events':json.dumps(data)})
+    # return HttpResponse(calendar_template.render(data,request))
 
 
 

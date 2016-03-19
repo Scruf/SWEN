@@ -1,4 +1,4 @@
-{% load fullcalendar_tags %}
+<!-- {% load fullcalendar_tags %} -->
 
  <!DOCTYPE html>
  <head>
@@ -13,10 +13,23 @@
 
      {% calendar_init event_url %}
 
+
  </head>
 
 
 
  <body>
-  {% calendar %}
+  <!-- {% calendar %} -->
+  <!-- <div id="calendar">
+   </div>
+ -->
+  <script>
+  $(document).ready(function(){
+    $('#calendar').fullCalendar({
+        events: {{ events|safe }}
+    });
+  });
+
+
+</script>
 </body>
