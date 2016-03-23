@@ -19,14 +19,16 @@
 
 
  <body>
-  <!-- {% calendar %} -->
-  <!-- <div id="calendar">
-   </div>
- -->
+
+<div id="calendar"></div>
   <script>
   $(document).ready(function(){
     $('#calendar').fullCalendar({
-        events: {{ events|safe }}
+        events: [{
+          title:'Soem stuff',
+          start:'03/22/2016',
+          end:'03/25/2016',
+        }]
     });
   });
 
