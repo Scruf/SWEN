@@ -23,13 +23,13 @@ def fullcalendar(request):
     calendar_template = loader.get_template('HealthNet/calendar.html')
     data = {
         'title':"I am batman",
-        'start':'2015-03-17',
-        'end':'2015-03-25',
+        'start':'03/22/2016',
+        'end':'03/25/2016',
     }
     context = {
         "Woo":"Wee",
     }
-    return render(request,'HealthNet/calendar.html',{'events':json.dumps(data)})
+    return render(request,'HealthNet/calendar.html',{'apointements':json.dumps(data)})
     # return HttpResponse(calendar_template.render(data,request))
 
 

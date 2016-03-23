@@ -24,11 +24,7 @@
   <script>
   $(document).ready(function(){
     $('#calendar').fullCalendar({
-        events: [{
-          title:'Soem stuff',
-          start:'03/22/2016',
-          end:'03/25/2016',
-        }]
+        events:[{{apointements|safe}}]
     });
   });
 
