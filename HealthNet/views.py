@@ -18,22 +18,28 @@ import json
 
 # Create your views here.
 REDIRECT_URL="http://dogr.io/wow/suchservice/muchtextsplitting/verydirectcompose.png"
-#Its is not index  I just created this controller to test sign in
+#Its not a full implementation of a fullcalendar
+#I am just using it for testing (savages)
 def fullcalendar(request):
     calendar_template = loader.get_template('HealthNet/calendar.html')
+    tite="ItWorks"
+    start="December21"
+    end="January6"
     data = {
         'title':"I am batman",
         'start':'03/22/2016',
         'end':'03/25/2016',
+        'url':'%s/%s/%s'%(tite,start,end),
+
     }
-    context = {
-        "Woo":"Wee",
-    }
+
     return render(request,'HealthNet/calendar.html',{'apointements':json.dumps(data)})
     # return HttpResponse(calendar_template.render(data,request))
 
 
-
+def fullcalendar_edit(request,title,start,end):
+    return HttpResponse("%s__%s__%s"%(title,start,end))
+#End of fullcalendar testing
 def index(request):
     users = Patient.objects.all()
     template = loader.get_template('HealthNet/index.html')

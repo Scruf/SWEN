@@ -11,7 +11,7 @@
      {% fullcalendar_jquery_ui %}
      {% fullcalendar_javascript %}
 
-     {% calendar_init event_url %}
+
 
 
  </head>
@@ -25,8 +25,11 @@
   $(document).ready(function(){
     $('#calendar').fullCalendar({
         events:[{{apointements|safe}}]
+
+
+      });
     });
-  });
+
 
 
 </script>
