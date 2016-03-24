@@ -5,10 +5,6 @@ from django.contrib.auth.models import User
 
 #Patient is the model that holds all of a patient's information
 
-class Comments(models.Model):
-    user = models.ForeignKey(User)
-    text = models.CharField(max_length=255)
-
 
 class  Patient(models.Model):
     user_name = models.CharField(max_length=50)
@@ -67,14 +63,7 @@ class Hospital(models.Model):
 #Doctor is the class that holds all of the information about a doctor
 
 #Apoitment is the class that holds all of the information about appointments
-class Apoitment(models.Model):
-    date = models.DateTimeField()
-    patients = models.CharField(max_length=250)
-    doctor = models.CharField(max_length=250)
-    reason = models.CharField(max_length=250)
 
-    def __str__(self):
-        return self.patients+"-"+self.doctor+"-"+self.reason
 #------------------------------------Logs----------------------------------
 class Logs(models.Model):
     date = models.DateTimeField()

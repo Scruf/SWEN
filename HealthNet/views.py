@@ -5,7 +5,7 @@ from django.views.decorators.csrf import csrf_exempt
 from django.contrib.sessions.models import Session
 from django.contrib.auth.decorators import login_required
 from django.template import loader
-from .models import Patient,Hospital,Logs,Doctor,Apoitment,User
+from .models import Patient,Hospital,Logs,Doctor,User
 from django.contrib.auth import authenticate, login
 import re
 import uuid
@@ -14,12 +14,15 @@ from django.core.mail import send_mail
 import datetime
 import redis
 import json
-
+import helpers as help
 
 # Create your views here.
 REDIRECT_URL="http://dogr.io/wow/suchservice/muchtextsplitting/verydirectcompose.png"
 #Its not a full implementation of a fullcalendar
 #I am just using it for testing (savages)
+
+
+
 def fullcalendar(request):
     calendar_template = loader.get_template('HealthNet/calendar.html')
     tite="ItWorks"
@@ -36,9 +39,15 @@ def fullcalendar(request):
     return render(request,'HealthNet/calendar.html',{'apointements':json.dumps(data)})
     # return HttpResponse(calendar_template.render(data,request))
 
+#Dates must be changed to a more good lookable form
+#Title mustbe truncated so as it could be used further
 
 def fullcalendar_edit(request,title,start,end):
     return HttpResponse("%s__%s__%s"%(title,start,end))
+
+
+
+    
 #End of fullcalendar testing
 def index(request):
     users = Patient.objects.all()
