@@ -21,7 +21,7 @@ urlpatterns =[
     url(r'^doctor/sign/$',views.doctor_sign,name='doctor_sign'),
     url(r'^doctor/sign/doctor/',views.doctor_verify,name="doctor_verify"),
     #urls for a scheduler
-    url(r'^fullcalendar/$',views.fullcalendar,name='fullcalendar'),
-    url(r'^fullcalendar/(?P<title>\w+)/(?P<start>\w+)/(?P<end>\w+)/$',views.fullcalendar_edit,name='fullcalendar_edit'),
+    #url(r'^fullcalendar/$',views.fullcalendar,name='fullcalendar'),
+    #url(r'^fullcalendar/(?P<title>\w+)/(?P<start>\w+)/(?P<end>\w+)/$',views.fullcalendar_edit,name='fullcalendar_edit'),
 
 ]

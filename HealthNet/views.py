@@ -5,7 +5,7 @@ from django.views.decorators.csrf import csrf_exempt
 from django.contrib.sessions.models import Session
 from django.contrib.auth.decorators import login_required
 from django.template import loader
-from .models import Patient,Hospital,Logs,Doctor,Apoitment
+from .models import Patient,Hospital,Logs,Doctor,Apoitment,Scheduler
 from django.contrib.auth import authenticate, login
 import re
 import uuid
@@ -20,25 +20,7 @@ import json
 REDIRECT_URL="http://dogr.io/wow/suchservice/muchtextsplitting/verydirectcompose.png"
 #Its not a full implementation of a fullcalendar
 #I am just using it for testing (savages)
-def fullcalendar(request):
-    calendar_template = loader.get_template('HealthNet/calendar.html')
-    tite="ItWorks"
-    start="December21"
-    end="January6"
-    data = {
-        'title':"I am batman",
-        'start':'03/22/2016',
-        'end':'03/25/2016',
-        'url':'%s/%s/%s'%(tite,start,end),
 
-    }
-
-    return render(request,'HealthNet/calendar.html',{'apointements':json.dumps(data)})
-    # return HttpResponse(calendar_template.render(data,request))
-
-
-def fullcalendar_edit(request,title,start,end):
-    return HttpResponse("%s__%s__%s"%(title,start,end))
 #End of fullcalendar testing
 def index(request):
     users = Patient.objects.all()
@@ -349,6 +331,7 @@ def doctor_profile(request,user_name):
 
 
 def appoitment(request,user_name):
+
     appoitment_template = loader.get_template('HealthNet/appointment.html')
     context = {
         'username':user_name,
@@ -360,27 +343,44 @@ def confirm_appoitment(request,user_name):
         patient = Patient.objects.get(user_name=user_name)
         doctor = Doctor.objects.get(patients=patient)
         appoitment_date = request.POST.get("date",None)
-        reason_to = request.POST.get("reason",None)
-        apoitment = Apoitment(date=appoitment_date,patients=patient.user_name,\
-                                doctor=doctor.username,reason=reason_to)
-        apoitment.save()
-        logs = Logs(date=datetime.date.today(),action="Requestiong Appoitment",who_did=patient.user_name)
-        logs.save()
-        return redirect("/HealthNet/%s"%user_name)
+        return HttpResponse(appoitment_date)
+        # month = appoitment_date.split("/")[0]
+        # day = apoitment_date.split("/")[1]
+        # year = apoitment_date.split("/")[2]
+        # full_date = year+"-"+month+"-"+day
+        # reason_to = request.POST.get("reason",None)
+        # apoitment = Scheduler(start_date=appoitment_date,patient=patient.user_name,\
+        #                         doctor=doctor.username,title=reason_to)
+        # apoitment.save()
+        # logs = Logs(date=datetime.date.today(),action="Requestiong Appoitment",who_did=patient.user_name)
+        # logs.save()
+        # return redirect("/HealthNet/%s"%user_name)
     else:
         return HttpResponse("WWTF")
 
 
 def edit_apoitment(request,user_name):
-    appoitment_edit_template = loader.get_template("HealthNet/appoitment_edit.html")
-    appoitment_list = Apoitment.objects.filter(patients=user_name)
-    user_name = Patient.objects.get(user_name=user_name)
-    context={
-        "user_name":user_name.user_name,
-        "Appoitment_prop":appoitment_list,
-    }
-    return HttpResponse(appoitment_edit_template.render(context,request))
+    try:
+        apoitment_details = Scheduler.objects.get(patient=user_name)
+    except Scheduler.DoesNotExist:
+        calendar_template = loader.get_template('HealthNet/calendar.html')
+        context = {
+            "No Dteails":"Were Found"
+        }
+        return HttpResponse(calendar_template.render(context,request))
+    calendar_template = loader.get_template('HealthNet/calendar.html')
+    tite=apoitment_details.title
+    start=apoitment_details.start_date
+    end=apoitment_details.end_date
+    data = {
+        'title':title,
+        'start':start,
+        'end':end,
+        'url':'%s/%s/%s'%(tite,start,end),
 
+    }
+
+    return render(request,'HealthNet/calendar.html',{'apointements':json.dumps(data)})
 
 def edit_apoitment_(request,user_name,apoitment_id):
     appoitment_edit_template = loader.get_template("HealthNet/appoitment_edit_.html")

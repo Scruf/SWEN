@@ -69,11 +69,11 @@ class Hospital(models.Model):
 #Apoitment is the class that holds all of the information about appointments
 class Scheduler(models.Model):
     start_date = models.DateTimeField()
-    end_date = models.DateTimeField()
+    # end_date = models.DateTimeField()
     title = models.CharField(max_length=250)
     doctor = models.CharField(max_length=250)
     patient = models.CharField(max_length=250)
-    
+
 
 class Apoitment(models.Model):
     date = models.DateTimeField()
