@@ -247,13 +247,13 @@ def register(request):
         logs1.save()
         return redirect('/HealthNet/%s'%username,None)
 
-#def load_profile(request,user_name):
- #   user = Patient.objects.get(user_name=user_name)
-  #  profile_template = loader.get_template('HealthNet/profile.html')
-   # context={
-    #    'Patient':user,
-    #}
-    #return HttpResponse(profile_template.render(context,request))
+def load_profile(request,user_name):
+    user = Patient.objects.get(user_name=user_name)
+    profile_template = loader.get_template('HealthNet/profile.html')
+    context={
+        'Patient':user,
+        }
+    return HttpResponse(profile_template.render(context,request))
 
 
 def patient_pool(request,hospital_name,doctor_user_name):
