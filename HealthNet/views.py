@@ -343,18 +343,17 @@ def confirm_appoitment(request,user_name):
         patient = Patient.objects.get(user_name=user_name)
         doctor = Doctor.objects.get(patients=patient)
         appoitment_date = request.POST.get("date",None)
-        return HttpResponse(appoitment_date)
-        # month = appoitment_date.split("/")[0]
-        # day = apoitment_date.split("/")[1]
-        # year = apoitment_date.split("/")[2]
-        # full_date = year+"-"+month+"-"+day
-        # reason_to = request.POST.get("reason",None)
-        # apoitment = Scheduler(start_date=appoitment_date,patient=patient.user_name,\
-        #                         doctor=doctor.username,title=reason_to)
-        # apoitment.save()
-        # logs = Logs(date=datetime.date.today(),action="Requestiong Appoitment",who_did=patient.user_name)
-        # logs.save()
-        # return redirect("/HealthNet/%s"%user_name)
+        month = appoitment_date.split("/")[0]
+        day = appoitment_date.split("/")[1]
+        year = appoitment_date.split("/")[2]
+        full_date = year+"-"+month+"-"+day
+        reason_to = request.POST.get("reason",None)
+        apoitment = Scheduler(start_date=full_date,patient=patient.user_name,\
+                                doctor=doctor.username,title=reason_to)
+        apoitment.save()
+        logs = Logs(date=datetime.date.today(),action="Requestiong Appoitment",who_did=patient.user_name)
+        logs.save()
+        return redirect("/HealthNet/%s"%user_name)
     else:
         return HttpResponse("WWTF")
 
@@ -369,15 +368,16 @@ def edit_apoitment(request,user_name):
         }
         return HttpResponse(calendar_template.render(context,request))
     calendar_template = loader.get_template('HealthNet/calendar.html')
-    tite=apoitment_details.title
+    title=apoitment_details.title
     start=apoitment_details.start_date
-    end=apoitment_details.end_date
+    start_date=str(start.month)+"/"+str(start.day)+"/"+str(start.year)
+
+    # end=apoitment_details.end_date
     data = {
         'title':title,
-        'start':start,
-        'end':end,
-        'url':'%s/%s/%s'%(tite,start,end),
-
+        'start':start_date,
+        'url':'%s/%s'%(title,start_date),
+        # 'end':end,
     }
 
     return render(request,'HealthNet/calendar.html',{'apointements':json.dumps(data)})

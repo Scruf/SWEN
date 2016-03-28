@@ -75,6 +75,8 @@ class Scheduler(models.Model):
     patient = models.CharField(max_length=250)
 
 
+
+
 class Apoitment(models.Model):
     date = models.DateTimeField()
     patients = models.CharField(max_length=250)
