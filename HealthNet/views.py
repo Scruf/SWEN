@@ -371,12 +371,13 @@ def edit_apoitment(request,user_name):
     title=apoitment_details.title
     start=apoitment_details.start_date
     start_date=str(start.month)+"/"+str(start.day)+"/"+str(start.year)
-
+    date_url = ''.join(start_date.split("/"))
+    
     # end=apoitment_details.end_date
     data = {
         'title':title,
         'start':start_date,
-        'url':'%s/%s'%(title,start_date),
+        'url':'%s/%s/%s'%(user_name,title,date_url),
         # 'end':end,
     }
 
