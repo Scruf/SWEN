@@ -74,7 +74,13 @@ class Scheduler(models.Model):
     doctor = models.CharField(max_length=250)
     patient = models.CharField(max_length=250)
 
-
+#@title = name of the drug to be given
+#@details = the reason why this drug is being assigned_doctor
+#@dosage = the amount of drug to be given
+class Prescription(models.Model):
+    title = models.CharField(max_length=250)
+    details = models.CharField(max_length=250)
+    dosage = models.CharField(max_length=250)
 
 
 class Apoitment(models.Model):

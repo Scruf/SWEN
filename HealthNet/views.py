@@ -372,16 +372,20 @@ def edit_apoitment(request,user_name):
     start=apoitment_details.start_date
     start_date=str(start.month)+"/"+str(start.day)+"/"+str(start.year)
     date_url = ''.join(start_date.split("/"))
-    
+
     # end=apoitment_details.end_date
     data = {
         'title':title,
         'start':start_date,
-        'url':'%s/%s/%s'%(user_name,title,date_url),
+        'url':'details/%s/%s'%(title,date_url),
         # 'end':end,
     }
 
     return render(request,'HealthNet/calendar.html',{'apointements':json.dumps(data)})
+
+def view_appoitment(request,title,date_url):
+    return HttpResponse("%s__%s__%s"%(user_name,title,date_url))
+
 
 def edit_apoitment_(request,user_name,apoitment_id):
     appoitment_edit_template = loader.get_template("HealthNet/appoitment_edit_.html")
