@@ -8,9 +8,10 @@ urlpatterns =[
     url(r'^signup/$', views.signup, name='signup'),
     url(r'^signup/register/$', views.register, name='register'),
     url(r'^(?P<user_name>\w+)/doctor/profile/',views.doctor_profile,name='doctor_profile'),
-   url(r'^(?P<user_name>\w+)/$',views.load_profile, name='load_profile'),
+    url(r'^(?P<user_name>\w+)/$',views.load_profile, name='load_profile'),
     url(r'^(?P<user_name>\w+)/appoitment/$',views.appoitment,name='appoitment'),
-    url(r'^(?P<user_name>\w+)/appoitment/edit/$',views.edit_apoitment,name='edit_apoitment'),
+    url(r'^(?P<user_name>\w+)/appoitment/view/$',views.edit_apoitment,name='edit_apoitment'),
+    url(r'^(?P<user_name>\w+)/appoitment/view/details/(?P<title>\w+)/(?P<date_url>\w+)/$',views.view_appoitment,name='view_appoitment'),
     url(r'^(?P<user_name>\w+)/appoitment/edit/(?P<apoitment_id>[0-9]+)/$',views.edit_apoitment_,name='edit_apoitment_'),
     url(r'^appoitment/edit/(?P<apoitment_id>[0-9]+)/save/$',views.apoitment_save, name='apoitment_save'),
 
