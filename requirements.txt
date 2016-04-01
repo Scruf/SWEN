@@ -1,4 +1,4 @@
-adium-theme-ubuntu==0.3.4
+
 apt-xapian-index==0.46
 beautifulsoup4==4.3.2
 blinker==1.3
