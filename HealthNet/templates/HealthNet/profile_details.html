@@ -1,0 +1,41 @@
+You are in profile details
+
+<div class="container">
+  <form method="POST" action="save/">
+    {%csrf_token%}
+  <ul>
+    <li>
+      <label>Username:</label>
+      <input type="text" name="user_name" value="{{patient.user_name}}">
+    </li>
+    <li>
+      <label>First Name:</label>
+      <input type="text" name="first_name" value="{{patient.first_name}}">
+    </li>
+    <li>
+      <label>Last Name:</label>
+      <input type="text" name="last_name" value="{{patient.last_name}}">
+    </li>
+    <li>
+      <label> Email:</label>
+      <input type="text" name="email" value="{{patient.email}}">
+    </li>
+    <li>
+      <label>Cell Phone</label>
+      <input type="text" name="cell_phone" value="{{patient.cell_phone}}">
+    </li>
+    <li>
+      <label>Address:</label>
+      <input type="text" name="address" value="{{patient.address}}">
+    </li>
+    <li>
+      <label>Insuarance Number:</label>
+      <input type="text" name="insuarance" value="{{patient.insuarance_number}}">
+    </li>
+    <ul>
+      <button class="success">Save</button>
+  </form>
+  </div>
+<style>
+  @import url('https://netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css');
+</style>

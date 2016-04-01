@@ -236,6 +236,45 @@ def load_profile(request,user_name):
         'Patient':user,
         }
     return HttpResponse(profile_template.render(context,request))
+#loading profile details to be editeted
+def profile_edit(request,user_name):
+    try:
+        patient = Patient.objects.get(user_name=user_name)
+        template = loader.get_template('HealthNet/profile_details.html')
+        context ={
+            'patient':patient,
+        }
+        return HttpResponse(template.render(context,request))
+    except Patient.DoesNotExist:
+        return HttpResponse("Error")
+
+def save_profile(request,user_name):
+    if request.method=='POST':
+        try:
+            user = Patient.objects.get(user_name=user_name)
+            user_name = request.POST.get("user_name",None)
+            first_name = request.POST.get("first_name",None)
+            last_name = request.POST.get("last_name",None)
+            email = request.POST.get("email",None)
+            cell_phone = request.POST.get("cell_phone",None)
+            address = request.POST.get("address",None)
+            insuarance_number = request.POST.get("insuarance",None)
+            user.user_name=user_name
+            user.first_name = first_name
+            user.last_name = last_name
+            user.email = email
+            user.cell_phone = cell_phone
+            user.address = address
+            user.insuarance_number = insuarance_number
+            user.save()
+            logs1 = Logs(date=datetime.date.today(),who_did="%s edited profile "%user_name)
+            logs1.save()
+            return redirect('/HealthNet/%s'%user_name,None)
+        except Patient.DoesNotExist:
+            return HttpResponse("Could not save the user")
+
+
+
 
 
 def patient_pool(request,hospital_name,doctor_user_name):
