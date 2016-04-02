@@ -4,6 +4,13 @@ from django.db import models
 from django.contrib.auth.models import User
 
 #Patient is the model that holds all of a patient's information
+class Administration(models.Model):
+    user_name = models.CharField(max_length=255)
+    password = models.CharField(max_length=255)
+    email = models.CharField(max_length=255)
+
+
+
 
 class Comments(models.Model):
     user = models.ForeignKey(User)
