@@ -4,9 +4,10 @@
 <head>
   <meta charset="UTF-8">
   <title>HealthNet</title>
-  <script src="{{STATIC_URL}}/static/HealthNet/js/jquery.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.0/jquery.min.js"></script>
   <script src="{{STATIC_URL}}/static/HealthNet/js/moment.js"></script>
   <script src="{{STATIC_URL}}/static/HealthNet/js/jquery-ui.js"></script>
+  <script src="{{STATIC_URL}}/static/HealthNet/js/bootstrap-datepicker.js"></script>
 </head>
 
 <body>
@@ -34,49 +35,42 @@
           </select>
         </div>
         <div class="form-group2">
-          <div class="controls">
-            <div class="input-group">
-              <input name ="date" id="date-picker-2" type="text" class="date-picker form-control" />
-              <label for="date-picker-2" class="input-group-addon btn"><span class="glyphicon glyphicon-calendar"></span>
-              </label>
+          <div class="input-group date" data-provide="datepicker">
+            <input type="text" class="form-control">
+            <div class="input-group-addon">
+              <span class="glyphicon glyphicon-th"></span>
             </div>
           </div>
-        </div>
-        <style>
-        @import url('https://netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css');
-          .date-form {
-            margin: 10px;
-          }
+          <style>
+            @import url('https://netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css');
+            .date-form {
+              margin: 10px;
+            }
 
-          label.control-label span {
-            cursor: pointer;
-          }
-        </style>
-        <script type="text/javascript">
-          $(document).ready(function() {
-            $(".date-picker").datepicker();
-            $(".date-picker").on("change", function() {
-              var id = $(this).attr("id");
-              var val = $("label[for='" + id + "']").text();
-              $("#msg").text(val + " changed");
+            label.control-label span {
+              cursor: pointer;
+            }
+          </style>
+          <script type="text/javascript">
+            $(document).ready(function() {
+              $('.datepicker').datepicker()
             });
-          });
-        </script>
-        <div class="form-group2">
-          <label class="">Reason for Appointment</label>
-        </div>
-        <div class="form-group2">
-          <input name="reason" class="form-control" type="textarea" id="message" maxlength="140" rows="7" style="width: 30%"></input>
-        </div>
+          </script>
+          <div class="form-group2">
+            <label class="">Reason for Appointment</label>
+          </div>
+          <div class="form-group2">
+            <input name="reason" class="form-control" type="textarea" id="message" maxlength="140" rows="7" style="width: 30%"></input>
+          </div>
 
-        <!-- Button Area-->
-        <button type="submit" class="btn1">Submit</button>
-        <button type="submit" class="btn2">Cancel</button>
-        <hr>
+          <!-- Button Area-->
+          <button type="submit" class="btn1">Submit</button>
+          <button type="submit" class="btn2">Cancel</button>
+          <hr>
       </form>
       <!-- form end -->
-    </div>
-    <!-- well end -->
+      </div>
+      <!-- well end -->
 
 </body>
 

@@ -5,7 +5,7 @@ from django.views.decorators.csrf import csrf_exempt
 from django.contrib.sessions.models import Session
 from django.contrib.auth.decorators import login_required
 from django.template import loader
-from .models import Patient,Hospital,Logs,Doctor,Apoitment,Scheduler
+from .models import Patient,Hospital,Logs,Doctor,Apoitment,Scheduler,Administration
 from django.contrib.auth import authenticate, login
 import re
 import uuid
@@ -23,7 +23,25 @@ REDIRECT_URL="http://dogr.io/wow/suchservice/muchtextsplitting/verydirectcompose
 #Its not a full implementation of a fullcalendar
 #I am just using it for testing (savages)
 
-#End of fullcalendar testing
+def administration(request):
+    template = loader.get_template('HealthNet/admin_sign_up.html')
+    context ={
+        "Some":"Wodo",
+    }
+    return HttpResponse(template.render(context,request))
+
+
+def administration_save(request):
+    if request.method == 'POST':
+        username = request.POST.get('username',None)
+        password = request.POST.get('password',None)
+        email = request.POST.get('email',None)
+        admin = Administration(user_name=username,password=password,email=email)
+        admin.save()
+        return HttpResponse("Savage %s Saved"%username)
+    else:
+        return HttpResponse("Not Saved")
+
 def index(request):
     users = Patient.objects.all()
     template = loader.get_template('HealthNet/index.html')
