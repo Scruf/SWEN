@@ -14,6 +14,8 @@ from django.core.mail import send_mail
 import datetime
 import redis
 import json
+from django.contrib import messages
+from django.shortcuts import render_to_response
 
 
 # Create your views here.
@@ -95,33 +97,36 @@ def signup(request):
 def register(request):
     if request.method == 'POST':
         username = request.POST.get('username',None)
-        if len(username)<4:
-            multiple_object_template = loader.get_template('HealthNet/error/short_username.html')
+        if len(username)<5:
+            print "Eroor"
+            messages.add_message(request, messages.ERROR, '%s too short'%username)
+            multiple_object_template = loader.get_template('HealthNet/signup.html')
             context = {
-                "username":username,
+                "input":username,
+                "text":"Username is less than 5 characters",
             }
-            return HttpResponse(multiple_object_template.render(context,request))
+            return render_to_response('HealthNet/signup.html',context,context_instance=RequestContext(request))
         else:
             try:
                 test_patient = Patient.objects.get(user_name=username)
             except Patient.DoesNotExist:
                 print "Robert"
             except Patient.MultipleObjectsReturned:
-                multiple_object_template = loader.get_template('HealthNet/error/username_error.html')
-                username = request.POST.get('username',None)
+                multiple_object_template = loader.get_template('HealthNet/errors/error.html')
                 context = {
-                    "user_name":username,
+                    "input":username,
+                    "text":"This username already exists",
                 }
                 return HttpResponse(multiple_object_template.render(context,request))
-
         password = request.POST.get('password',None)
         first_name = request.POST.get('first_name',None)
         last_name = request.POST.get('last_name',None)
         if first_name==last_name or len(first_name)<2 or len(last_name)<2:
-            multiple_object_template = loader.get_template('HealthNet/error/firstlastname_error.html')
+            multiple_object_template = loader.get_template('HealthNet/errors/error.html')
+            fullname = first_name + " " + last_name,
             context = {
-                "first":first_name,
-                "last":last_name,
+                "input":fullname,
+                "text":"These these first names and last names are too short",
             }
             return HttpResponse(multiple_object_template.render(context,request))
         else:
@@ -130,37 +135,33 @@ def register(request):
             except Patient.DoesNotExist:
                 print "Robert"
             except Patient.MultipleObjectsReturned:
-                 multiple_object_template = loader.get_template('HealthNet/error/firstlastname_error.html')
-                 first_name = request.POST.get('first_name',None)
-                 last_name = request.POST.get('last_name',None)
-                 context = {
-                    "first_name":first_name,
-                    "last_name":last_name,
-                 }
-                 return HttpResponse(multiple_object_template.render(context,request))
-
+                multiple_object_template = loader.get_template('HealthNet/errors/error.html')
+                fullname = first_name + " " + last_name,
+                context = {
+                    "input":fullname,
+                    "text":"First and last name already in the system",
+                }
+                return HttpResponse(multiple_object_template.render(context,request))
         email = request.POST.get('email',None)
         if not re.match(r'(\w+[.|\w])*@(\w+[.])*\w+', str(email)):
-            multiple_object_template = loader.get_template('HealthNet/error/email_format_error.html')
+            multiple_object_template = loader.get_template('HealthNet/errors/error.html')
             context = {
-                "mail":email,
+                "input":email,
+                "text":"Email format is invalid",
             }
-            return HttpResponse("Email format is invalid")
+            return HttpResponse(multiple_object_template.render(context,request))
         else:
             try:
                 test_patient = Patient.objects.get(email=email)
             except Patient.DoesNotExist:
                 print "Robert"
             except Patient.MultipleObjectsReturned:
-                multiple_object_template = loader.get_template('HealthNet/error/email_error.html')
-                email = request.POST.get('first_name',None)
-
+                multiple_object_template = loader.get_template('HealthNet/errors/error.html')
                 context = {
-                    "email":email,
+                    "input":email,
+                    "text":"Email is already being used",
                 }
-
                 return HttpResponse(multiple_object_template.render(context,request))
-
         cell_phone = request.POST.get('cell_phone',None)
         if len(str(cell_phone.split("+")))<1 and str(cell_phone)[0] is not '1':
             cell_phone = '1'+cell_phone
@@ -168,67 +169,68 @@ def register(request):
                  float(str(cell_phone.split("+")[1]))
             except ValueError:
                  return HttpResponse("Cell phone number of Invalid format")
-        elif cell_phone[0] is '1':
-            cell_phone = '+'+cell_phone
-            try:
-                float(str(cell_phone.split("+")[1]))
-            except ValueError:
-                return redirect(REDIRECT_URL)
+        elif cell_phone:
+            if cell_phone[0] is '1':
+                cell_phone = '+'+cell_phone
+                try:
+                    float(str(cell_phone.split("+")[1]))
+                except ValueError:
+                    return redirect(REDIRECT_URL)
+            else:
+                try:
+                    cell_phone = request.POST.get('cell_phone',None)
+                except Patient.DoesNotExist:
+                    print "Robert"
+                except Patient.MultipleObjectsReturned:
+                    multiple_object_template = loader.get_template('HealthNet/errors/error.html')
+                    context = {
+                        "input":cell_phone,
+                        "text":"Phone number is already in the system",
+                    }
+                    return HttpResponse(multiple_object_template.render(context,request))
         else:
-            try:
-                cell_phone = request.POST.get('cell_phone',None)
-            except Patient.DoesNotExist:
-                print "Robert"
-            except Patient.MultipleObjectsReturned:
-                multiple_object_template = loader.get_template('HealthNet/error/phone_error.html')
-                phone = request.POST.get('cell_phone',None)
-
-                context = {
-                    "cell_phone":phone,
-                }
-
-
-                return HttpResponse(multiple_object_template.render(context,request))
-
-        hospital_name = request.POST.get('hospital',None)
-        if len(hospital_name)<2:
-            multiple_object_template = loader.get_template('HealthNet/error/hospital_error.html')
+            multiple_object_template = loader.get_template('HealthNet/errors/error.html')
             context = {
-                "hospital":hospital_name,
+                "input":cell_phone,
+                "text":"Please enter a phone number",
             }
-
+            return HttpResponse(multiple_object_template.render(context,request))
+        hospital_name = request.POST.get('hospital',None)
+        if not hospital_name  or len(hospital_name)<2:
+            multiple_object_template = loader.get_template('HealthNet/errors/error.html')
+            context = {
+                "input":"",
+                "text":"Hospital name too short",
+            }
             return HttpResponse(multiple_object_template.render(context,request))
         address = request.POST.get('address',None)
         if address is None or len(address)<5:
-            multiple_object_template = loader.get_template('HealthNet/error/address_error.html')
-
+            multiple_object_template = loader.get_template('HealthNet/errors/error.html')
             context = {
-                "addr":address,
+                "input":address,
+                "text":"Address too short",
             }
-
             return HttpResponse(multiple_object_template.render(context,request))
         insuarance = request.POST.get('insuarance_number',None)
         if len(insuarance)<5:
-            multiple_object_template = loader.get_template('HealthNet/error/insurance_error.html')
+            multiple_object_template = loader.get_template('HealthNet/errors/error.html')
             context = {
-                "insuarance":insuarance,
+                "input":insuarance,
+                "text":"Insurance is too short",
             }
-            return HttpResponse(multiple_object_template.render(context,render))
+            return HttpResponse(multiple_object_template.render(context,request))
         else:
             try:
                 test_patient = Patient.objects.get(insuarance_number=insuarance)
             except Patient.DoesNotExist:
                 print "Robert"
             except Patient.MultipleObjectsReturned:
-                multiple_object_template = loader.get_template('HealthNet/error/insurance_error.html')
-                insur = request.POST.get('insuarance_number',None)
-
+                multiple_object_template = loader.get_template('HealthNet/errors/error.html')
                 context = {
-                    "insuarance":insur,
+                    "input":insuarance,
+                    "text":"Insurance is already in the system",
                 }
-
                 return HttpResponse(multiple_object_template.render(context,request))
-
         hospital_val = request.POST.get("hospital",None)
         symptoms = ' '
         p = Patient(user_name=username,password=password,first_name=first_name,last_name=last_name,email=email,user_id=uuid.uuid1(),\
