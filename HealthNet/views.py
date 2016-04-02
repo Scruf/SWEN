@@ -98,14 +98,14 @@ def register(request):
     if request.method == 'POST':
         username = request.POST.get('username',None)
         if len(username)<5:
-            messages
-            messages.add_message(request, messages.ERROR, 'Username too short')
+            print "Eroor"
+            messages.add_message(request, messages.ERROR, '%s too short'%username)
             multiple_object_template = loader.get_template('HealthNet/signup.html')
             context = {
                 "input":username,
                 "text":"Username is less than 5 characters",
             }
-            return render_to_response('HealthNet/signup.html',context)
+            return render_to_response('HealthNet/signup.html',context,context_instance=RequestContext(request))
         else:
             try:
                 test_patient = Patient.objects.get(user_name=username)
