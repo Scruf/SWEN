@@ -24,23 +24,38 @@ REDIRECT_URL="http://dogr.io/wow/suchservice/muchtextsplitting/verydirectcompose
 #I am just using it for testing (savages)
 
 def administration(request):
-    template = loader.get_template('HealthNet/admin_sign_up.html')
+    template = loader.get_template('HealthNet/administration_sign.html')
     context ={
         "Some":"Wodo",
     }
     return HttpResponse(template.render(context,request))
 
-
-def administration_save(request):
+def admin_vierify(request):
     if request.method == 'POST':
-        username = request.POST.get('username',None)
-        password = request.POST.get('password',None)
         email = request.POST.get('email',None)
-        admin = Administration(user_name=username,password=password,email=email)
-        admin.save()
-        return HttpResponse("Savage %s Saved"%username)
+        password = request.POST.get('password',None)
+        try:
+            admin = Administration.objects.get(email=email,password=password)
+            context = {
+                "admin":admin,
+            }
+            admin_template = loader.get_template('HealthNet/admin.html')
+            return HttpResponse(admin_template.render(context,request))
+        except Administration.DoesNotExist:
+            return HttpResponse("Invalid Credentails")
     else:
-        return HttpResponse("Not Saved")
+        return HttpResponse("Howdy Fellow")
+
+# def administration_save(request):
+#     if request.method == 'POST':
+#         username = request.POST.get('username',None)
+#         password = request.POST.get('password',None)
+#         email = request.POST.get('email',None)
+#         admin = Administration(user_name=username,password=password,email=email)
+#         admin.save()
+#         return HttpResponse("Savage %s Saved"%username)
+#     else:
+#         return HttpResponse("Not Saved")
 
 def index(request):
     users = Patient.objects.all()
