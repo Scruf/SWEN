@@ -1,54 +1,62 @@
-You are in profile details
+<head>
+  <link rel="stylesheet" type="text/css" href="../../../static/HealthNet/css/profile_details.css"> 
+</head>
 
-<div class="container">
-  <form method="POST" action="save/">
-    {%csrf_token%}
-    <ul>
-      <li>
-        <div class="col-md-4">
-          <label>Username:</label>
+
+<div class="everything">
+  <div class="container">
+    <form method="POST" action="save/">
+      {%csrf_token%}
+      <ul style="list-style-type: none">
+        <li>
+          <div class="col-md-4">
+            <label>Username:</label>
+          </div>
+          <input type="text" name="user_name" value="{{patient.user_name}}">
+        </li>
+        <li>
+          <div class="col-md-4">
+            <label>First Name:</label>
+          </div>
+          <input type="text" name="first_name" value="{{patient.first_name}}">
+        </li>
+        <li>
+          <div class="col-md-4">
+            <label>Last Name:</label>
+          </div class="col-md-4">
+          <input type="text" name="last_name" value="{{patient.last_name}}">
+        </li>
+        <li>
+          <div class="col-md-4">
+            <label> Email:</label>
+          </div>
+          <input type="text" name="email" value="{{patient.email}}">
+        </li>
+        <li>
+          <div class="col-md-4">
+          <label>Cell Phone</label>
         </div>
-        <input type="text" name="user_name" value="{{patient.user_name}}">
-      </li>
-      <li>
-        <div class="col-md-4">
-          <label>First Name:</label>
+          <input type="text" name="cell_phone" value="{{patient.cell_phone}}">
+        </li>
+        <li>
+          <div class="col-md-4">
+          <label>Address:</label>
         </div>
-        <input type="text" name="first_name" value="{{patient.first_name}}">
-      </li>
-      <li>
-        <div class="col-md-4">
-          <label>Last Name:</label>
-        </div class="col-md-4">
-        <input type="text" name="last_name" value="{{patient.last_name}}">
-      </li>
-      <li>
-        <div class="col-md-4">
-          <label> Email:</label>
+          <input type="text" name="address" value="{{patient.address}}">
+        </li>
+        <li>
+          <div class="col-md-4">
+          <label>Insuarance Number:</label>
         </div>
-        <input type="text" name="email" value="{{patient.email}}">
-      </li>
-      <li>
+          <input type="text" name="insuarance" value="{{patient.insuarance_number}}">
+        </li>
+        
         <div class="col-md-4">
-        <label>Cell Phone</label>
-      </div>
-        <input type="text" name="cell_phone" value="{{patient.cell_phone}}">
-      </li>
-      <li>
-        <div class="col-md-4">
-        <label>Address:</label>
-      </div>
-        <input type="text" name="address" value="{{patient.address}}">
-      </li>
-      <li>
-        <div class="col-md-4">
-        <label>Insuarance Number:</label>
-      </div>
-        <input type="text" name="insuarance" value="{{patient.insuarance_number}}">
-      </li>
-      <ul>
-        <button class="success">Save</button>
-  </form>
+          <button class="success">Save</button>
+            </div>
+      </ul>
+    </form>
+  </div>
 </div>
 <style>
   @import url('https://netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css');

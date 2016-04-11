@@ -1,0 +1,14 @@
+.container{
+	color: black;
+	background-color: 4dffd2;
+}
+
+.everything{
+	background-color: 4dffd2; 
+}
+
+.success{
+	background-color: white;
+	border-radius: 8px;
+	resize: 100000;
+}
