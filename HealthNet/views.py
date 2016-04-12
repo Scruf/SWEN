@@ -46,6 +46,17 @@ def admin_vierify(request):
     else:
         return HttpResponse("Howdy Fellow")
 
+@login_required
+def admin_profile(request,admin_name):
+    try:
+        admin = Administration.objects.get(user_name=admin_name)
+        context = {
+            'admin':admin,
+        }
+        admin_profile_template = loader.get_template('HealthNet/admin.html')
+        return HttpResponse(admin_profile_template.render(context,request))
+    except Administration.DoesNotExist:
+        return HttpResponse("Administration Does Not exists")
 # def administration_save(request):
 #     if request.method == 'POST':
 #         username = request.POST.get('username',None)
@@ -271,7 +282,8 @@ def load_profile(request,user_name):
         'Patient':user,
         }
     return HttpResponse(profile_template.render(context,request))
-#loading profile details to be editeted
+#
+
 def profile_edit(request,user_name):
     try:
         patient = Patient.objects.get(user_name=user_name)

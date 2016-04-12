@@ -5,6 +5,7 @@ urlpatterns =[
     url(r'^$', views.index, name='index'),
     url(r'^administration/$', views.administration,name='administration'),
     url(r'^administration/admin/$', views.admin_vierify,name='admin_vierify'),
+    url(r'^administration/admin/(?P<admin_name>\w)/$', views.admin_profile,name='admin_profile'),
     # url(r'^administration/register/$',views.administration_save,name='administration_save'),
 
     url(r'^sign/$', views.sign_in, name='sign'),
