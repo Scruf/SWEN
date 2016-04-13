@@ -44,7 +44,7 @@ def admin_vierify(request):
         except Administration.DoesNotExist:
             return HttpResponse("Invalid Credentails")
     else:
-        return HttpResponse("Howdy Fellow")
+        return redirect(REDIRECT_URL)
 
 @login_required
 def admin_profile(request,admin_name):
@@ -57,6 +57,18 @@ def admin_profile(request,admin_name):
         return HttpResponse(admin_profile_template.render(context,request))
     except Administration.DoesNotExist:
         return HttpResponse("Administration Does Not exists")
+
+def admin_create(request):
+    admin_create_temlate = loader.get_template('HealthNet/admins/admin_create.html')
+    context = {
+        'create':'Doctors'
+    }
+    return HttpResponse(admin_create_temlate.render(context,request))
+
+def admin_create_verify(request):
+    return HttpResponse("Saved")
+#admin stuff goes on top
+#whoever put not admin stuff in admin stuff will die horible and painful death
 # def administration_save(request):
 #     if request.method == 'POST':
 #         username = request.POST.get('username',None)

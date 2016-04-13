@@ -1,1 +1,38 @@
-<h1>Welcome {{admin.user_name}} back </h1>
+<!DOCTYPE html>
+
+<head>
+    <title>Admin Panel</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css">
+    <style>
+        html {
+            overflow-y: scroll;
+        }
+
+        body {
+            padding-top: 50px;
+        }
+        .options{
+          width: 280px;
+          height: 280px;
+        }
+    </style>
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+    <!-- load jquery -->
+    <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.0.8/angular.min.js"></script>
+</head>
+
+<body>
+    <div class="container">
+        <div class="row">
+            <div class="col-md-4">
+                <button class="btn  options"><a href="{{request.get_full_path}}create" style="color:black">Create Profile</a></button>
+            </div>
+            <div class="col-md-4">
+                <button class="btn  options">Passwords</button>
+            </div>
+        </div>
+
+    </div>
+</body>
