@@ -16,10 +16,11 @@ import redis
 import json
 from django.contrib import messages
 from django.shortcuts import render_to_response
+from django.http import HttpResponseRedirect
 
 
 # Create your views here.
-REDIRECT_URL="http://dogr.io/wow/suchservice/muchtextsplitting/verydirectcompose.png"
+#REDIRECT_URL="http://dogr.io/wow/suchservice/muchtextsplitting/verydirectcompose.png"
 #Its not a full implementation of a fullcalendar
 #I am just using it for testing (savages)
 
@@ -138,137 +139,89 @@ def register(request):
         if len(username)<5:
             print "Eroor"
             messages.add_message(request, messages.ERROR, '%s too short'%username)
-            multiple_object_template = loader.get_template('HealthNet/signup.html')
-            context = {
-                "input":username,
-                "text":"Username is less than 5 characters",
-            }
-            return render_to_response('HealthNet/signup.html',context,context_instance=RequestContext(request))
+            return redirect( '/HealthNet/signup/',permanent=True)
         else:
             try:
                 test_patient = Patient.objects.get(user_name=username)
             except Patient.DoesNotExist:
                 print "Robert"
             except Patient.MultipleObjectsReturned:
-                multiple_object_template = loader.get_template('HealthNet/errors/error.html')
-                context = {
-                    "input":username,
-                    "text":"This username already exists",
-                }
-                return HttpResponse(multiple_object_template.render(context,request))
+                messages.add_message(request, messages.ERROR, 'This username: %s already exists'%username)
+                return redirect( '/HealthNet/signup/',permanent=True)
         password = request.POST.get('password',None)
         first_name = request.POST.get('first_name',None)
         last_name = request.POST.get('last_name',None)
         if first_name==last_name or len(first_name)<2 or len(last_name)<2:
-            multiple_object_template = loader.get_template('HealthNet/errors/error.html')
-            fullname = first_name + " " + last_name,
-            context = {
-                "input":fullname,
-                "text":"These these first names and last names are too short",
-            }
-            return HttpResponse(multiple_object_template.render(context,request))
+            messages.add_message(request, messages.ERROR, 'These these first names and last names are too short')
+            return redirect( '/HealthNet/signup/',permanent=True)
         else:
             try:
                 test_patient = Patient.objects.get(first_name=first_name,last_name=last_name)
             except Patient.DoesNotExist:
                 print "Robert"
             except Patient.MultipleObjectsReturned:
-                multiple_object_template = loader.get_template('HealthNet/errors/error.html')
                 fullname = first_name + " " + last_name,
-                context = {
-                    "input":fullname,
-                    "text":"First and last name already in the system",
-                }
-                return HttpResponse(multiple_object_template.render(context,request))
+                messages.add_message(request, messages.ERROR, 'First and last name already in the system: %s'%fullname)
+                return redirect( '/HealthNet/signup/',permanent=True)
         email = request.POST.get('email',None)
         if not re.match(r'(\w+[.|\w])*@(\w+[.])*\w+', str(email)):
-            multiple_object_template = loader.get_template('HealthNet/errors/error.html')
-            context = {
-                "input":email,
-                "text":"Email format is invalid",
-            }
-            return HttpResponse(multiple_object_template.render(context,request))
+            messages.add_message(request, messages.ERROR, 'Invalid Email format')
+            return redirect( '/HealthNet/signup/',permanent=True)
         else:
             try:
                 test_patient = Patient.objects.get(email=email)
             except Patient.DoesNotExist:
                 print "Robert"
             except Patient.MultipleObjectsReturned:
-                multiple_object_template = loader.get_template('HealthNet/errors/error.html')
-                context = {
-                    "input":email,
-                    "text":"Email is already being used",
-                }
-                return HttpResponse(multiple_object_template.render(context,request))
+                messages.add_message(request, messages.ERROR, 'Email is already in use: %s'%email)
+                return redirect( '/HealthNet/signup/',permanent=True)
         cell_phone = request.POST.get('cell_phone',None)
         if len(str(cell_phone.split("+")))<1 and str(cell_phone)[0] is not '1':
             cell_phone = '1'+cell_phone
             try:
                  float(str(cell_phone.split("+")[1]))
             except ValueError:
-                 return HttpResponse("Cell phone number of Invalid format")
+                 messages.add_message(request, messages.ERROR, 'Phone Number is invalid')
+                 return redirect( '/HealthNet/signup/',permanent=True)
         elif cell_phone:
             if cell_phone[0] is '1':
                 cell_phone = '+'+cell_phone
                 try:
                     float(str(cell_phone.split("+")[1]))
                 except ValueError:
-                    return redirect(REDIRECT_URL)
+                    messages.add_message(request, messages.ERROR, 'Phone Number is invalid')
+                    return redirect( '/HealthNet/signup/',permanent=True)
             else:
                 try:
                     cell_phone = request.POST.get('cell_phone',None)
                 except Patient.DoesNotExist:
                     print "Robert"
                 except Patient.MultipleObjectsReturned:
-                    multiple_object_template = loader.get_template('HealthNet/errors/error.html')
-                    context = {
-                        "input":cell_phone,
-                        "text":"Phone number is already in the system",
-                    }
-                    return HttpResponse(multiple_object_template.render(context,request))
+                    messages.add_message(request, messages.ERROR, 'Phone Number is ialready in use: %s'%cell_phone)
+                    return redirect( '/HealthNet/signup/',permanent=True)
         else:
-            multiple_object_template = loader.get_template('HealthNet/errors/error.html')
-            context = {
-                "input":cell_phone,
-                "text":"Please enter a phone number",
-            }
-            return HttpResponse(multiple_object_template.render(context,request))
+            messages.add_message(request, messages.ERROR, 'Phone Number is invalid')
+            return redirect( '/HealthNet/signup/',permanent=True)
         hospital_name = request.POST.get('hospital',None)
         if not hospital_name  or len(hospital_name)<2:
-            multiple_object_template = loader.get_template('HealthNet/errors/error.html')
-            context = {
-                "input":"",
-                "text":"Hospital name too short",
-            }
-            return HttpResponse(multiple_object_template.render(context,request))
+            messages.add_message(request, messages.ERROR, 'Hospital Name too short')
+            return redirect( '/HealthNet/signup/',permanent=True)
         address = request.POST.get('address',None)
         if address is None or len(address)<5:
-            multiple_object_template = loader.get_template('HealthNet/errors/error.html')
-            context = {
-                "input":address,
-                "text":"Address too short",
-            }
-            return HttpResponse(multiple_object_template.render(context,request))
+            messages.add_message(request, messages.ERROR, 'Address too short')
+            return redirect( '/HealthNet/signup/',permanent=True)
         insuarance = request.POST.get('insuarance_number',None)
         if len(insuarance)<5:
-            multiple_object_template = loader.get_template('HealthNet/errors/error.html')
-            context = {
-                "input":insuarance,
-                "text":"Insurance is too short",
-            }
-            return HttpResponse(multiple_object_template.render(context,request))
+            messages.add_message(request, messages.ERROR, 'Insurance Number is too short')
+            return redirect( '/HealthNet/signup/',permanent=True)
         else:
             try:
                 test_patient = Patient.objects.get(insuarance_number=insuarance)
             except Patient.DoesNotExist:
                 print "Robert"
             except Patient.MultipleObjectsReturned:
-                multiple_object_template = loader.get_template('HealthNet/errors/error.html')
-                context = {
-                    "input":insuarance,
-                    "text":"Insurance is already in the system",
-                }
-                return HttpResponse(multiple_object_template.render(context,request))
+                messages.add_message(request, messages.ERROR, 'Insurance Number is already in use: %s'%insuarance)
+                return redirect( '/HealthNet/signup/',permanent=True)
         hospital_val = request.POST.get("hospital",None)
         symptoms = ' '
         p = Patient(user_name=username,password=password,first_name=first_name,last_name=last_name,email=email,user_id=uuid.uuid1(),\
