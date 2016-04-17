@@ -68,6 +68,9 @@ def admin_create(request,admin_name):
 def admin_create_verify(request,admin_name):
     if request.method == 'POST':
         user_name = request.POST.get('user_name',None)
+        if len(user_name)<3:
+            messages.add_message(request, messages.ERROR, 'Username too short')
+            return redirect( '/HealthNet/administration/' + admin_name + '/create/',permanent=True)
         try:
             patient = Patient.objects.get(user_name=user_name)
         except Patient.MultipleObjectsReturned:
@@ -76,8 +79,9 @@ def admin_create_verify(request,admin_name):
             return redirect( '/HealthNet/administration/' + admin_name + '/create/',permanent=True)
         except Patient.DoesNotExist:
             print("Ben Affleck was okay Batman")
-
         try:
+            print("%s"%user_name)
+            print Doctor.objects.get(username=user_name).password
             doctor = Doctor.objects.get(username=user_name)
         except Doctor.MultipleObjectsReturned:
             print ("%s with this username already exists"%user_name)
@@ -85,21 +89,14 @@ def admin_create_verify(request,admin_name):
             return redirect( '/HealthNet/administration/' + admin_name + '/create/',permanent=True)
         except Doctor.DoesNotExist:
             print ("Join the darkside")
-        email = request.POST.get('email',None)
-        try:
-            patient = Patient.objects.get(email=email)
-        except Patient.MultipleObjectsReturned:
-            print("Patient with this email exists")
-        except Patient.DoesNotExist:
-            print "Hooray to Satan"
-        try:
-            doctor = Doctor.objects.get(email=email)
-        except Doctor.MultipleObjectsReturned:
-            print "Doctor with this email already exists"
-        except Doctor.DoesNotExist:
-            print "Join the darkside"
         first_name = request.POST.get('first_name',None)
         last_name = request.POST.get('last_name',None)
+        if len(first_name)<2 or len(last_name)<2:
+            messages.add_message(request, messages.ERROR, 'Name too short')
+            return redirect( '/HealthNet/administration/' + admin_name + '/create/',permanent=True)
+        if first_name==user_name or last_name==user_name or (first_name + last_name)==user_name:
+            messages.add_message(request, messages.ERROR, 'First or Last name cant be the username')
+            return redirect( '/HealthNet/administration/' + admin_name + '/create/',permanent=True)
         if first_name==last_name:
             print("First name cannot be equals last name")
             messages.add_message(request, messages.ERROR, 'First and last name are equal')
@@ -113,6 +110,26 @@ def admin_create_verify(request,admin_name):
                 return redirect( '/HealthNet/administration/' + admin_name + '/create/',permanent=True)
             except Doctor.DoesNotExist:
                 print ("Jointhe darkside")
+        email = request.POST.get('email',None)
+        if not re.match(r'(\w+[.|\w])*@(\w+[.])*\w+', str(email)):
+            messages.add_message(request, messages.ERROR, 'Invalid email')
+            return redirect( '/HealthNet/administration/' + admin_name + '/create/',permanent=True)
+        try:
+            patient = Patient.objects.get(email=email)
+        except Patient.MultipleObjectsReturned:
+            print("Patient with this email exists")
+            messages.add_message(request, messages.ERROR, 'Email is already in use')
+            return redirect( '/HealthNet/administration/' + admin_name + '/create/',permanent=True)
+        except Patient.DoesNotExist:
+            print "Hooray to Satan"
+        try:
+            doctor = Doctor.objects.get(email=email)
+        except Doctor.MultipleObjectsReturned:
+            print "Doctor with this email already exists"
+            messages.add_message(request, messages.ERROR, 'Email is already in use')
+            return redirect( '/HealthNet/administration/' + admin_name + '/create/',permanent=True)
+        except Doctor.DoesNotExist:
+            print "Join the darkside"
         hospital = request.POST.get('hospital',None)
         password = str(uuid.uuid1()).split("-")[0]
         doctor = Doctor(username=user_name,email=email,first_name=first_name,last_name=last_name,password=password,hospital_name=hospital)
