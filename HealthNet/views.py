@@ -440,8 +440,12 @@ def doctor_verify(request):
     #     return redirect(REDIRECT_URL)
 
 def doctor_profile(request,doctor_user_name):
-    return HttpResponse("Welcome back doctor %s"%doctor_user_name)
-
+    doctor_template = loader.get_template('HealthNet/doctors.html')
+    doctor = Doctor.objects.get(username=doctor_user_name)
+    context = {
+        'doctor':doctor
+    }
+    return HttpResponse(doctor_template.render(context,request))
 def appoitment(request,user_name):
 
     appoitment_template = loader.get_template('HealthNet/appointment.html')
