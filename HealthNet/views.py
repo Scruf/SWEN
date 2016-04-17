@@ -72,24 +72,33 @@ def admin_create_verify(request,admin_name):
             patient = Patient.objects.get(user_name=user_name)
         except Patient.MultipleObjectsReturned:
             print ("This %s is already taken "%user_name)
+            messages.add_message(request, messages.ERROR, 'Username is already taken: %s'%user_name)
+            return redirect( '/HealthNet/administration/' + admin_name + '/create/',permanent=True)
         except Patient.DoesNotExist:
             print("Ben Affleck was okay Batman")
-
+            messages.add_message(request, messages.ERROR, 'First and last name are equal')
+            return redirect( '/HealthNet/administration/' + admin_name + '/create/',permanent=True)
         try:
             doctor = Doctor.objects.get(username=user_name)
         except Doctor.MultipleObjectsReturned:
             print ("%s with this username already exists"%user_name)
+            messages.add_message(request, messages.ERROR, 'Username is already taken: %s'%user_name)
+            return redirect( '/HealthNet/administration/' + admin_name + '/create/',permanent=True)
         except Doctor.DoesNotExist:
             print ("Join the darkside")
         first_name = request.POST.get('first_name',None)
         last_name = request.POST.get('last_name',None)
         if first_name==last_name:
             print("First name cannot be equals last name")
+            messages.add_message(request, messages.ERROR, 'First and last name are equal')
+            return redirect( '/HealthNet/administration/' + admin_name + '/create/',permanent=True)
         else:
             try:
                 doctor = Doctor.objects.get(first_name=first_name,last_name=last_name)
             except Doctor.MultipleObjectsReturned:
                 print ("Doctor with this first name: %s and this last name: %s already exists"%(first_name,last_name))
+                messages.add_message(request, messages.ERROR, 'First and last names are in the system already')
+                return redirect( '/HealthNet/administration/' + admin_name + '/create/',permanent=True)
             except Doctor.DoesNotExist:
                 print ("Jointhe darkside")
         hospital = request.POST.get('hospital',None)
