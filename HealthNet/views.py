@@ -159,20 +159,24 @@ def thankyou(request):
         email = request.POST.get('email',None)
         password = request.POST.get('password',None)
         try:
-            t = Patient.objects.get(email=email,password=password)
-            context ={
-                'user_name':email,
-            }
-            user_name = Patient.objects.get(email=email,password=password).user_name
-            log = Logs(date=datetime.date.today(),action="Sign In",who_did=user_name,what_happened="Log In the System")
-            log.save()
-            user_context = {
-                'user_name':user_name,
-            }
+            doctor = Doctor.objects.get(email=email,password=password)
+            return redirect('/HealthNet/doctor/%s'%doctor.username)
+        except Doctor.DoesNotExist:
+            try:
+                t = Patient.objects.get(email=email,password=password)
+                context ={
+                    'user_name':email,
+                }
+                user_name = Patient.objects.get(email=email,password=password).user_name
+                log = Logs(date=datetime.date.today(),action="Sign In",who_did=user_name,what_happened="Log In the System")
+                log.save()
+                user_context = {
+                    'user_name':user_name,
+                }
 
-            return redirect('/HealthNet/%s'%user_name,None)
-        except Patient.DoesNotExist:
-            return HttpResponse("Patient with this credentials does not exists")
+                return redirect('/HealthNet/%s'%user_name,None)
+            except Patient.DoesNotExist:
+                return HttpResponse("Patient with this credentials does not exists")
 
 #signup prompts the user to sign up with their name and contact information and to provide
 #a unique username and password for their account
@@ -418,21 +422,8 @@ def doctor_verify(request):
     # else:
     #     return redirect(REDIRECT_URL)
 
-def doctor_profile(request,user_name):
-    try:
-        doctor = Doctor.objects.get(username=user_name)
-        doctor_template = loader.get_template('HealthNet/doctors.html')
-        patients = doctor.patients.all()
-        appoitment_list = Apoitment.objects.filter(doctor=user_name)
-        context ={
-            "doctor":doctor,
-            "appoitment_list":appoitment_list,
-            "patient_list":patients,
-        }
-        return HttpResponse(doctor_template.render(context,request))
-    except Doctor,DoesNotExist:
-        return redirect(REDIRECT_URL)
-
+def doctor_profile(request,doctor_user_name):
+    return HttpResponse("Welcome back doctor %s"%doctor_user_name)
 
 def appoitment(request,user_name):
 

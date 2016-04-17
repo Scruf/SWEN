@@ -15,7 +15,6 @@ urlpatterns =[
     url(r'^thankyou/$', views.thankyou, name=''),
     url(r'^signup/$', views.signup, name='signup'),
     url(r'^signup/register/$', views.register, name='register'),
-    url(r'^(?P<user_name>\w+)/doctor/profile/',views.doctor_profile,name='doctor_profile'),
     url(r'^(?P<user_name>\w+)/$',views.load_profile, name='load_profile'),
     url(r'^(?P<user_name>\w+)/view/$', views.profile_edit,name='view_profile'),
     url(r'^(?P<user_name>\w+)/view/save/$', views.save_profile,name='save_profile'),
@@ -30,8 +29,7 @@ urlpatterns =[
     url(r'^(?P<user_name>\w+)/send/$',views.send_message,name='send'),
     url(r'^doctor/sign/$',views.doctor_sign,name='doctor_sign'),
     url(r'^doctor/sign/doctor/',views.doctor_verify,name="doctor_verify"),
-    #urls for a scheduler
-    #url(r'^fullcalendar/$',views.fullcalendar,name='fullcalendar'),
-    #url(r'^fullcalendar/(?P<title>\w+)/(?P<start>\w+)/(?P<end>\w+)/$',views.fullcalendar_edit,name='fullcalendar_edit'),
-
+    #urls for doctors go bellow
+    url(r'^doctor/(?P<doctor_user_name>\w+)/$',views.doctor_profile,name='doctor_profile'),
+    #urls for doctors go above
 ]
