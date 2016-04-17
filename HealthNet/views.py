@@ -76,8 +76,7 @@ def admin_create_verify(request,admin_name):
             return redirect( '/HealthNet/administration/' + admin_name + '/create/',permanent=True)
         except Patient.DoesNotExist:
             print("Ben Affleck was okay Batman")
-            messages.add_message(request, messages.ERROR, 'First and last name are equal')
-            return redirect( '/HealthNet/administration/' + admin_name + '/create/',permanent=True)
+
         try:
             doctor = Doctor.objects.get(username=user_name)
         except Doctor.MultipleObjectsReturned:
@@ -86,6 +85,19 @@ def admin_create_verify(request,admin_name):
             return redirect( '/HealthNet/administration/' + admin_name + '/create/',permanent=True)
         except Doctor.DoesNotExist:
             print ("Join the darkside")
+        email = request.POST.get('email',None)
+        try:
+            patient = Patient.objects.get(email=email)
+        except Patient.MultipleObjectsReturned:
+            print("Patient with this email exists")
+        except Patient.DoesNotExist:
+            print "Hooray to Satan"
+        try:
+            doctor = Doctor.objects.get(email=email)
+        except Doctor.MultipleObjectsReturned:
+            print "Doctor with this email already exists"
+        except Doctor.DoesNotExist:
+            print "Join the darkside"
         first_name = request.POST.get('first_name',None)
         last_name = request.POST.get('last_name',None)
         if first_name==last_name:
@@ -103,7 +115,7 @@ def admin_create_verify(request,admin_name):
                 print ("Jointhe darkside")
         hospital = request.POST.get('hospital',None)
         password = str(uuid.uuid1()).split("-")[0]
-        doctor = Doctor(username=user_name,first_name=first_name,last_name=last_name,password=password,hospital_name=hospital)
+        doctor = Doctor(username=user_name,email=email,first_name=first_name,last_name=last_name,password=password,hospital_name=hospital)
         doctor.save()
         log = Logs(date=datetime.date.today(),action="New Doctor created",who_did="admin",what_happened="Doctor creation")
 
