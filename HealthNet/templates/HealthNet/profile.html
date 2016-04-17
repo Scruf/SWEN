@@ -46,7 +46,6 @@
             <span class="icon-bar"></span>
           </button>
           <a class="navbar-brand" href="#">{{Patient.first_name}} {{Patient.last_name}}</a>
-          <a href="view">Edit Profile</a>
         </div>
         <div id="navbar" class="navbar-collapse collapse">
 		<form method="POST" action="thankyou/" class="navbar-form navbar-right">
@@ -83,11 +82,12 @@
             <div class="row">
                 <div class="col-lg-12 text-center">
                     <h2>Profile</h2>
+                    <a href="view">Edit Profile</a>
                     <hr class="star-primary">
                 </div>
             </div>
             <div class="row">
-                <div class="col-sm-4 portfolio-item">
+                <div class="col-sm-3 portfolio-item">
                     <a href="#portfolioModal1" class="portfolio-link" data-toggle="modal">
                         <div class="caption">
                             <div class="caption-content">
@@ -95,38 +95,38 @@
                             </div>
                         </div>
 
-                        <img class="img-responsive" src="{% static "HealthNet/img/cabin.png"%}"  alt="">
+                        <img class="img-responsive" src="{% static "HealthNet/img/cabin.png"%}" style="width: 40%"  alt="">
                     </a>
                 </div>
-                <div class="col-sm-4 portfolio-item">
+                <div class="col-sm-3 portfolio-item">
                     <a href="appoitment/view/" class="portfolio-link" data-toggle="modal">
                         <div class="caption">
                             <div class="caption-content">
                                 <i class="fa fa-search-plus fa-3x"></i>
                             </div>
                         </div>
-                        <img src="{% static "HealthNet/img/cake.png"%}" class="img-responsive" alt="">
+                        <img src="{% static "HealthNet/img/cake.png"%}" style="width: 40%" class="img-responsive" alt="">
                     </a>
                 </div>
-                <div class="col-sm-4 portfolio-item">
+                <div class="col-sm-3 portfolio-item">
                     <a href="#portfolioModal3" class="portfolio-link" data-toggle="modal">
                         <div class="caption">
                             <div class="caption-content">
                                 <i class="fa fa-search-plus fa-3x"></i>
                             </div>
                         </div>
-                        <img src="{% static "HealthNet/img/circus.png"%}" class="img-responsive" alt="">
+                        <img src="{% static "HealthNet/img/circus.png"%}" style="width: 40%" class="img-responsive" alt="">
 
                     </a>
                 </div>
-				<div class="col-sm-4 portfolio-item">
+				<div class="col-sm-3 portfolio-item">
                     <a href="appoitment/" class="portfolio-link" data-toggle="modal">
                         <div class="caption">Hello
                             <div class="caption-content">
                                 <i class="fa fa-search-plus fa-3x"></i>
                             </div>
                         </div>
-                        <img src="{% static "HealthNet/img/game.png"%}" class="img-responsive" alt="">
+                        <img src="{% static "HealthNet/img/game.png"%}" style="width: 40%" class="img-responsive" alt="">
                     </a>
                 </div>
             </div>
