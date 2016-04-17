@@ -20,7 +20,7 @@ from django.http import HttpResponseRedirect
 
 
 # Create your views here.
-#REDIRECT_URL="http://dogr.io/wow/suchservice/muchtextsplitting/verydirectcompose.png"
+REDIRECT_URL="http://dogr.io/wow/suchservice/muchtextsplitting/verydirectcompose.png"
 #Its not a full implementation of a fullcalendar
 #I am just using it for testing (savages)
 
@@ -65,9 +65,44 @@ def admin_create(request):
         'create':'Doctors'
     }
     return HttpResponse(admin_create_temlate.render(context,request))
-
+#@controller admin  will create and verify  doctor profile
+#in future this controller should create a username by itslf without
+#requring admin entering it manually
 def admin_create_verify(request):
-    return HttpResponse("Saved")
+    if request.method == 'POST':
+        user_name = request.POST.get('user_name',None)
+        try:
+            patient = Patient.objects.get(user_name=user_name)
+        except Patient.MultipleObjectsReturned:
+            print ("This %s is already taken "%user_name)
+        except Patient.DoesNotExist:
+            print("Ben Affleck was okay Batman")
+
+        try:
+            doctor = Doctor.objects.get(username=user_name)
+        except Doctor.MultipleObjectsReturned:
+            print ("%s with this username already exists"%user_name)
+        except Doctor.DoesNotExist:
+            print ("Join the darkside")
+        first_name = request.POST.get('first_name',None)
+        last_name = request.POST.get('last_name',None)
+        if first_name==last_name:
+            print("First name cannot be equals last name")
+        else:
+            try:
+                doctor = Doctor.objects.get(first_name=first_name,last_name=last_name)
+            except Doctor.MultipleObjectsReturned:
+                print ("Doctor with this first name: %s and this last name: %s already exists"%(first_name,last_name))
+            except Doctor.DoesNotExist:
+                print ("Jointhe darkside")
+        hospital = request.POST.get('hospital',None)
+        password = str(uuid.uuid1()).split("-")[0]
+        doctor = Doctor(username=user_name,first_name=first_name,last_name=last_name,password=password,hospital_name=hospital)
+        doctor.save()
+        log = Logs(date=datetime.date.today(),action="Doctor %s created",who_did="admin",what_happened="Doctor creation"%user_name)
+
+        log.save()
+        return redirect('/HealthNet/administration/admin/')
 #admin stuff goes on top
 #whoever put not admin stuff in admin stuff will die horible and painful death
 # def administration_save(request):
