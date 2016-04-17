@@ -12,10 +12,11 @@
 
         body {
             padding-top: 50px;
+            background-color: #18bc9c;
         }
         .options{
-          width: 280px;
-          height: 280px;
+          width: 180px;
+          height: 100px;
         }
     </style>
     <script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
@@ -26,11 +27,20 @@
 <body>
     <div class="container">
         <div class="row">
-            <div class="col-md-4">
+            <div class="col-md-2">
                 <button class="btn  options"><a href="{{request.get_full_path}}create" style="color:black">Create Profile</a></button>
             </div>
-            <div class="col-md-4">
-                <button class="btn  options">Passwords</button>
+            <div class="col-md-2">
+                <button class="btn  options">Recover Passwords</button>
+            </div>
+            <div class="col-md-2">
+                <button class="btn  options">View Activity Log</button>
+            </div>
+            <div class="col-md-2">
+                <button class="btn  options">View System Statistics</button>
+            </div>
+            <div class="col-md-2">
+                <button class="btn  options">View System Statistics</button>
             </div>
         </div>
 
