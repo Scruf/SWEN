@@ -31,7 +31,7 @@ def administration(request):
     }
     return HttpResponse(template.render(context,request))
 
-def admin_vierify(request):
+def admin_verify(request):
     if request.method == 'POST':
         email = request.POST.get('email',None)
         password = request.POST.get('password',None)
@@ -40,26 +40,23 @@ def admin_vierify(request):
             context = {
                 "admin":admin,
             }
+            admin_user_name = admin.user_name
             admin_template = loader.get_template('HealthNet/admin.html')
-            return HttpResponse(admin_template.render(context,request))
+            return redirect('/HealthNet/administration/%s'%admin_user_name)
         except Administration.DoesNotExist:
             return HttpResponse("Invalid Credentails")
-    else:
-        return redirect(REDIRECT_URL)
 
-@login_required
+
 def admin_profile(request,admin_name):
-    try:
-        admin = Administration.objects.get(user_name=admin_name)
+
         context = {
-            'admin':admin,
+            'admin':admin_name,
         }
         admin_profile_template = loader.get_template('HealthNet/admin.html')
         return HttpResponse(admin_profile_template.render(context,request))
-    except Administration.DoesNotExist:
-        return HttpResponse("Administration Does Not exists")
 
-def admin_create(request):
+
+def admin_create(request,admin_name):
     admin_create_temlate = loader.get_template('HealthNet/admins/admin_create.html')
     context = {
         'create':'Doctors'
@@ -68,7 +65,7 @@ def admin_create(request):
 #@controller admin  will create and verify  doctor profile
 #in future this controller should create a username by itslf without
 #requring admin entering it manually
-def admin_create_verify(request):
+def admin_create_verify(request,admin_name):
     if request.method == 'POST':
         user_name = request.POST.get('user_name',None)
         try:
@@ -99,10 +96,10 @@ def admin_create_verify(request):
         password = str(uuid.uuid1()).split("-")[0]
         doctor = Doctor(username=user_name,first_name=first_name,last_name=last_name,password=password,hospital_name=hospital)
         doctor.save()
-        log = Logs(date=datetime.date.today(),action="Doctor %s created",who_did="admin",what_happened="Doctor creation"%user_name)
+        log = Logs(date=datetime.date.today(),action="New Doctor created",who_did="admin",what_happened="Doctor creation")
 
         log.save()
-        return redirect('/HealthNet/administration/admin/')
+        return redirect('/HealthNet/administration/')
 #admin stuff goes on top
 #whoever put not admin stuff in admin stuff will die horible and painful death
 # def administration_save(request):
