@@ -99,7 +99,7 @@ def admin_create_verify(request,admin_name):
         log = Logs(date=datetime.date.today(),action="New Doctor created",who_did="admin",what_happened="Doctor creation")
 
         log.save()
-        return redirect('/HealthNet/administration/')
+        return redirect('/HealthNet/administration/%s'%admin_name)
 #admin stuff goes on top
 #whoever put not admin stuff in admin stuff will die horible and painful death
 # def administration_save(request):
