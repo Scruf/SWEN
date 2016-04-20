@@ -8,7 +8,7 @@ urlpatterns =[
     url(r'^administration/admin/$', views.admin_verify,name='admin_verify'),
     url(r'^administration/(?P<admin_name>\w+)/$',views.admin_profile,name='admin_profile'),
     url(r'^administration/(?P<admin_name>\w+)/create/verify/$',views.admin_create_verify,name='admin_create_verify'),
-
+    url(r'^administration/(?P<admin_name>\w+)/logs$',views.admin_logs,name='admin_logs'),
     # url(r'^administration/register/$',views.administration_save,name='administration_save'),
 
     url(r'^sign/$', views.sign_in, name='sign'),

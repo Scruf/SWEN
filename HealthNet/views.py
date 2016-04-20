@@ -150,7 +150,13 @@ def admin_create_verify(request,admin_name):
 #         return HttpResponse("Savage %s Saved"%username)
 #     else:
 #         return HttpResponse("Not Saved")
-
+def admin_logs(request,admin_name):
+    admin_logs_template = loader.get_template('HealthNet/admin_logs.html')
+    log = Logs.objects.all();
+    context = {
+        'logs':log
+    }
+    return HttpResponse(admin_logs_template.render(context,request))
 def index(request):
     users = Patient.objects.all()
     template = loader.get_template('HealthNet/index.html')
