@@ -9,8 +9,11 @@ urlpatterns =[
     url(r'^administration/(?P<admin_name>\w+)/$',views.admin_profile,name='admin_profile'),
     url(r'^administration/(?P<admin_name>\w+)/create/verify/$',views.admin_create_verify,name='admin_create_verify'),
     url(r'^administration/(?P<admin_name>\w+)/logs$',views.admin_logs,name='admin_logs'),
-    # url(r'^administration/register/$',views.administration_save,name='administration_save'),
 
+    # url(r'^administration/register/$',views.administration_save,name='administration_save'),
+    #message url
+    url(r'^(?P<sender_name>\w+)/message/$',views.message,name='message'),
+    #end of message url
     url(r'^sign/$', views.sign_in, name='sign'),
     url(r'^thankyou/$', views.thankyou, name=''),
     url(r'^signup/$', views.signup, name='signup'),

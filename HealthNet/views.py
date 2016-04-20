@@ -23,7 +23,13 @@ from django.http import HttpResponseRedirect
 REDIRECT_URL="http://dogr.io/wow/suchservice/muchtextsplitting/verydirectcompose.png"
 #Its not a full implementation of a fullcalendar
 #I am just using it for testing (savages)
-
+def message(request,sender_name):
+    message_template = loader.get_template('HealthNet/messages.html')
+    context = {
+        'message':'context',
+        'sender':sender_name
+    }
+    return HttpResponse(message_template.render(context,request))
 def administration(request):
     template = loader.get_template('HealthNet/administration_sign.html')
     context ={
