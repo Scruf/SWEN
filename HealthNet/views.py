@@ -537,30 +537,36 @@ def apoitment_save(request,apoitment_id):
 
 def save(request):
     return HttpResponse("Saved")
-
-"""
-Testing area
-"""
-@login_required
-def home(request):
-    comments = Comments.objects.select_related().all()[0:100]
-    return render(request,'HealtNet/index_chat.html',locals())
-
-@csrf_exempt
-def node_api(request):
+#doctor edit will load the template with doctors details to be edited
+def doctor_edit_profile(request,doctor_user_name):
+    doctor_edit_template = loader.get_template('HealthNet/doctor_edit.html')
     try:
-        #Get User from sessionid
-        session = Session.objects.get(session_key=request.POST.get('sessionid'))
-        user_id = session.get_decoded().get('_auth_user_id')
-        user = User.objects.get(id=user_id)
+        doctor = Doctor.objects.get(username=doctor_user_name)
+        context = {
+            'doctor':doctor
+        }
+        return HttpResponse(doctor_edit_template.render(context,request))
+    except Doctor.DoesNotExist:
+        return HttpResponse("Doctor Does Not exists");
 
-        #Create comment
-        Comments.objects.create(user=user, text=request.POST.get('comment'))
-
-        #Once comment has been created post it to the chat channel
-        r = redis.StrictRedis(host='localhost', port=6379, db=0)
-        r.publish('chat', user.username + ': ' + request.POST.get('comment'))
-
-        return HttpResponse("Working")
-    except Exception, e:
-        return HttpResponseServerError(str(e))
+#doctor edit will validate and save doctor profile to database
+def doctor_edit_profile_save(request,doctor_user_name):
+    if request.method == 'POST':
+        user_name = request.POST.get('user_name',None)
+        first_name = request.POST.get('first_name',None)
+        last_name = request.POST.get('last_name',None)
+        email = request.POST.get('email',None)
+        cell_phone = request.POST.get('cell_phone',None)
+        password = request.POST.get('password',None)
+        try:
+            doctor = Doctor.objects.get(username=doctor_user_name)
+            doctor.username = user_name
+            doctor.first_name = first_name
+            doctor.last_name = last_name
+            doctor.email = email
+            doctor.cell_phone=cell_phone
+            doctor.password = password
+            doctor.save()
+            return redirect('/HealthNet/doctor/%s'%doctor.username)
+        except Doctor.DoesNotExist:
+            return HttpResponse("Could not find doctor")
