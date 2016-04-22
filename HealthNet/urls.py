@@ -28,6 +28,7 @@ urlpatterns =[
     url(r'^appoitment/edit/(?P<apoitment_id>[0-9]+)/save/$',views.apoitment_save, name='apoitment_save'),
     url(r'^(?P<user_name>\w+)/appoitment/confirm/$',views.confirm_appoitment,name='confirm_appoitment'),
     url(r'^(?P<hospital_name>\w+)/(?P<doctor_user_name>\w+)/pool/$',views.patient_pool,name='patient_pool'),
+    url(r'^(?P<hospital_name>\w+)/(?P<doctor_user_name>\w+)/pool/(?P<patient_uesr_name>\w+)/view$',views.patient_pool_view,name='patient_pool'),
     url(r'^(?P<hospital_name>\w+)/(?P<doctor_user_name>\w+)/pool/(?P<user_name>\w+)/save/$',views.patien_to_save, name='patient_to_save'),
     url(r'^(?P<user_name>\w+)/send/$',views.send_message,name='send'),
     url(r'^doctor/sign/$',views.doctor_sign,name='doctor_sign'),

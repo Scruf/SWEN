@@ -376,6 +376,7 @@ def save_profile(request,user_name):
 
 
 def patient_pool(request,hospital_name,doctor_user_name):
+    temp_hospital_name= hospital_name
     hospital_name =' '.join(filter(None,re.split("([A-Z][^A-Z]*)",hospital_name)))
     hospital = Hospital.objects.get(hospital_name=hospital_name)
     patient_list = []
@@ -389,16 +390,13 @@ def patient_pool(request,hospital_name,doctor_user_name):
 
                           }
             patient_list.append(patient_info)
-    _hospital_name=hospital_name[0]
-    for h in hospital_name[1:]:
-        if h.isupper():
-            _hospital_name = hospital_name + " "+h
-        else:
-            _hospital_name = hospital_name + h
+
+
     context ={
         'Patient':patient_list,
         "Hospital":hospital_name,
-        "Normailized_Hospital_Name":_hospital_name,
+        'hospital_name':temp_hospital_name,
+        "doctor":doctor_user_name
     }
     logs = Logs(date=datetime.date.today(),action="Browsing list of patients",who_did="%s"%doctor_user_name)
     logs.save()
@@ -644,3 +642,10 @@ def doctor_apoitments_view(request,doctor_user_name):
     except Doctor.DoesNotExist:
         return HttpResponse("Viewing doctor apoitment")
 #doctor_patient_pool will render a patient pool template
+def patient_pool_view(request,hospital_name,doctor_user_name,patient_uesr_name):
+    patient = Patient.objects.get(user_name=patient_uesr_name)
+    context = {
+        'patient':patient
+    }
+    patient_template = loader.get_template('HealthNet/patient_view.html')
+    return HttpResponse(patient_template.render(context,request))
