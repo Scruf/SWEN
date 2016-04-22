@@ -36,6 +36,6 @@ urlpatterns =[
     url(r'^doctor/(?P<doctor_user_name>\w+)/$',views.doctor_profile,name='doctor_profile'),
     url(r'^doctor/(?P<doctor_user_name>\w+)/edit/$',views.doctor_edit_profile,name='doctor_edit_profile'),
     url(r'^doctor/(?P<doctor_user_name>\w+)/edit/doctor_edit/$',views.doctor_edit_profile_save,name='doctor_edit_profile_save'),
-    url(r'^doctor/(?P<doctor_user_name>\w+)/appointment/$',views.doctor_apoitments_view,name='doctor_apoitments'),
+
     #urls for doctors go above
 ]

@@ -376,6 +376,7 @@ def save_profile(request,user_name):
 
 
 def patient_pool(request,hospital_name,doctor_user_name):
+    hospital_name =' '.join(filter(None,re.split("([A-Z][^A-Z]*)",hospital_name)))
     hospital = Hospital.objects.get(hospital_name=hospital_name)
     patient_list = []
     patient_info = {}
@@ -454,9 +455,13 @@ def doctor_verify(request):
 def doctor_profile(request,doctor_user_name):
     doctor_template = loader.get_template('HealthNet/doctors.html')
     doctor = Doctor.objects.get(username=doctor_user_name)
+    hospital_name = ''.join(doctor.hospital_name.split(" "))
     context = {
-        'doctor':doctor
+        'doctor':doctor,
+        'hospital_name':hospital_name
     }
+
+
     return HttpResponse(doctor_template.render(context,request))
 def appoitment(request,user_name):
 
@@ -583,3 +588,4 @@ def doctor_apoitments_view(request,doctor_user_name):
         return HttpResponse(doctor_apoitment_template.render(context,request))
     except Doctor.DoesNotExist:
         return HttpResponse("Viewing doctor apoitment")
+#doctor_patient_pool will render a patient pool template
