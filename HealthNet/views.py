@@ -463,9 +463,13 @@ def doctor_profile(request,doctor_user_name):
     doctor_template = loader.get_template('HealthNet/doctors.html')
     doctor = Doctor.objects.get(username=doctor_user_name)
     hospital_name = ''.join(doctor.hospital_name.split(" "))
+    patients=[]
+    for patient in doctor.patients.all():
+        patients.append(patient)
     context = {
         'doctor':doctor,
-        'hospital_name':hospital_name
+        'hospital_name':hospital_name,
+        'patient_list':patients
     }
 
 
@@ -643,7 +647,7 @@ def doctor_edit_profile_save(request,doctor_user_name):
             log.save()
             return HttpResponse("Could not find doctor")
 
-#doctor apoitment will view all apoitments
+#doctor apoitment will view all apoitmentsf
 #also doctor will have ability to views the details about apoitment
 def doctor_apoitments_view(request,doctor_user_name):
     try:
