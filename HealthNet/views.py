@@ -202,9 +202,12 @@ def thankyou(request):
                 user_context = {
                     'user_name':user_name,
                 }
-
+                log = Logs(date=datetime.date.today(),action="Doctor logged in",who_did=email,what_happened="Doctor logged into the system")
+                log.save()
                 return redirect('/HealthNet/%s'%user_name,None)
             except Patient.DoesNotExist:
+                log = Logs(date=datetime.date.today(),action="Attempted Doctor logged in",who_did=email,what_happened="Doctor attempted to log into the system")
+                log.save()
                 return HttpResponse("Patient with this credentials does not exists")
 
 #signup prompts the user to sign up with their name and contact information and to provide
@@ -369,6 +372,8 @@ def save_profile(request,user_name):
             logs1.save()
             return redirect('/HealthNet/%s'%user_name,None)
         except Patient.DoesNotExist:
+            log = Logs(date=datetime.date.today(),action="Attempted User profile save",who_did=user_name,what_happened="User attempted to edit profile that doesn't exist")
+            log.save()
             return HttpResponse("Could not save the user")
 
 
@@ -426,6 +431,8 @@ def send_message(request,user_name):
             redirect('/HealthNet/%s'%user_name)
         else:
             print "Error in sending email"
+    log = Logs(date=datetime.date.today(),action="Message sent",who_did=user_name,what_happened="A message was sent")
+    log.save()
     return HttpResponse("Message Was Send")
 
 
@@ -443,6 +450,8 @@ def doctor_verify(request):
         password = request.POST.get('password',None)
         try:
             doctor = Doctor.objects.get(email=email,password=password)
+            log = Logs(date=datetime.date.today(),action="Doctor logged in",who_did=email,what_happened="Doctor logged into the system")
+            log.save()
             return redirect("/HealthNet/%s/doctor/profile/"%doctor.username)
             # return HttpResponse("HealthNet/%s/doctor/profile"%doctor.username)
         except Doctor.DoesNotExist:
@@ -511,7 +520,8 @@ def edit_apoitment(request,user_name):
         'url':'details/%s/%s'%(title,date_url),
         # 'end':end,
     }
-
+    log = Logs(date=datetime.date.today(),action="Appointment was edited",who_did=user_name,what_happened="Appointment edited")
+    log.save()
     return render(request,'HealthNet/calendar.html',{'apointements':json.dumps(data)})
 
 def view_appoitment(request,title,date_url):
@@ -625,8 +635,12 @@ def doctor_edit_profile_save(request,doctor_user_name):
             doctor.cell_phone=cell_phone
             doctor.password = password
             doctor.save()
+            log = Logs(date=datetime.date.today(),action="Doctor edited his profile",who_did=user_name,what_happened="Doctor edited profile")
+            log.save()
             return redirect('/HealthNet/doctor/%s'%doctor.username)
         except Doctor.DoesNotExist:
+            log = Logs(date=datetime.date.today(),action="Doctor attempted to edit profile and failed",who_did=user_name,what_happened="Doctor failed in profile edit")
+            log.save()
             return HttpResponse("Could not find doctor")
 
 #doctor apoitment will view all apoitments
