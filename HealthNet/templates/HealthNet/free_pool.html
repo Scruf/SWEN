@@ -1,57 +1,80 @@
-<style>
- table {
-    width:100%;
-}
-table, th, td {
-    border: 1px solid black;
-    border-collapse: collapse;
-}
-th, td {
-    padding: 5px;
-    text-align: left;
-}
-table#t01 tr:nth-child(even) {
-    background-color: #99ff99;
-}
-table#t01 tr:nth-child(odd) {
-   background-color:#00e6e6;
-}
-table#t01 th	{
-    background-color: #29a329;
-    color: white;
-}
-</style>
+<!doctype html>
 
-{% load staticfiles %}
-<link rel="stylesheet" type="text/css" href="{% static 'HealthNet/css/bootstrap.min.css'%}" />
+<head>
+    <style>
+        table {
+            width: 100%;
+        }
 
-<link rel="stylesheet" type="text/css" href="{% static 'HealthNet/css/jumbotron.css' %}" />
+        table,
+        th,
+        td {
+            border: 1px solid black;
+            border-collapse: collapse;
+        }
 
-<link rel="stylesheet" type="text/css" href="{% static 'HealthNet/css/ie10-viewport-bug-workaround.css' %}" />
+        th,
+        td {
+            padding: 5px;
+            text-align: left;
+        }
 
-<script src="{% static 'HealthNet/js/bootstrap.min.js'%} "></script>
+        table#t01 tr:nth-child(even) {
+            background-color: #99ff99;
+        }
 
-<script src="{% static 'HealthNet/js/ie10-viewport-bug-workaround.js'%}"></script>
+        table#t01 tr:nth-child(odd) {
+            background-color: #00e6e6;
+        }
 
-<script src="{% static 'HealthNet/js/ie-emulation-modes-warning.js' %}"> </script>
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.0/jquery.min.js"></script>
-<h1>{{Normailized_Hospital_Name}}</h1>
-<table id="t01">
-  <tr>
-    <th>Username</th>
-    <th>First Name</th>
-    <th>Last Name</th>
-  </tr>
-  {% for p  in Patient %}
-  <tr>
+        table#t01 th {
+            background-color: #29a329;
+            color: white;
+        }
+    </style>
 
-    <td>{{p.patient_user_name}}</td>
-    <td>{{p.patient_first_name}}</td>
-    <td>{{p.patient_last_name}}</td>
-    <th><button><a href="{{p.patient_user_name}}/save">Save</button></th>
-      <th><button><a href="/HealthNet/{{p.patient_user_name}}">View</a></button></th>
-  </tr>
+    {%load staticfiles%}
 
-{%endfor%}
-</table>
-<br>
+    <!-- Bootstrap Core CSS -->
+    <link href="{% static "HealthNet/css/bootstrap.min.css" %}" rel="stylesheet">
+
+
+    <!-- MetisMenu CSS -->
+
+    <link href="{% static "HealthNet/css/font-awesome.css" %}" rel="stylesheet" type="text/css">
+</head>
+
+<body>
+    <a href="/HealthNet/doctor/{{doctor}}">
+        <button class="btn btn-succes">Home</button>
+    </a>
+    <h1>{{Normailized_Hospital_Name}}</h1>
+    <table id="t01">
+        <tr>
+            <th>Username</th>
+            <th>First Name</th>
+            <th>Last Name</th>
+        </tr>
+        {% for p in Patient %}
+        <tr>
+
+            <td>{{p.patient_user_name}}</td>
+            <td>{{p.patient_first_name}}</td>
+            <td>{{p.patient_last_name}}</td>
+            <th>
+                <button><a href="{{p.patient_user_name}}/save">Save</button></th>
+      <th><button><a href="/HealthNet/{{hospital_name}}/{{doctor}}/pool/{{p.patient_user_name}}/view">View</a></button>
+            </th>
+        </tr>
+
+        {%endfor%}
+    </table>
+    <br>
+    <script src="{% static "HealthNet/js/jquery1.min.js" %}"></script>
+
+    <!-- Bootstrap Core JavaScript -->
+    <script src="{% static "HealthNet/js/bootstrap1.min.js" %}"></script>
+
+    <!-- Metis Menu Plugin JavaScript -->
+
+</body>
