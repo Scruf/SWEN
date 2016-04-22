@@ -1,0 +1,52 @@
+<!doctype HTML>
+<head>
+  {%load staticfiles%}
+
+  <!-- Bootstrap Core CSS -->
+  <link href="{% static "HealthNet/css/bootstrap.min.css" %}" rel="stylesheet">
+
+  <style>
+  .info{
+    width: 90%;
+    height:35px;
+    background-color: grey;
+  }
+  </style>
+
+</head>
+<body>
+  <div class="container">
+    <form class="form-horizontal">
+
+        <div class="form-group form-group-lg">
+            <label class="col-sm-2">Username:</label>
+            <div class="col-sm-8">
+              <div class="info">{{patient.user_name}}</div>
+            </div>
+        </div>
+        <div class="form-group form-group-lg">
+            <label class="col-sm-2">First Name:</label>
+            <div class="col-sm-8">
+              <div class="info">{{patient.first_name}}</div>
+        </div>
+        <div class="form-group form-group-lg">
+            <label class="col-sm-2">Last Name:</label>
+            <div class="col-sm-8">
+              <div class="info">{{patient.last_name}}</div>
+            </div>
+        </div>
+        <div class="form-group form-group-lg">
+            <label class="col-sm-2">Email:</label>
+            <div class="col-sm-8">
+              <div class="info">{{patient.email}}</div>
+            </div>
+        </div>
+
+
+            
+
+    </form>
+  </div>
+  <script src="{% static "HealthNet/js/jquery1.min.js" %}"></script>
+  <script src="{% static "HealthNet/js/bootstrap1.min.js" %}"></script>
+</body>

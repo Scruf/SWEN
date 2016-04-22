@@ -588,4 +588,9 @@ def doctor_apoitments_view(request,doctor_user_name):
         return HttpResponse("Viewing doctor apoitment")
 #doctor_patient_pool will render a patient pool template
 def patient_pool_view(request,hospital_name,doctor_user_name,patient_uesr_name):
-    return HttpResponse('View Patient info')
+    patient = Patient.objects.get(user_name=patient_uesr_name)
+    context = {
+        'patient':patient
+    }
+    patient_template = loader.get_template('HealthNet/patient_view.html')
+    return HttpResponse(patient_template.render(context,request))
