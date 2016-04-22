@@ -558,11 +558,66 @@ def doctor_edit_profile(request,doctor_user_name):
 def doctor_edit_profile_save(request,doctor_user_name):
     if request.method == 'POST':
         user_name = request.POST.get('user_name',None)
+        if len(user_name ) < 4:
+            messages.add_message(request, messages.ERROR, 'Username too short')
+            return redirect( '/HealthNet/doctor/' + doctor_user_name + '/edit/',permanent=True)
+        try:
+            doctor = Doctor.objects.get(username=user_name)
+        except Doctor.DoesNotExist:
+            print "good job"
+        except Doctor.MultipleObjectsReturned:
+            messages.add_message(request, messages.ERROR, 'Username is in use by someone else')
+            return redirect( '/HealthNet/doctor/' + doctor_user_name + '/edit/',permanent=True)
         first_name = request.POST.get('first_name',None)
+        if len(first_name ) < 3:
+            messages.add_message(request, messages.ERROR, 'First name too short')
+            return redirect( '/HealthNet/doctor/' + doctor_user_name + '/edit/',permanent=True)
         last_name = request.POST.get('last_name',None)
+        if len(last_name) < 3:
+            messages.add_message(request, messages.ERROR, 'Last name too short')
+            return redirect( '/HealthNet/doctor/' + doctor_user_name + '/edit/',permanent=True)
+        if first_name == last_name:
+            messages.add_message(request, messages.ERROR, 'First and last names cannot be equal')
+            return redirect( '/HealthNet/doctor/' + doctor_user_name + '/edit/',permanent=True)
+        if first_name == user_name or last_name == user_name:
+            messages.add_message(request, messages.ERROR, 'Username cannot be first or last name')
+            return redirect( '/HealthNet/doctor/' + doctor_user_name + '/edit/',permanent=True)
         email = request.POST.get('email',None)
+        if not re.match(r'(\w+[.|\w])*@(\w+[.])*\w+', str(email)):
+            messages.add_message(request, messages.ERROR, 'Email is of invalid format')
+            return redirect( '/HealthNet/doctor/' + doctor_user_name + '/edit/',permanent=True)
         cell_phone = request.POST.get('cell_phone',None)
+        if len(str(cell_phone.split("+")))<1 and str(cell_phone)[0] is not '1':
+            cell_phone = '1'+cell_phone
+            try:
+                 float(str(cell_phone.split("+")[1]))
+            except ValueError:
+                 messages.add_message(request, messages.ERROR, 'Phone number is of invalid format')
+                 return redirect( '/HealthNet/doctor/' + doctor_user_name + '/edit/',permanent=True)
+        elif cell_phone and len(cell_phone ) > 5:
+            if cell_phone[0] is '1':
+                cell_phone = '+'+cell_phone
+                try:
+                    float(str(cell_phone.split("+")[1]))
+                except ValueError:
+                    messages.add_message(request, messages.ERROR, 'Phone number is of invalid format')
+                    return redirect( '/HealthNet/doctor/' + doctor_user_name + '/edit/',permanent=True)
+            else:
+                try:
+                    cell_phone = request.POST.get('cell_phone',None)
+                except Patient.DoesNotExist:
+                    print "Robert"
+                except Patient.MultipleObjectsReturned:
+                    messages.add_message(request, messages.ERROR, 'Phone number is of invalid format')
+                    return redirect( '/HealthNet/doctor/' + doctor_user_name + '/edit/',permanent=True)
+        else:
+            messages.add_message(request, messages.ERROR, 'Phone number is of invalid format')
+            return redirect( '/HealthNet/doctor/' + doctor_user_name + '/edit/',permanent=True)
         password = request.POST.get('password',None)
+        passwordTryTwo = request.POST.get('confirm_password',None)
+        if password != passwordTryTwo:
+            messages.add_message(request, messages.ERROR, 'Passwords do not match')
+            return redirect( '/HealthNet/doctor/' + doctor_user_name + '/edit/',permanent=True)
         try:
             doctor = Doctor.objects.get(username=doctor_user_name)
             doctor.username = user_name

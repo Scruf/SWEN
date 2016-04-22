@@ -47,12 +47,22 @@
           </div>
       </div>
       <div class="form-group form-group-lg">
-          <label class="col-sm-2">Password</label>
+          <label class="col-sm-2">Confirm Password</label>
           <div class="col-sm-8">
-              <button class="btn btn-success">Save</button>
+              <input type="password" class="form-control text-center"  placeholder="Confirm Password" name="confirm_password">
           </div>
       </div>
 
+              <button class="btn btn-success">Save</button>
+
+              {% if messages %}
+              <ul class="messages">
+                  {% for message in messages %}
+                  <li{% if message.tags %} class="{{ message.tags }}"
+                        {% endif %}><font color="red">{{ message }}</li>
+                  {% endfor %}
+              </ul>
+              {% endif %}
   </form>
 </div>
 </body>
