@@ -1,0 +1,43 @@
+<!-- {% load fullcalendar_tags %} -->
+
+ <!DOCTYPE html>
+ <head>
+
+     <title>Doctor {{doctor.first_name}} {{doctor.last_name}}</title>
+
+     {% fullcalendar_css %}
+     {% fullcalendar_print_css %}
+     {% fullcalendar_jquery %}
+     {% fullcalendar_jquery_ui %}
+     {% fullcalendar_javascript %}
+     {% load staticfiles %}
+       <link href="{% static "HealthNet/css/bootstrap.min.css" %}" rel="stylesheet">
+
+
+
+ </head>
+
+
+
+ <body>
+   <style>
+    #calendar{
+      width: 50%;
+      height: 50%;
+    }
+   </style>
+<div class="container">
+  <a href="/HealthNet/doctor/{{doctor.username}}"><button class="btn btn-success">Home</button></a>
+<div id="calendar"></div>
+  <script>
+  $(document).ready(function(){
+    $('#calendar').fullCalendar({
+        events:[{{apointements|safe}}]
+
+
+      });
+    });
+
+  </script>
+  </div>
+</body>

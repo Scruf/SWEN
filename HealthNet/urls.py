@@ -21,7 +21,7 @@ urlpatterns =[
     url(r'^(?P<user_name>\w+)/$',views.load_profile, name='load_profile'),
     url(r'^(?P<user_name>\w+)/view/$', views.profile_edit,name='view_profile'),
     url(r'^(?P<user_name>\w+)/view/save/$', views.save_profile,name='save_profile'),
-    url(r'^(?P<user_name>\w+)/appoitment/$',views.appoitment,name='appoitment'),
+    # url(r'^(?P<user_name>\w+)/appoitment/$',views.appoitment,name='appoitment'),
     url(r'^(?P<user_name>\w+)/appoitment/view/$',views.edit_apoitment,name='edit_apoitment'),
     url(r'^(?P<user_name>\w+)/appoitment/view/details/(?P<title>\w+)/(?P<date_url>\w+)/$',views.view_appoitment,name='view_appoitment'),
     url(r'^(?P<user_name>\w+)/appoitment/edit/(?P<apoitment_id>[0-9]+)/$',views.edit_apoitment_,name='edit_apoitment_'),
@@ -36,5 +36,6 @@ urlpatterns =[
     url(r'^doctor/(?P<doctor_user_name>\w+)/$',views.doctor_profile,name='doctor_profile'),
     url(r'^doctor/(?P<doctor_user_name>\w+)/edit/$',views.doctor_edit_profile,name='doctor_edit_profile'),
     url(r'^doctor/(?P<doctor_user_name>\w+)/edit/doctor_edit/$',views.doctor_edit_profile_save,name='doctor_edit_profile_save'),
+    url(r'^doctor/(?P<doctor_user_name>\w+)/appointment/$',views.doctor_apoitments_view,name='doctor_apoitments'),
     #urls for doctors go above
 ]

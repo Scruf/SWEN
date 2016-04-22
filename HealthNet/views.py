@@ -570,3 +570,16 @@ def doctor_edit_profile_save(request,doctor_user_name):
             return redirect('/HealthNet/doctor/%s'%doctor.username)
         except Doctor.DoesNotExist:
             return HttpResponse("Could not find doctor")
+
+#doctor apoitment will view all apoitments
+#also doctor will have ability to views the details about apoitment
+def doctor_apoitments_view(request,doctor_user_name):
+    try:
+        doctor = Doctor.objects.get(username=doctor_user_name)
+        context = {
+            'doctor':doctor
+        }
+        doctor_apoitment_template = loader.get_template('HealthNet/doctor_apoitment.html')
+        return HttpResponse(doctor_apoitment_template.render(context,request))
+    except Doctor.DoesNotExist:
+        return HttpResponse("Viewing doctor apoitment")
