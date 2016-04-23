@@ -525,10 +525,12 @@ def confirm_appoitment(request,user_name):
         # apoitment.save()
         logs = Logs(date=datetime.date.today(),action="Requestiong Appoitment",who_did=patient.user_name)
         logs.save()
-        return redirect("/HealthNet/%s"%user_name)
+        return redirect("/HealthNet/%s/appoitment/confirm/%s"%(user_name,full_date))
     else:
         return redirect("/HealthNet/%s"%user_name)
 
+def confirm_appoitment_dates(request,user_name,dates):
+    return HttpResponse("dates")
 
 def edit_apoitment(request,user_name):
     try:
