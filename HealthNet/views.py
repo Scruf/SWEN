@@ -439,8 +439,12 @@ def doctor_profile(request,doctor_user_name):
 def appoitment(request,user_name):
 
     appoitment_template = loader.get_template('HealthNet/appointment.html')
+    patient  = Patient.objects.get(user_name=user_name)
+    doctor = Doctor.objects.get(username=patient._doctor)
+
     context = {
         'username':user_name,
+        'doctor':doctor
     }
     return HttpResponse(appoitment_template.render(context,request))
 
@@ -450,14 +454,15 @@ def confirm_appoitment(request,user_name):
         patient = Patient.objects.get(user_name=user_name)
         doctor = Doctor.objects.get(patients=patient)
         appoitment_date = request.POST.get("date",None)
-        month = appoitment_date.split("/")[0]
-        day = appoitment_date.split("/")[1]
-        year = appoitment_date.split("/")[2]
+        month = appoitment_date.split("-")[1]
+        day = appoitment_date.split("-")[2]
+        year = appoitment_date.split("-")[0]
         full_date = year+"-"+month+"-"+day
+
         reason_to = request.POST.get("reason",None)
         apoitment = Scheduler(start_date=full_date,patient=patient.user_name,\
                                 doctor=doctor.username,title=reason_to)
-        apoitment.save()
+        # apoitment.save()
         logs = Logs(date=datetime.date.today(),action="Requestiong Appoitment",who_did=patient.user_name)
         logs.save()
         return redirect("/HealthNet/%s"%user_name)
