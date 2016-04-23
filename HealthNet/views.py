@@ -3,26 +3,25 @@ from django.shortcuts import render,get_object_or_404,redirect
 from django.http import HttpResponse,HttpResponseServerError,JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 from django.contrib.sessions.models import Session
-from django.contrib.auth.decorators import login_required
+#from django.contrib.auth.decorators import login_required
 from django.template import loader
 from .models import Patient,Hospital,Logs,Doctor,Apoitment,Scheduler,Administration
-from django.contrib.auth import authenticate, login
+#from django.contrib.auth import authenticate, login
 import re
 import uuid
 from django.template.context import RequestContext
 from django.core.mail import send_mail
 import datetime
-import redis
+#import redis
 import json
 from django.contrib import messages
-from django.shortcuts import render_to_response
+#from django.shortcuts import render_to_response
 from django.http import HttpResponseRedirect
 
 
 # Create your views here.
 REDIRECT_URL="http://dogr.io/wow/suchservice/muchtextsplitting/verydirectcompose.png"
-#Its not a full implementation of a fullcalendar
-#I am just using it for testing (savages)
+
 def message(request,sender_name):
     message_template = loader.get_template('HealthNet/messages.html')
     context = {
@@ -32,10 +31,7 @@ def message(request,sender_name):
     return HttpResponse(message_template.render(context,request))
 def administration(request):
     template = loader.get_template('HealthNet/administration_sign.html')
-    context ={
-        "Some":"Wodo",
-    }
-    return HttpResponse(template.render(context,request))
+    return HttpResponse(template.render(None,request))
 
 def admin_verify(request):
     if request.method == 'POST':
@@ -50,6 +46,7 @@ def admin_verify(request):
             admin_template = loader.get_template('HealthNet/admin.html')
             return redirect('/HealthNet/administration/%s'%admin_user_name)
         except Administration.DoesNotExist:
+            #Make error message and redirect back to administration_sign
             return HttpResponse("Invalid Credentails")
 
 
@@ -61,13 +58,10 @@ def admin_profile(request,admin_name):
         admin_profile_template = loader.get_template('HealthNet/admin.html')
         return HttpResponse(admin_profile_template.render(context,request))
 
-
+#Creating a doctor
 def admin_create(request,admin_name):
     admin_create_temlate = loader.get_template('HealthNet/admins/admin_create.html')
-    context = {
-        'create':'Doctors'
-    }
-    return HttpResponse(admin_create_temlate.render(context,request))
+    return HttpResponse(admin_create_temlate.render(None,request))
 #@controller admin  will create and verify  doctor profile
 #in future this controller should create a username by itslf without
 #requring admin entering it manually
@@ -140,7 +134,7 @@ def admin_create_verify(request,admin_name):
         password = str(uuid.uuid1()).split("-")[0]
         doctor = Doctor(username=user_name,email=email,first_name=first_name,last_name=last_name,password=password,hospital_name=hospital)
         doctor.save()
-        log = Logs(date=datetime.date.today(),action="New Doctor created",who_did="admin",what_happened="Doctor creation")
+        log = Logs(date=datetime.date.today(),action="New Doctor created",who_did=admin_name,what_happened="Doctor creation")
 
         log.save()
         return redirect('/HealthNet/administration/%s'%admin_name)
@@ -156,6 +150,8 @@ def admin_create_verify(request,admin_name):
 #         return HttpResponse("Savage %s Saved"%username)
 #     else:
 #         return HttpResponse("Not Saved")
+
+#loading admin logs into admin_logs template
 def admin_logs(request,admin_name):
     admin_logs_template = loader.get_template('HealthNet/admin_logs.html')
     log = Logs.objects.all();
@@ -163,6 +159,7 @@ def admin_logs(request,admin_name):
         'logs':log
     }
     return HttpResponse(admin_logs_template.render(context,request))
+#load the main page
 def index(request):
     users = Patient.objects.all()
     template = loader.get_template('HealthNet/index.html')
@@ -171,9 +168,9 @@ def index(request):
     }
     return HttpResponse(template.render(context,request))
 
-#Request will be submited to this controller whoch will generate the message
-#on fail it will gennerate fail message
-#on succes it will generate succes
+#Request will be submited to this controller which will generate the message
+#on fail it will generate a fail message
+#on success it will generate succes
 def sign_in(request):
 
     sign_in_template = loader.get_template('HealthNet/signin.html')
@@ -189,6 +186,7 @@ def thankyou(request):
         password = request.POST.get('password',None)
         try:
             doctor = Doctor.objects.get(email=email,password=password)
+            #log for doctor
             return redirect('/HealthNet/doctor/%s'%doctor.username)
         except Doctor.DoesNotExist:
             try:
@@ -320,11 +318,10 @@ def register(request):
         log = Logs(date=datetime.date.today(),action="Register",who_did=username,what_happened="Signing up to the system")
         log.save()
 
-        logs = Logs(date=datetime.date.today(),action="Registering",who_did="%s"%username)
-        logs.save()
         h = Hospital.objects.get(hospital_name=hospital_val)
         h.patients_list.add(p)
         h.save()
+        #DO NOT TOUCH
         logs1 = Logs(date=datetime.date.today(),who_did="%s saved a patient with a %s"%(hospital_name,username))
         logs1.save()
         return redirect('/HealthNet/%s'%username,None)
@@ -379,7 +376,7 @@ def save_profile(request,user_name):
 
 
 
-
+#This is loading the patient pool template into the system
 def patient_pool(request,hospital_name,doctor_user_name):
     temp_hospital_name= hospital_name
     hospital_name =' '.join(filter(None,re.split("([A-Z][^A-Z]*)",hospital_name)))
@@ -403,11 +400,12 @@ def patient_pool(request,hospital_name,doctor_user_name):
         'hospital_name':temp_hospital_name,
         "doctor":doctor_user_name
     }
-    logs = Logs(date=datetime.date.today(),action="Browsing list of patients",who_did="%s"%doctor_user_name)
+    logs = Logs(date=datetime.date.today(),action=doctor_user_name + " is Browsing list of patients at : " + hospital_name,who_did="%s"%doctor_user_name)
     logs.save()
     pool_template = loader.get_template('HealthNet/free_pool.html')
     return HttpResponse(pool_template.render(context,request))
 
+#doctor is choosing which patient to take
 def patien_to_save(request,hospital_name,user_name,doctor_user_name):
     patient = Patient.objects.get(user_name=user_name)
     patient.assigned_doctor = True
@@ -420,45 +418,8 @@ def patien_to_save(request,hospital_name,user_name,doctor_user_name):
     logs = Logs(date=datetime.date.today(),action="Assigning Patient",who_did="%s"%doctor_user_name)
     logs.save()
     return redirect("/HealthNet/%s/%s/pool"%(hospital_name,user_name))
-#smpt fail
-def send_message(request,user_name):
-    if request.method == 'POST':
-        doctor_user_name = request.POST.get("doctor_email",None)
-        message = request.POST.get('message',None)
-        #doctor_user_name = Doctor.objects.get(username=doctor_user_name).email
-        email_m = doctor_user_name
-        if send_mail("You've got a message from %s"%user_name,message,"healthnettesting@gmail.com",['%s'%email_m],fail_silently=False)==1:
-            redirect('/HealthNet/%s'%user_name)
-        else:
-            print "Error in sending email"
-    log = Logs(date=datetime.date.today(),action="Message sent",who_did=user_name,what_happened="A message was sent")
-    log.save()
-    return HttpResponse("Message Was Send")
 
-
-def doctor_sign(request):
-    doctor_sign_template = loader.get_template("HealthNet/doctors_sign.html")
-    context = {
-        "Doctor":"Sign",
-    }
-    return HttpResponse(doctor_sign_template.render(context,request))
-
-
-def doctor_verify(request):
-    if request.method == 'POST':
-        email = request.POST.get('email',None)
-        password = request.POST.get('password',None)
-        try:
-            doctor = Doctor.objects.get(email=email,password=password)
-            log = Logs(date=datetime.date.today(),action="Doctor logged in",who_did=email,what_happened="Doctor logged into the system")
-            log.save()
-            return redirect("/HealthNet/%s/doctor/profile/"%doctor.username)
-            # return HttpResponse("HealthNet/%s/doctor/profile"%doctor.username)
-        except Doctor.DoesNotExist:
-            return HttpResponse("Hello")
-    # else:
-    #     return redirect(REDIRECT_URL)
-
+#loading doctor profile
 def doctor_profile(request,doctor_user_name):
     doctor_template = loader.get_template('HealthNet/doctors.html')
     doctor = Doctor.objects.get(username=doctor_user_name)
@@ -472,8 +433,9 @@ def doctor_profile(request,doctor_user_name):
         'patient_list':patients
     }
 
-
     return HttpResponse(doctor_template.render(context,request))
+
+#loading appointment page
 def appoitment(request,user_name):
 
     appoitment_template = loader.get_template('HealthNet/appointment.html')
@@ -481,6 +443,7 @@ def appoitment(request,user_name):
         'username':user_name,
     }
     return HttpResponse(appoitment_template.render(context,request))
+
 
 def confirm_appoitment(request,user_name):
     if request.method == 'POST':
@@ -552,8 +515,6 @@ def apoitment_save(request,apoitment_id):
     # else:
     #     return redirect(REDIRECT_URL)
 
-def save(request):
-    return HttpResponse("Saved")
 #doctor edit will load the template with doctors details to be edited
 def doctor_edit_profile(request,doctor_user_name):
     doctor_edit_template = loader.get_template('HealthNet/doctor_edit.html')

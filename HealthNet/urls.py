@@ -30,9 +30,6 @@ urlpatterns =[
     url(r'^(?P<hospital_name>\w+)/(?P<doctor_user_name>\w+)/pool/$',views.patient_pool,name='patient_pool'),
     url(r'^(?P<hospital_name>\w+)/(?P<doctor_user_name>\w+)/pool/(?P<patient_uesr_name>\w+)/view$',views.patient_pool_view,name='patient_pool'),
     url(r'^(?P<hospital_name>\w+)/(?P<doctor_user_name>\w+)/pool/(?P<user_name>\w+)/save/$',views.patien_to_save, name='patient_to_save'),
-    url(r'^(?P<user_name>\w+)/send/$',views.send_message,name='send'),
-    url(r'^doctor/sign/$',views.doctor_sign,name='doctor_sign'),
-    url(r'^doctor/sign/doctor/',views.doctor_verify,name="doctor_verify"),
     #urls for doctors go bellow
     url(r'^doctor/(?P<doctor_user_name>\w+)/$',views.doctor_profile,name='doctor_profile'),
     url(r'^doctor/(?P<doctor_user_name>\w+)/edit/$',views.doctor_edit_profile,name='doctor_edit_profile'),
