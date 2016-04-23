@@ -3,19 +3,15 @@ from django.shortcuts import render,get_object_or_404,redirect
 from django.http import HttpResponse,HttpResponseServerError,JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 from django.contrib.sessions.models import Session
-#from django.contrib.auth.decorators import login_required
 from django.template import loader
 from .models import Patient,Hospital,Logs,Doctor,Apoitment,Scheduler,Administration
-#from django.contrib.auth import authenticate, login
 import re
 import uuid
 from django.template.context import RequestContext
 from django.core.mail import send_mail
 import datetime
-#import redis
 import json
 from django.contrib import messages
-#from django.shortcuts import render_to_response
 from django.http import HttpResponseRedirect
 
 
@@ -44,10 +40,12 @@ def admin_verify(request):
             }
             admin_user_name = admin.user_name
             admin_template = loader.get_template('HealthNet/admin.html')
+            log = Logs(date=datetime.date.today(),action="Admin signin",who_did=email,what_happened="Admin sign in")
+            log.save()
             return redirect('/HealthNet/administration/%s'%admin_user_name)
         except Administration.DoesNotExist:
-            #Make error message and redirect back to administration_sign
-            return HttpResponse("Invalid Credentails")
+            messages.add_message(request, messages.ERROR, 'Invalid login credentials for: %s'%email)
+            return redirect('/HealthNet/administration',permenent=True)
 
 
 def admin_profile(request,admin_name):
@@ -56,6 +54,8 @@ def admin_profile(request,admin_name):
             'admin':admin_name,
         }
         admin_profile_template = loader.get_template('HealthNet/admin.html')
+        log = Logs(date=datetime.date.today(),action=admin_name + " loaded admin page",who_did=admin_name,what_happened="Admin loaded admin page")
+        log.save()
         return HttpResponse(admin_profile_template.render(context,request))
 
 #Creating a doctor
@@ -186,7 +186,8 @@ def thankyou(request):
         password = request.POST.get('password',None)
         try:
             doctor = Doctor.objects.get(email=email,password=password)
-            #log for doctor
+            log = Logs(date=datetime.date.today(),action="Sign In",who_did=email,what_happened="Doctor logged in")
+            log.save()
             return redirect('/HealthNet/doctor/%s'%doctor.username)
         except Doctor.DoesNotExist:
             try:
@@ -332,6 +333,8 @@ def load_profile(request,user_name):
     context={
         'Patient':user,
         }
+    log = Logs(date=datetime.date.today(),action="Loaded profile",who_did=user_name,what_happened="User loaded profile")
+    log.save()
     return HttpResponse(profile_template.render(context,request))
 #
 
@@ -357,6 +360,64 @@ def save_profile(request,user_name):
             cell_phone = request.POST.get("cell_phone",None)
             address = request.POST.get("address",None)
             insuarance_number = request.POST.get("insuarance",None)
+
+            #setting the appropriate logs
+            if user.user_name != user_name:
+                print ("username is different")
+                if user_name == first_name or user_name == last_name or user_name == user.first_name or user_name == user.last_name:
+                    messages.add_message(request, messages.ERROR, 'Cannot set username to your first or last name')
+                    return redirect( '/HealthNet/' + user.user_name + '/view/',permanent=True)
+                try:
+                    print ("trying to find patient")
+                    test_patient = Patient.objects.get(user_name=user_name)
+                    if test_patient is not None:
+                        messages.add_message(request, messages.ERROR, 'Username is already in use')
+                        return redirect( '/HealthNet/' + user.user_name + '/view/',permanent=True)
+                except Patient.DoesNotExist:
+                    print ("printing exception")
+                log = Logs(date=datetime.date.today(),action="User edited profile",who_did=user.user_name,what_happened="User changed username from " + user.user_name + " to " + user_name)
+                log.save()
+            if user.first_name != first_name:
+                if len(first_name) < 3:
+                    messages.add_message(request, messages.ERROR, 'Invalid first name')
+                    return redirect( '/HealthNet/' + user.user_name + '/view/',permanent=True)
+                if first_name == last_name:
+                    messages.add_message(request, messages.ERROR, 'First name cannot be equal to last name')
+                    return redirect( '/HealthNet/' + user.user_name + '/view/',permanent=True)
+                log = Logs(date=datetime.date.today(),action="User edited profile",who_did=user.user_name,what_happened="User changed first name from " + user.first_name + " to " + first_name)
+                log.save()
+            if user.last_name != last_name:
+                if len(last_name) < 3:
+                    messages.add_message(request, messages.ERROR, 'Invalid last name')
+                    return redirect( '/HealthNet/' + user.user_name + '/view/',permanent=True)
+                if last_name == first_name:
+                    messages.add_message(request, messages.ERROR, 'Invalid first name')
+                    return redirect( '/HealthNet/' + user.user_name + '/view/',permanent=True)
+                log = Logs(date=datetime.date.today(),action="User edited profile",who_did=user.user_name,what_happened="User changed last name from " + user.last_name + " to " + last_name)
+                log.save()
+            if user.email != email:
+                if not re.match(r'(\w+[.|\w])*@(\w+[.])*\w+', str(email)):
+                    messages.add_message(request, messages.ERROR, 'Invalid email')
+                    return redirect( '/HealthNet/' + user.user_name + '/view/',permanent=True)
+                log = Logs(date=datetime.date.today(),action="User edited profile",who_did=user.user_name,what_happened="User changed email address from " + user.email + " to " + email)
+                log.save()
+            if user.cell_phone != cell_phone:
+                if len(str(cell_phone.split("+")))<1 and str(cell_phone)[0] is not '1':
+                    messages.add_message(request, messages.ERROR, 'Invalid cell phone number')
+                    return redirect( '/HealthNet/' + user.user_name + '/view/',permanent=True)
+                log = Logs(date=datetime.date.today(),action="User edited profile",who_did=user.user_name,what_happened="User changed cell phone number from " + user.cell_phone + " to " + cell_phone)
+                log.save()
+            if user.address != address:
+
+                log = Logs(date=datetime.date.today(),action="User edited profile",who_did=user.user_name,what_happened="User changed address from " + user.adress + " to " + adress)
+                log.save()
+            if user.insuarance_number != insuarance_number:
+                if len(insuarance_number) < 5:
+                    messages.add_message(request, messages.ERROR, 'Invalid insurance number')
+                    return redirect( '/HealthNet/' + user.user_name + '/view/',permanent=True)
+                log = Logs(date=datetime.date.today(),action="User edited profile",who_did=user.user_name,what_happened="User changed insurance number from " + user.insuarance_number + " to " + insuarance_number)
+                log.save()
+
             user.user_name=user_name
             user.first_name = first_name
             user.last_name = last_name
@@ -365,8 +426,6 @@ def save_profile(request,user_name):
             user.address = address
             user.insuarance_number = insuarance_number
             user.save()
-            logs1 = Logs(date=datetime.date.today(),who_did="%s edited profile "%user_name)
-            logs1.save()
             return redirect('/HealthNet/%s'%user_name,None)
         except Patient.DoesNotExist:
             log = Logs(date=datetime.date.today(),action="Attempted User profile save",who_did=user_name,what_happened="User attempted to edit profile that doesn't exist")
@@ -432,7 +491,8 @@ def doctor_profile(request,doctor_user_name):
         'hospital_name':hospital_name,
         'patient_list':patients
     }
-
+    logs = Logs(date=datetime.date.today(),action=doctor_user_name + " loaded profile",who_did="%s"%doctor_user_name)
+    logs.save()
     return HttpResponse(doctor_template.render(context,request))
 
 #loading appointment page
@@ -467,7 +527,7 @@ def confirm_appoitment(request,user_name):
         logs.save()
         return redirect("/HealthNet/%s"%user_name)
     else:
-        return HttpResponse("WWTF")
+        return redirect("/HealthNet/%s"%user_name)
 
 
 def edit_apoitment(request,user_name):
@@ -528,6 +588,8 @@ def doctor_edit_profile(request,doctor_user_name):
         context = {
             'doctor':doctor
         }
+        log = Logs(date=datetime.date.today(),action="Doctor editing profile",who_did=doctor_user_name,what_happened="Doctor editing his profile")
+        log.save()
         return HttpResponse(doctor_edit_template.render(context,request))
     except Doctor.DoesNotExist:
         return HttpResponse("Doctor Does Not exists");
@@ -622,6 +684,8 @@ def doctor_apoitments_view(request,doctor_user_name):
             'doctor':doctor
         }
         doctor_apoitment_template = loader.get_template('HealthNet/doctor_apoitment.html')
+        log = Logs(date=datetime.date.today(),action="Doctor viewing appointments",who_did=doctor_user_name,what_happened="Doctor viewed appointments")
+        log.save()
         return HttpResponse(doctor_apoitment_template.render(context,request))
     except Doctor.DoesNotExist:
         return HttpResponse("Viewing doctor apoitment")
@@ -632,4 +696,6 @@ def patient_pool_view(request,hospital_name,doctor_user_name,patient_uesr_name):
         'patient':patient
     }
     patient_template = loader.get_template('HealthNet/patient_view.html')
+    log = Logs(date=datetime.date.today(),action="Doctor viewed a patient in the patient pool",who_did=doctor_user_name,what_happened=doctor_user_name + " viewed " + patient_user_name + " at " + hospital_name)
+    log.save()
     return HttpResponse(patient_template.render(context,request))

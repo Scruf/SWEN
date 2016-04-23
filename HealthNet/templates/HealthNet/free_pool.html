@@ -4,18 +4,12 @@
     <style>
         table {
             width: 100%;
+            border: 1px solid black;
         }
 
-        table,
         th,
         td {
             border: 1px solid black;
-            border-collapse: collapse;
-        }
-
-        th,
-        td {
-            padding: 5px;
             text-align: left;
         }
 
@@ -31,6 +25,11 @@
             background-color: #29a329;
             color: white;
         }
+        .title{
+            background-color: #2c3e50;
+            color: white;
+            font-size: 50px;
+        }
     </style>
 
     {%load staticfiles%}
@@ -45,26 +44,33 @@
 </head>
 
 <body>
-    <a href="/HealthNet/doctor/{{doctor}}">
-        <button class="btn btn-succes">Home</button>
-    </a>
+    <div class="title">
+        <label class="col-sm-11">Your Patients</label>
+        <a href="/HealthNet/doctor/{{doctor}}">
+            <button class="btn btn-succes">Home</button>
+        </a>
+    </div>
     <h1>{{Normailized_Hospital_Name}}</h1>
     <table id="t01">
         <tr>
             <th>Username</th>
             <th>First Name</th>
             <th>Last Name</th>
+            <th style="width: 6%">Options</th>
         </tr>
         {% for p in Patient %}
         <tr>
-
             <td>{{p.patient_user_name}}</td>
             <td>{{p.patient_first_name}}</td>
             <td>{{p.patient_last_name}}</td>
-            <th>
-                <button><a href="{{p.patient_user_name}}/save">Save</button></th>
-      <th><button><a href="/HealthNet/{{hospital_name}}/{{doctor}}/pool/{{p.patient_user_name}}/view">View</a></button>
-            </th>
+            <td>
+                <button style="width: 45%">
+                    <a href="{{p.patient_user_name}}/save">Save</a>
+                </button>
+                <button style="width: 45%">
+                    <a href="/HealthNet/{{hospital_name}}/{{doctor}}/pool/{{p.patient_user_name}}/view">View</a>
+                </button>
+            </td>
         </tr>
 
         {%endfor%}
