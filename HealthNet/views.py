@@ -156,7 +156,8 @@ def admin_logs(request,admin_name):
     admin_logs_template = loader.get_template('HealthNet/admin_logs.html')
     log = Logs.objects.all();
     context = {
-        'logs':log
+        'logs':log,
+        'admin':admin_name
     }
     return HttpResponse(admin_logs_template.render(context,request))
 #load the main page
