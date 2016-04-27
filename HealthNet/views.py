@@ -18,6 +18,18 @@ from django.http import HttpResponseRedirect
 # Create your views here.
 REDIRECT_URL="http://dogr.io/wow/suchservice/muchtextsplitting/verydirectcompose.png"
 
+def patient(request):
+    patient = Patient.objects.all()
+    patient_list = []
+    for p in patient:
+        data={
+            'user_name':p.user_name,
+            'first_name':p.first_name,
+            'last_name':p.last_name
+        }
+        patient_list.append(data)
+    return HttpResponse(json.dumps(patient_list), content_type="application/json")
+
 def message(request,sender_name):
     message_template = loader.get_template('HealthNet/messages.html')
     context = {
@@ -535,6 +547,8 @@ def confirm_appoitment_dates(request,user_name,dates):
     try:
         doctor = Doctor.objects.get(username=doctor_user_name)
         available_time = doctor.apoitment_list.all()
+        year = int(dates.split("/")[0])
+        month = int(dates.split("/")[1])
         return HttpResponse("The dates are %s"%dates)
 
     except Doctor.DoesNotExist:

@@ -15,7 +15,7 @@ class Apoitment(models.Model):
     reason = models.CharField(max_length=250)
 
     def __str__(self):
-        return self.patients+"-"+self.doctor+"-"+self.reason
+        return self.date+" "+self.name+" "+self.reason
 #------------------------------------Logs----------------------------------
 
 class Messages(models.Model):

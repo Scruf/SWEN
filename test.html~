@@ -1,0 +1,23 @@
+<!doctype HTML>
+<head>
+	<script src="https://code.jquery.com/jquery-2.2.3.js" integrity="sha256-laXWtGydpwqJ8JA+X9x2miwmaiKhn8tVmOVEigRNtP4=" crossorigin="anonymous"></script>
+</head>
+<script>
+	$(document).ready(function(){
+   		$.ajax({
+	url:'http://127.0.0.1:8000/HealthNet/api/users/',
+	type:'GET',
+	crossDomain:true,
+	dataType: 'jsonp',
+	success: function(data){
+		if(data.success){
+			console.log("WOw");
+		}
+	
+	});
+	
+});
+</script>
+http://127.0.0.1:8000/HealthNet/api/users/
+<body>
+</body>
