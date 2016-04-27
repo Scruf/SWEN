@@ -17,7 +17,8 @@ from django.http import HttpResponseRedirect
 
 # Create your views here.
 REDIRECT_URL="http://dogr.io/wow/suchservice/muchtextsplitting/verydirectcompose.png"
-#begining of api
+#begining of api this method is for practice use only
+
 def patient(request):
     patient = Patient.objects.all()
     patient_list = []
@@ -29,12 +30,33 @@ def patient(request):
         }
         patient_list.append(data)
     if 'callback' in request.GET:
-        data ='%s(%s)'%(request.GET['callback'],json.dumps(patient_list));
+        data ='%s(%s)'%(request.GET['callback'],json.dumps(patient_list))
         return HttpResponse(data,'text/javascript')
     else:
         return HttpResponse("Didi not work")
-def check_for_time(request,apoitment_time):
-    return HttpResponse("Work")
+
+
+def check_for_time(request,doctor_name,apoitment_time):
+    try:
+        doctor = Doctor.objects.get(username=doctor_name)
+        alvailable_time = doctor.apoitment_list.all()
+        if len(alvailable_time)==0:
+            if 'callback' in request.GET:
+                date = {
+                    'day':apoitment_time.split("/")[2],
+                    'month':apoitment_time.split("/")[1]
+                }
+                date_list = []
+                date_list.append(date)
+                data  = '%s(%s)'%(request.GET['callback'].json.dumps(date_list))
+                return HttpResponse(data,'text/javascript')
+    except Doctor.DoesNotExist:
+        return HttpResponse("You have not been assigned doctor yet, please contact administration to resolve this issue")
+
+
+
+
+
 def message(request,sender_name):
     message_template = loader.get_template('HealthNet/messages.html')
     context = {

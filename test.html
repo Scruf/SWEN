@@ -1,24 +1,26 @@
 <!doctype HTML>
+
 <head>
 	<script src="https://code.jquery.com/jquery-2.2.3.js" integrity="sha256-laXWtGydpwqJ8JA+X9x2miwmaiKhn8tVmOVEigRNtP4=" crossorigin="anonymous"></script>
 </head>
 <script>
-	$(document).ready(function(){
-   		$.ajax({
-	url:"http://127.0.0.1:8000/HealthNet/api/users/",
-	type:'GET',
-	data:({}),
-	crossDomain:true,
-	dataType: 'jsonp',
-	success: function(data){
-		data.filter(function(d){
-			console.log(d.first_name);
+	$(document).ready(function() {
+		$.ajax({
+			url: "http://127.0.0.1:8000/HealthNet/api/users/",
+			type: 'GET',
+			data: ({}),
+			crossDomain: true,
+			dataType: 'jsonp',
+			success: function(data) {
+				data.filter(function(d) {
+					console.log(d.first_name);
+				});
+			}
 		});
-	}
-	});
 
-});
+	});
 </script>
 <!-- http://127.0.0.1:8000/HealthNet/api/users/ -->
+
 <body>
 </body>

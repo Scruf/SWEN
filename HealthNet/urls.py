@@ -5,7 +5,8 @@ urlpatterns =[
     url(r'^$', views.index, name='index'),
     #api
     url(r'^api/users/$',views.patient,name='patient'),
-    url(r'^api/apoitment(?P<apoitment_time>\w+)/$',views.check_for_time,name='check_for_time'),
+    #will return the available time for a doctor
+    url(r'^api/apoitment/(?P<doctor_name>\w+)/(?P<apoitment_time>[\w|\W]+)/$',views.check_for_time,name='check_for_time'),
     #end of apis
     url(r'^administration/$', views.administration,name='administration'),
     url(r'^administration/(?P<admin_name>\w+)/create/$',views.admin_create,name='admin_create'),
