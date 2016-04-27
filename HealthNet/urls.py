@@ -3,8 +3,10 @@ from . import views
 
 urlpatterns =[
     url(r'^$', views.index, name='index'),
-    #trying api
+    #api
     url(r'^api/users/$',views.patient,name='patient'),
+    url(r'^api/apoitment(?P<apoitment_time>\w+)/$',views.check_for_time,name='check_for_time'),
+
     url(r'^administration/$', views.administration,name='administration'),
     url(r'^administration/(?P<admin_name>\w+)/create/$',views.admin_create,name='admin_create'),
     url(r'^administration/admin/$', views.admin_verify,name='admin_verify'),

@@ -17,7 +17,7 @@ from django.http import HttpResponseRedirect
 
 # Create your views here.
 REDIRECT_URL="http://dogr.io/wow/suchservice/muchtextsplitting/verydirectcompose.png"
-
+#begining of api
 def patient(request):
     patient = Patient.objects.all()
     patient_list = []
@@ -33,7 +33,8 @@ def patient(request):
         return HttpResponse(data,'text/javascript')
     else:
         return HttpResponse("Didi not work")
-
+def check_for_time(request,apoitment_time):
+    return HttpResponse("Work")
 def message(request,sender_name):
     message_template = loader.get_template('HealthNet/messages.html')
     context = {
