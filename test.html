@@ -5,19 +5,20 @@
 <script>
 	$(document).ready(function(){
    		$.ajax({
-	url:'http://127.0.0.1:8000/HealthNet/api/users/',
+	url:"http://127.0.0.1:8000/HealthNet/api/users/",
 	type:'GET',
+	data:({}),
 	crossDomain:true,
 	dataType: 'jsonp',
 	success: function(data){
-		if(data.success){
-			console.log("WOw");
-		}
+		data.filter(function(d){
+			console.log(d.first_name);
+		});
 	}
 	});
-	
+
 });
 </script>
-http://127.0.0.1:8000/HealthNet/api/users/
+<!-- http://127.0.0.1:8000/HealthNet/api/users/ -->
 <body>
 </body>

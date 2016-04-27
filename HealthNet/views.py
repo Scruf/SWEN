@@ -28,7 +28,11 @@ def patient(request):
             'last_name':p.last_name
         }
         patient_list.append(data)
-    return HttpResponse(json.dumps(patient_list), content_type="application/json")
+    if 'callback' in request.GET:
+        data ='%s(%s)'%(request.GET['callback'],json.dumps(patient_list));
+        return HttpResponse(data,'text/javascript')
+    else:
+        return HttpResponse("Didi not work")
 
 def message(request,sender_name):
     message_template = loader.get_template('HealthNet/messages.html')
