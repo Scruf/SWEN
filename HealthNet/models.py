@@ -9,7 +9,14 @@ class Administration(models.Model):
     password = models.CharField(max_length=255)
     email = models.CharField(max_length=255)
 
+class Apoitment(models.Model):
+    date = models.DateTimeField()
+    name = models.CharField(max_length=250)
+    reason = models.CharField(max_length=250)
 
+    def __str__(self):
+        return self.patients+"-"+self.doctor+"-"+self.reason
+#------------------------------------Logs----------------------------------
 
 class Messages(models.Model):
     sender = models.CharField(max_length=250)
@@ -53,7 +60,7 @@ class Doctor(models.Model):
     email = models.CharField(max_length=250)
     hospital_name = models.CharField(max_length=250)
     patients = models.ManyToManyField(Patient)
-
+    apoitment_list = models.ManyToManyField(Apoitment)
     def __str__(self):
         return self.username+"-"+self.patients
 
@@ -97,15 +104,7 @@ class Prescription(models.Model):
     dosage = models.CharField(max_length=250)
 
 
-class Apoitment(models.Model):
-    date = models.DateTimeField()
-    patients = models.CharField(max_length=250)
-    doctor = models.CharField(max_length=250)
-    reason = models.CharField(max_length=250)
 
-    def __str__(self):
-        return self.patients+"-"+self.doctor+"-"+self.reason
-#------------------------------------Logs----------------------------------
 class Logs(models.Model):
     date = models.DateTimeField()
     action = models.CharField(max_length=250)

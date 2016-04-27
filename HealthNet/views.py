@@ -526,12 +526,21 @@ def confirm_appoitment(request,user_name):
         # apoitment.save()
         logs = Logs(date=datetime.date.today(),action="Requestiong Appoitment",who_did=patient.user_name)
         logs.save()
-        return redirect("/HealthNet/%s/appoitment/confirm/%s"%(user_name,full_date))
+        return redirect("/HealthNet/%s/appoitment/confirm/%s"%(user_name,'/'.join(full_date.split('-'))))
     else:
         return redirect("/HealthNet/%s"%user_name)
 
 def confirm_appoitment_dates(request,user_name,dates):
-    return HttpResponse("dates")
+    doctor_user_name = Patient.objects.get(user_name=user_name)._doctor
+    try:
+        doctor = Doctor.objects.get(username=doctor_user_name)
+        available_time = doctor.apoitment_list.all()
+        return HttpResponse("The dates are %s"%dates)
+
+    except Doctor.DoesNotExist:
+        #must prompt a user to submit a ticket to a hospital administration so that issue can be resolved
+        return HttpResponse("You do not have a doctor assigned to you")
+    return HttpResponse("dates %s "%doctor_user_name)
 
 def edit_apoitment(request,user_name):
     try:
