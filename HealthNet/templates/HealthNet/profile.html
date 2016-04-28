@@ -1,3 +1,4 @@
+<!-- {% load fullcalendar_tags %} -->
 <!DOCTYPE html>
 <html lang="en">
 
@@ -10,6 +11,12 @@
     <meta name="author" content="">
 
     <title>{{user.user_name}}</title>
+ {% fullcalendar_css %}
+     {% fullcalendar_print_css %}
+     {% fullcalendar_jquery %}
+     {% fullcalendar_jquery_ui %}
+     {% fullcalendar_javascript %}
+   <!--  <script src="https://code.jquery.com/jquery-2.2.3.js" integrity="sha256-laXWtGydpwqJ8JA+X9x2miwmaiKhn8tVmOVEigRNtP4=" crossorigin="anonymous"></script> -->
 
     <!-- Bootstrap Core CSS - Uses Bootswatch Flatly Theme: http://bootswatch.com/flatly/ -->
     <link href="../../static/HealthNet/css/bootstrap.min.css" rel="stylesheet">
@@ -20,8 +27,8 @@
 
     <!-- Custom Fonts -->
     <link href="../../static/HealthNet/css/font-awesome.min.css" rel="stylesheet" type="text/css">
-    <link href="http://fonts.googleapis.com/css?family=Montserrat:400,700" rel="stylesheet" type="text/css">
-    <link href="http://fonts.googleapis.com/css?family=Lato:400,700,400italic,700italic" rel="stylesheet" type="text/css">
+    <link href="https://fonts.googleapis.com/css?family=Montserrat:400,700" rel="stylesheet" type="text/css">
+    <link href="https://fonts.googleapis.com/css?family=Lato:400,700,400italic,700italic" rel="stylesheet" type="text/css">
 
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
@@ -37,24 +44,41 @@
 
     <!-- Start of MODIFIED NAVBAR -->
     <nav class="navbar navbar-default navbar-fixed-top">
-      <div class="container">
-        <div class="navbar-header">
-          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
-            <span class="sr-only">Toggle navigation</span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-          </button>
-          <a class="navbar-brand" href="#">{{Patient.first_name}} {{Patient.last_name}}</a>
+        <div class="container">
+            <div class="row">
+                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <div class="col-sm-2">
+                    {%load staticfiles%}
+                    <a href="#portfolioModal1" class="portfolio-link" data-toggle="modal">
+                        <img class="img-responsive" src="{% static "HealthNet/img/doge.jpg"%}" style="width: 40%" alt="">
+                    </a>
+                </div>
+                <div class="col-sm-4">
+                    <a class="navbar-brand" href="#">{{Patient.first_name}} {{Patient.last_name}}</a>
+                </div>
+                <div class="col-sm-2">
+                    <a href="#portfolioModal3" class="portfolio-link" data-toggle="modal">
+                        <img src="{% static "HealthNet/img/circus.png"%}" style="width: 40%" class="img-responsive" alt="">
+                    </a>
+                </div>
+                <div class="col-sm-2">
+                    <a href="appoitment/" class="portfolio-link" data-toggle="modal">
+                        <img src="{% static "HealthNet/img/game.png"%}" style="width: 40%" class="img-responsive" alt="">
+                    </a>
+                </div>
+                <div id="navbar" class="navbar-collapse collapse">
+                    <form method="POST" action="thankyou/" class="navbar-form navbar-right">
+                        <button type="submit" class ="btn btn-success"><a href="/HealthNet" style="color: white;text-decoration:none;">Logout</a></button>
+                        <button type="submit" class ="btn btn-success"><a href="/HealthNet" style="color: white;text-decoration:none;">Home</a></button>
+                    </form>
+                </div>
+            </div><!--/.navbar-collapse -->
         </div>
-        <div id="navbar" class="navbar-collapse collapse">
-		<form method="POST" action="thankyou/" class="navbar-form navbar-right">
-            <button type="submit" class ="btn btn-success"><a href="/HealthNet" style="color: white;text-decoration:none;">Logout</a></button>
-			<button type="submit" class ="btn btn-success"><a href="/HealthNet" style="color: white;text-decoration:none;">Home</a></button>
-          </form>
-
-        </div><!--/.navbar-collapse -->
-      </div>
     </nav>
     <!-- End of MODIFIED NAVBAR -->
 
@@ -63,75 +87,29 @@
     <!-- Header -->
     <header>
         <div class="container">
-            <div class="row">
-                <div class="col-lg-12">
-                  {%load staticfiles%}
-                    <img class="img-responsive" src="{% static "HealthNet/img/doge.jpg" %}" alt="">
-                    <div class="intro-text">
-                        <span class="name">something something</span>
-                        <hr class="star-light">
-                    </div>
-                </div>
+            
+            <style>
+                #calendar{
+                    width: 100%;
+                    height: 100%;
+                    background-color: white;
+                    color: black;
+                    padding: 20px;
+                    border-radius: 2px;
+                   }
+            </style>
+            <div class="content">
+                <div id="calendar"></div>
+                <script>
+                    $(document).ready(function(){
+                        $('#calendar').fullCalendar({
+                           
+                        });
+                    });
+                </script>
             </div>
         </div>
     </header>
-
-    <!-- Portfolio Grid Section -->
-    <section id="portfolio">
-        <div class="container">
-            <div class="row">
-                <div class="col-lg-12 text-center">
-                    <h2>Profile</h2>
-                    <a href="view">Edit Profile</a>
-                    <hr class="star-primary">
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-sm-3 portfolio-item">
-                    <a href="#portfolioModal1" class="portfolio-link" data-toggle="modal">
-                        <div class="caption">
-                            <div class="caption-content">
-                                <i class="fa fa-search-plus fa-3x"></i>
-                            </div>
-                        </div>
-
-                        <img class="img-responsive" src="{% static "HealthNet/img/cabin.png"%}" style="width: 40%"  alt="">
-                    </a>
-                </div>
-                <div class="col-sm-3 portfolio-item">
-                    <a href="appoitment/view/" class="portfolio-link" data-toggle="modal">
-                        <div class="caption">
-                            <div class="caption-content">
-                                <i class="fa fa-search-plus fa-3x"></i>
-                            </div>
-                        </div>
-                        <img src="{% static "HealthNet/img/cake.png"%}" style="width: 40%" class="img-responsive" alt="">
-                    </a>
-                </div>
-                <div class="col-sm-3 portfolio-item">
-                    <a href="#portfolioModal3" class="portfolio-link" data-toggle="modal">
-                        <div class="caption">
-                            <div class="caption-content">
-                                <i class="fa fa-search-plus fa-3x"></i>
-                            </div>
-                        </div>
-                        <img src="{% static "HealthNet/img/circus.png"%}" style="width: 40%" class="img-responsive" alt="">
-
-                    </a>
-                </div>
-				<div class="col-sm-3 portfolio-item">
-                    <a href="appoitment/" class="portfolio-link" data-toggle="modal">
-                        <div class="caption">Hello
-                            <div class="caption-content">
-                                <i class="fa fa-search-plus fa-3x"></i>
-                            </div>
-                        </div>
-                        <img src="{% static "HealthNet/img/game.png"%}" style="width: 40%" class="img-responsive" alt="">
-                    </a>
-                </div>
-            </div>
-        </div>
-    </section>
 
     <!-- Footer -->
     <footer class="text-center">
@@ -139,7 +117,7 @@
             <div class="container">
                 <div class="row">
                     <div class="col-lg-12">
-                        Copyright &copy; Your Website 2016
+                        Copyright &copy; HealthNet 2016
                     </div>
                 </div>
             </div>
@@ -168,23 +146,34 @@
                         <div class="modal-body">
                             <h2>{{Patient.first_name}} {{Patient.last_name}}</h2>
                             <hr class="star-primary">
-                            <img src="{% static "HealthNet/img/doge.jpg"%}" class="img-responsive img-centered" alt="">
 
                             <ul class="list-inline item-details">
+                                <li>Username:
+                                    <strong>{{Patient.user_name}}</strong>
+                                </li><br>
+                                <li>First Name:
+                                    <strong>{{Patient.first_name}}</strong>
+                                </li><br>
+                                <li>Last Name:
+                                    <strong>{{Patient.last_name}}</strong>
+                                </li><br>
                                 <li>Email:
-                                    <strong>{{Patient.email}}</a>
-                                    </strong>
+                                    <strong>{{Patient.email}}</strong>
+                                </li><br>
+                                <li>Cell Phone:
+                                    <strong>{{Patient.cell_phone}}</strong>
+                                </li><br>
+                                <li>Address:
+                                    <strong>{{Patient.address}}</strong>
                                 </li><br>
                                 <li>Insuarance Number:
-                                    <strong>{{Patient.insuarance_number}}April 2014</a>
-                                    </strong>
+                                    <strong>{{Patient.insuarance_number}}</strong>
                                 </li><br>
-                                <li>Service:
-                                    <strong><a href="https://startbootstrap.com">Web Development</a>
-                                    </strong>
-                                </li>
                             </ul>
-                            <button type="button" class="btn btn-default" data-dismiss="modal"><i class="fa fa-times"></i> Close</button>
+                            <a href="view">
+                                <button type="button" class="btn btn-default">Edit</button>
+                            </a>
+                            <button type="button" class="btn btn-default" data-dismiss="modal"></i> Close</button>
                         </div>
                     </div>
                 </div>
@@ -318,23 +307,20 @@
     </div>
 
 
-    <!-- jQuery -->
-    <script src="../../static/HealthNet/js/jquery.js"></script>
-
     <!-- Bootstrap Core JavaScript -->
-    <script src="../../static/HealthNet/js/bootstrap.min.js"></script>
+  <!--   <script src="../../static/HealthNet/js/bootstrap.min.js"></script> -->
 
     <!-- Plugin JavaScript -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-easing/1.3/jquery.easing.min.js"></script>
+  <!--   <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-easing/1.3/jquery.easing.min.js"></script> -->
     <script src="../../static/HealthNet/js/classie.js"></script>
     <script src="../../static/HealthNet/js/cbpAnimatedHeader.js"></script>
 
     <!-- Contact Form JavaScript -->
-    <script src="../../static/HealthNet/js/jqBootstrapValidation.js"></script>
+  <!--   <script src="../../static/HealthNet/js/jqBootstrapValidation.js"></script> -->
 
 
     <!-- Custom Theme JavaScript -->
-    <script src="../../static/HealthNet/js/freelancer.js"></script>
+  <!--   <script src="../../static/HealthNet/js/freelancer.js"></script> -->
 
 </body>
 
