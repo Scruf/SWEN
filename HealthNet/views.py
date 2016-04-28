@@ -17,7 +17,7 @@ from django.http import HttpResponseRedirect
 
 # Create your views here.
 REDIRECT_URL="http://dogr.io/wow/suchservice/muchtextsplitting/verydirectcompose.png"
-#begining of api this method is for practice use only
+#begining of apis this method is for practice use only
 
 def patient(request):
     patient = Patient.objects.all()
@@ -35,25 +35,49 @@ def patient(request):
     else:
         return HttpResponse("Didi not work")
 
-
-def check_for_time(request,doctor_name,apoitment_time):
+#date must be submittied in a form YYYYMMDD
+def check_fo_time(request,doctor_name,apoitment_date):
     try:
         doctor = Doctor.objects.get(username=doctor_name)
-        alvailable_time = doctor.apoitment_list.all()
-        if len(alvailable_time)==0:
-            if 'callback' in request.GET:
-                date = {
-                    'day':apoitment_time.split("/")[2],
-                    'month':apoitment_time.split("/")[1]
-                }
-                date_list = []
-                date_list.append(date)
-                data  = '%s(%s)'%(request.GET['callback'].json.dumps(date_list))
-                return HttpResponse(data,'text/javascript')
+        doctor_apoitments = doctor.apoitment_list.all()
+        year = int(apoitment_date[0:4])
+        month = int(apoitment_date[4:6])
+        day = int(apoitment_date[6:8])
+        full_date = str(year)+"/"+str(month)+"/"+str(day)
+        available_time_list = doctor.apoitment_list.all()
+        current_date = datetime.datetime.now()
+        for a in available_time_list:
+            #sanity check for year
+            if year-current_date.year>1:
+                print("You cannot schedule an apoitment two years in advance")
+            elif year<current_date.year:
+                print("You cannot schedule an apoitment in the past")
+            elif month>12:
+                print("There no such month in the calendar yet!")
+            elif month <1:
+                print ("Month connot be less than one")
+            #end of sanity checks
+            else:
+                #check for a year
+                if year>a.date.year:
+                    print("Everything is okay")
+                else:
+                    print("We go the winner")
+        doctor_list = []
+        doctor_data = {
+            "username":doctor.username,
+            "first_name":doctor.first_name,
+            "last_name":doctor.last_name,
+            "full_date":full_date
+        }
+        doctor_list.append(doctor_data)
+        if 'callback' in request.GET:
+            data ='%s(%s)'%(request.GET['callback'],json.dumps(doctor_list))
+            return HttpResponse(data,'text/javascript')
+        else:
+            print("It was not callback")
     except Doctor.DoesNotExist:
-        return HttpResponse("You have not been assigned doctor yet, please contact administration to resolve this issue")
-
-
+        return HttpResponse("You do not have doctor yet please contact administration")
 
 
 
