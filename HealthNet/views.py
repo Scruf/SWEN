@@ -60,9 +60,12 @@ def check_fo_time(request,doctor_name,apoitment_date):
             else:
                 #check for a year
                 if year>a.date.year:
-                    print("Everything is okay")
+                    #Return the entire year as a free for apoitment
+                    print("Available all year around")
                 else:
-                    print("We go the winner")
+                    #check month
+                    print("Random")
+
         doctor_list = []
         doctor_data = {
             "username":doctor.username,

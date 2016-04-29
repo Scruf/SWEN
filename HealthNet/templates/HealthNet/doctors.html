@@ -16,13 +16,30 @@
     <title>{{doctor.first_name}} {{doctor.last_name}}</title>
 
     {%load staticfiles%}
-    {% fullcalendar_css %}
-    {% fullcalendar_print_css %}
-    {% fullcalendar_jquery %}
-    {% fullcalendar_jquery_ui %}
-    {% fullcalendar_javascript %}
+
+
+
+
     <!-- Bootstrap Core CSS -->
     <link href="{% static "HealthNet/css/bootstrap.min.css" %}" rel="stylesheet">
+
+    <!-- <link href="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/2.7.0/fullcalendar.min.css"> -->
+    <!-- <link href="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/2.7.0/fullcalendar.print.css"> -->
+    <link rel="stylesheet" href="{% static "HealthNet/css/fullcalendar.min.css" %}">
+    <link rel="stylesheet" href="{% static "HealthNet/css/fullcalendar.print.css" %}" media='print'>
+    <script src="{% static "HealthNet/js/moment.js" %}"></script>
+      <script src="{% static "HealthNet/js/jquery1.min.js" %}"></script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/2.7.0/fullcalendar.min.js"></script>
+    <script>
+    $(document).ready(function(){
+      $('#calendar').fullCalendar({
+
+
+        });
+      });
+
+    </script>
 
 
     <!-- MetisMenu CSS -->
@@ -30,7 +47,7 @@
 
     <!-- Timeline CSS -->
     <link href="{% static "HealthNet/css/timeline.css" %}" rel="stylesheet">
-    <link rel="{% static "HealtNet/css/test1.js"}" rel=javascript>
+
     <!-- Custom CSS -->
     <link href="{% static "HealthNet/css/sb-admin-2.css"%}" rel="stylesheet">
 
@@ -38,7 +55,7 @@
     <link href="{% static "HealthNet/css/morris.css"%}" rel="stylesheet">
 
     <!-- Custom Fonts -->
-    <link href="{% static "HealthNet/css/font-awesome.css"%}" rel="stylesheet" type="text/css">
+    <!-- <link href="{% static "HealthNet/css/font-awesome.css"%}" rel="stylesheet" type="text/css"> -->
 
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
@@ -149,16 +166,7 @@
                     <div class="panel panel-default">
                         <div class="panel-heading">
                             <i class="fa fa-bar-chart-o fa-fw"></i> Apoitments
-                            <div id="calendar"></div>
-                              <script>
-                              $(document).ready(function(){
-                                $('#calendar').fullCalendar({
-
-
-                                  });
-                                });
-
-                              </script>
+                            <div id='calendar'></div>
 
 
 
