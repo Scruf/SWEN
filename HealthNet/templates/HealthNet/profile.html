@@ -1,4 +1,4 @@
-<!-- {% load fullcalendar_tags %} -->
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -11,11 +11,23 @@
     <meta name="author" content="">
 
     <title>{{user.user_name}}</title>
- {% fullcalendar_css %}
-     {% fullcalendar_print_css %}
-     {% fullcalendar_jquery %}
-     {% fullcalendar_jquery_ui %}
-     {% fullcalendar_javascript %}
+    {% load staticfiles%}
+    <link rel="stylesheet" href="{% static "HealthNet/css/fullcalendar.min.css" %}">
+    <link rel="stylesheet" href="{% static "HealthNet/css/fullcalendar.print.css" %}" media='print'>
+    <script src="{% static "HealthNet/js/moment.js" %}"></script>
+      <script src="{% static "HealthNet/js/jquery1.min.js" %}"></script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/2.7.0/fullcalendar.min.js"></script>
+    <script>
+    $(document).ready(function(){
+      $('#calendar').fullCalendar({
+
+
+        });
+      });
+
+    </script>
+
    <!--  <script src="https://code.jquery.com/jquery-2.2.3.js" integrity="sha256-laXWtGydpwqJ8JA+X9x2miwmaiKhn8tVmOVEigRNtP4=" crossorigin="anonymous"></script> -->
 
     <!-- Bootstrap Core CSS - Uses Bootswatch Flatly Theme: http://bootswatch.com/flatly/ -->
@@ -87,7 +99,7 @@
     <!-- Header -->
     <header>
         <div class="container">
-            
+
             <style>
                 #calendar{
                     width: 100%;
@@ -103,7 +115,7 @@
                 <script>
                     $(document).ready(function(){
                         $('#calendar').fullCalendar({
-                           
+
                         });
                     });
                 </script>
