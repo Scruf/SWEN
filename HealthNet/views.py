@@ -96,9 +96,17 @@ def check_fo_time(request,doctor_name,apoitment_date):
         #check if the month is not in the list and its
         if month not in month_list and month >= datetime.datetime.now().month:
             available_hour = []
+            hours =  []
+            for hour in range(0,13):
+                for minutes in range(0,60):
+                    time = {
+                        'hour':hour,
+                        'minutes':minutes
+                        }
+                    hours.append(time)
             data = {
                 "date":full_date,
-                "hours":[24],
+                "hours":hours,
                 "availbale_hours":True,
                 "month":False,
                 "day":True

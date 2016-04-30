@@ -12,11 +12,16 @@ $(document).ready(function(){
       crossDomain:true,
       dataType:'jsonp',
       success: function(data){
+
         data.filter(function(el){
           if(el.availbale_hours && el.day && el.month){
             $("<input type=time class=time>").insertBefore(".hours");
           }
-
+          //if its not in the year and the month is greater
+          if (el.availbale_hours && el.day){
+              $("<input type=time class=time>").insertBefore(".hours");
+          }
+          
         })
       }
     });
