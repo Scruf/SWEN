@@ -48,36 +48,103 @@ def check_fo_time(request,doctor_name,apoitment_date):
         current_date = datetime.datetime.now()
         month_list = []
         day_list = []
+        year_list = []
         for a in available_time_list:
             month_list.append(a.date.month)
             day_list.append(a.date.day)
+            year_list.append(a.date.year)
+
+
+        if year-current_date.year>1:
+            print("You cannot schedule an apoitment two years in advance")
+        elif year<current_date.year:
+            print("You cannot schedule an apoitment in the past")
+        elif month>12:
+            print("There no such month in the calendar yet!")
+        elif month <1:
+            print ("Month connot be less than one")
+        #end of sanity checks
+        else:
+            #check for a year
+            if year>max(year_list):
+                #Return the entire year as a free for apoitment
+                available_hour = []
+                data = {
+                    "date":full_date,
+                    "hours":[24],
+                    "availbale_hours":True,
+                    "day":True,
+                    "month":True
+                }
+                available_hour.append(data)
+                if 'callback' in request.GET:
+                    data ='%s(%s)'%(request.GET['callback'],json.dumps(available_hour))
+                    return HttpResponse(data,'text/javascript')
+
+
             #sanity check for year
-            if year-current_date.year>1:
-                print("You cannot schedule an apoitment two years in advance")
-            elif year<current_date.year:
-                print("You cannot schedule an apoitment in the past")
-            elif month>12:
-                print("There no such month in the calendar yet!")
-            elif month <1:
-                print ("Month connot be less than one")
-            #end of sanity checks
+
+        #check if the month is not in the list and its
+        if month not in month_list and month >= datetime.datetime.now().month:
+            available_hour = []
+            data = {
+                "date":full_date,
+                "hours":[24],
+                "availbale_hours":True,
+                "month":False,
+                "day":True
+            }
+            available_hour.append(data)
+            if 'callback' in request.GET:
+                data = '%s(%s)'%(request.GET['callback'],json.dumps(available_hour))
+                return HttpResponse(data,'text/javascript')
+        # if the month in the month list than only specific days are availabl
+        if month in month_list:
+            if day > max(day_list):
+                available_hour=[]
+                date = {
+                    "date":full_date,
+                    "hours":[24],
+                    "available_hour":True,
+                    "month":False,
+                    "day":True,
+                    "reason":"Day is greater than all days"
+                }
+                available_hour.append(date)
+                if 'callback' in request.GET:
+                    data = '%s(%s)'%(request.GET['callback'],json.dumps(available_hour))
+                    return HttpResponse(data,'text/javascript')
+            # make sure to check for hours
+            elif day in day_list:
+                available_hour = []
+
+                date = {
+                    "date":full_date,
+                    "hours":[0],
+                    "available_hour":False,
+                    "month":False,
+                    "day":True,
+                    "reason":"This day was taken"
+                }
+                available_hour.append(date)
+                if 'callback' in request.GET:
+                    data = '%s(%s)'%(request.GET['callback'],json.dumps(available_hour))
+                    return HttpResponse(data,'text/javascript')
             else:
-                #check for a year
-                if year>a.date.year:
-                    #Return the entire year as a free for apoitment
-                    available_hour = []
-                    data = {
+                if day < min(day_list) and day<current_date.day:
+                    availbale_hours = []
+                    date = {
                         "date":full_date,
-                        "hours":[24],
-                        "availbale_hours":True
+                        "hours":[0],
+                        "availbale_hour":False,
+                        "month":False,
+                        "day":False,
+                        "reason":"Day cannot be lower than current date"
                     }
-                    available_hour.append(data)
+                    availbale_hours.append(date)
                     if 'callback' in request.GET:
-                        data ='%s(%s)'%(request.GET['callback'],json.dumps(available_hour))
+                        data ='%s(%s)'%(request.GET['callback'],json.dumps(availbale_hours))
                         return HttpResponse(data,'text/javascript')
-
-
-
         doctor_list = []
         doctor_data = {
             "username":doctor.username,
