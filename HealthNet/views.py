@@ -69,9 +69,18 @@ def check_fo_time(request,doctor_name,apoitment_date):
             if year>max(year_list):
                 #Return the entire year as a free for apoitment
                 available_hour = []
+                hours = []
+                for hour in range(0,13):
+                    for minutes in range(0,60):
+                        time = {
+                            "hour":hour,
+                            "minute":minutes
+                        }
+                        hours.append(time)
+
                 data = {
                     "date":full_date,
-                    "hours":[24],
+                    "hours":hours,
                     "availbale_hours":True,
                     "day":True,
                     "month":True

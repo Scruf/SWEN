@@ -12,7 +12,12 @@ $(document).ready(function(){
       crossDomain:true,
       dataType:'jsonp',
       success: function(data){
-        console.log(data);
+        data.filter(function(el){
+          if(el.availbale_hours && el.day && el.month){
+            $("<input type=time class=time>").insertBefore(".hours");
+          }
+
+        })
       }
     });
   });

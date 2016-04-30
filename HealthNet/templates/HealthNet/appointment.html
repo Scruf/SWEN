@@ -8,6 +8,8 @@
     <script src="{{STATIC_URL}}/static/HealthNet/js/moment.js"></script>
     <script src="{{STATIC_URL}}/static/HealthNet/js/jquery-ui.js"></script>
     <script src="{{STATIC_URL}}/static/HealthNet/js/bootstrap-datepicker.js"></script>
+    <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-colorpicker/2.3.3/css/bootstrap-colorpicker.css">
+
     {%load staticfiles%}
     <link rel="stylesheet" type="text/css" href="{% static 'HealthNet/css/bootstrap-datepicker.css'%}">
     <link rel="stylesheet" type="text/css" href="{% static 'HealthNet/css/bootstrap.min.css' %}">
@@ -16,8 +18,10 @@
 <body>
 
 
+
     <!-- <link rel="stylesheet" type="text/css" href="{%static 'HealthNet/css/appointment.css' %}"> -->
     <input type="text" class="doctor_name" style="visibility:hidden" value={{doctor.username}}>
+
     <div class="container">
         <div class="col-md-4">
             <div class="well">
