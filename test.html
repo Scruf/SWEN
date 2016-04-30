@@ -6,7 +6,7 @@
 <script>
 	$(document).ready(function() {
 		$.ajax({
-			url: "http://127.0.0.1:8000/HealthNet/api/apoitment/zoid/20161224",
+			url: "http://127.0.0.1:8000/HealthNet/api/apoitment/zoid/20171224",
 			type: 'GET',
 			data: ({}),
 			crossDomain: true,
@@ -23,35 +23,39 @@
 
 <body>
 </body>
+<!-- <form >
+		<!-- {%csrf_token%} -->
+		<!-- Contact by Input -->
 
-<!-- Bootstrap Core CSS -->
-<link href="{% static "HealthNet/css/bootstrap.min.css" %}" rel="stylesheet">
-
-
-<!-- MetisMenu CSS -->
-<link href="{% static "HealthNet/css/metisMenu.min.css" %}" rel="stylesheet">
-
-<!-- Timeline CSS -->
-<link href="{% static "HealthNet/css/timeline.css" %}" rel="stylesheet">
-
-<!-- Custom CSS -->
-<link href="{% static "HealthNet/css/sb-admin-2.css"%}" rel="stylesheet">
-
-<!-- Morris Charts CSS -->
-<link href="{% static "HealthNet/css/morris.css"%}" rel="stylesheet">
+		<div class="form-group2">
 
 
 
+				<style>
+						@import url('https://netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css');
+						.date-form {
+								margin: 10px;
+						}
 
-<script src="{% static "HealthNet/js/bootstrap1.min.js" %}"></script>
+						label.control-label span {
+								cursor: pointer;
+						}
+				</style>
 
-<!-- Metis Menu Plugin JavaScript -->
-<script src="{% static "HealthNet/js/metisMenu.min.js" %}"></script>
+		</div>
 
-<!-- Morris Charts JavaScript -->
-<script src="{% static "HealthNet/js/raphael-min.js" %}"></script>
-<script src="{% static "HealthNet/js/morris.min.js" %}"></script>
-<script src="{% static "HealthNet/js/morris-data.js" %}"></script>
 
-<!-- Custom Theme JavaScript -->
-<script src="{% static "HealthNet/js/sb-admin-2.js" %}"></script>
+		<div class="form-group2">
+				<label class="">Reason for Appointment</label>
+		</div>
+		<div class="form-group2">
+				<input name="reason" class="form-control" type="textarea" id="message" maxlength="140" rows="7" style="width: 30%"></input>
+		</div>
+
+
+		<br> -->
+		<!-- Button Area-->
+		<!-- <button type="submit" class="btn1">Submit</button> -->
+
+		<hr>
+</form>

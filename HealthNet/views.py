@@ -46,7 +46,11 @@ def check_fo_time(request,doctor_name,apoitment_date):
         full_date = str(year)+"/"+str(month)+"/"+str(day)
         available_time_list = doctor.apoitment_list.all()
         current_date = datetime.datetime.now()
+        month_list = []
+        day_list = []
         for a in available_time_list:
+            month_list.append(a.date.month)
+            day_list.append(a.date.day)
             #sanity check for year
             if year-current_date.year>1:
                 print("You cannot schedule an apoitment two years in advance")
@@ -61,10 +65,18 @@ def check_fo_time(request,doctor_name,apoitment_date):
                 #check for a year
                 if year>a.date.year:
                     #Return the entire year as a free for apoitment
-                    print("Available all year around")
-                else:
-                    #check month
-                    print("Random")
+                    available_hour = []
+                    data = {
+                        "date":full_date,
+                        "hours":[24],
+                        "availbale_hours":True
+                    }
+                    available_hour.append(data)
+                    if 'callback' in request.GET:
+                        data ='%s(%s)'%(request.GET['callback'],json.dumps(available_hour))
+                        return HttpResponse(data,'text/javascript')
+
+
 
         doctor_list = []
         doctor_data = {
@@ -576,25 +588,25 @@ def appoitment(request,user_name):
     return HttpResponse(appoitment_template.render(context,request))
 
 
-def confirm_appoitment(request,user_name):
-    if request.method == 'POST':
-        patient = Patient.objects.get(user_name=user_name)
-        doctor = Doctor.objects.get(patients=patient)
-        appoitment_date = request.POST.get("date",None)
-        month = appoitment_date.split("-")[1]
-        day = appoitment_date.split("-")[2]
-        year = appoitment_date.split("-")[0]
-        full_date = year+"-"+month+"-"+day
-
-        reason_to = request.POST.get("reason",None)
-        apoitment = Scheduler(start_date=full_date,patient=patient.user_name,\
-                                doctor=doctor.username,title=reason_to)
-        # apoitment.save()
-        logs = Logs(date=datetime.date.today(),action="Requestiong Appoitment",who_did=patient.user_name)
-        logs.save()
-        return redirect("/HealthNet/%s/appoitment/confirm/%s"%(user_name,'/'.join(full_date.split('-'))))
-    else:
-        return redirect("/HealthNet/%s"%user_name)
+# def confirm_appoitment(request,user_name):
+#     if request.method == 'POST':
+#         patient = Patient.objects.get(user_name=user_name)
+#         doctor = Doctor.objects.get(patients=patient)
+#         appoitment_date = request.POST.get("date",None)
+#         month = appoitment_date.split("-")[1]
+#         day = appoitment_date.split("-")[2]
+#         year = appoitment_date.split("-")[0]
+#         full_date = year+"-"+month+"-"+day
+#
+#         reason_to = request.POST.get("reason",None)
+#         apoitment = Scheduler(start_date=full_date,patient=patient.user_name,\
+#                                 doctor=doctor.username,title=reason_to)
+#         # apoitment.save()
+#         logs = Logs(date=datetime.date.today(),action="Requestiong Appoitment",who_did=patient.user_name)
+#         logs.save()
+#         return redirect("/HealthNet/%s/appoitment/confirm/%s"%(user_name,'/'.join(full_date.split('-'))))
+#     else:
+#         return redirect("/HealthNet/%s"%user_name)
 
 def confirm_appoitment_dates(request,user_name,dates):
     doctor_user_name = Patient.objects.get(user_name=user_name)._doctor
