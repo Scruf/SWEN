@@ -190,7 +190,7 @@ def message(request,sender_name):
         'message':'context',
         'sender':sender_name
     }
-    return HttpResponse(message_template.render(context,request))
+    return redirect(message_template.render(context,request))
 def administration(request):
     template = loader.get_template('HealthNet/administration_sign.html')
     return HttpResponse(template.render(None,request))
@@ -300,6 +300,9 @@ def admin_create_verify(request,admin_name):
         password = str(uuid.uuid1()).split("-")[0]
         doctor = Doctor(username=user_name,email=email,first_name=first_name,last_name=last_name,password=password,hospital_name=hospital)
         doctor.save()
+        hospital = Hospital.objects.get(hospital_name=hospital)
+        hospital.doctors.add(doctor)
+        hospital.save()
         log = Logs(date=datetime.date.today(),action="New Doctor created",who_did=admin_name,what_happened="Doctor creation")
 
         log.save()
