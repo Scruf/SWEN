@@ -496,14 +496,27 @@ def register(request):
 
 def load_profile(request,user_name):
     user = Patient.objects.get(user_name=user_name)
+    hospital_name = user.hospital_name
+    hospital = Hospital.objects.get(hospital_name=hospital_name)
+    doctor_list = hospital.doctors.all()
+    doctor_names = []
+    for d in doctor_list:
+        doctor_data  = {
+            "first_name":d.first_name,
+            "last_name":d.last_name
+        }
+        doctor_names.append(doctor_data)
+    print doctor_names
     profile_template = loader.get_template('HealthNet/profile.html')
     context={
         'Patient':user,
+        'hospital_name':hospital_name,
+        'doctor_list':doctor_names
         }
     log = Logs(date=datetime.date.today(),action="Loaded profile",who_did=user_name,what_happened="User loaded profile")
     log.save()
     return HttpResponse(profile_template.render(context,request))
-#
+
 
 def profile_edit(request,user_name):
     try:

@@ -5,6 +5,8 @@ urlpatterns =[
     url(r'^$', views.index, name='index'),
     #api
     url(r'^api/users/$',views.patient,name='patient'),
+    # url(r'^api/(?P<sender_name>\w+)/(?P<hospital_name>\w+)/message/$',views.message,name='message'),
+
     #will return the available time for a doctor
     url(r'^api/apoitment/(?P<doctor_name>\w+)/(?P<apoitment_date>\w+)/$',views.check_fo_time,name='check_for_time'),
     #end of apis
