@@ -2,69 +2,69 @@
   <link rel="stylesheet" type="text/css" href="../../../static/HealthNet/css/profile_details.css">
 </head>
 
-<div class="header">
-  <div class="header-text">
-    <label>Profile</label>
-  </div>
-</div>
-
 <body>
   <div class="container">
-    <form method="POST" action="save/">
-      {%csrf_token%}
-      <ul style="list-style-type: none">
-        <li>
-          <div class="col-md-4">
-            <label>Username:</label>
-          </div>
-          <input type="text" name="user_name" value="{{patient.user_name}}">
-        </li>
-        <li>
-          <div class="col-md-4">
-            <label>First Name:</label>
-          </div>
-          <input type="text" name="first_name" value="{{patient.first_name}}">
-        </li>
-        <li>
-          <div class="col-md-4">
-            <label>Last Name:</label>
-          </div class="col-md-4">
-          <input type="text" name="last_name" value="{{patient.last_name}}">
-        </li>
-        <li>
-          <div class="col-md-4">
-            <label> Email:</label>
-          </div>
-          <input type="text" name="email" value="{{patient.email}}">
-        </li>
-        <li>
-          <div class="col-md-4">
-          <label>Cell Phone</label>
-        </div>
-          <input type="text" name="cell_phone" value="{{patient.cell_phone}}">
-        </li>
-        <li>
-          <div class="col-md-4">
-          <label>Address:</label>
-        </div>
-          <input type="text" name="address" value="{{patient.address}}">
-        </li>
-        <li>
-          <div class="col-md-4">
-          <label>Insuarance Number:</label>
-        </div>
-          <input type="text" name="insuarance" value="{{patient.insuarance_number}}">
-        </li>
-
-        <div class="col-md-4">
-          <button class="success">Save</button>
+    <div class="profile">
+      <div class="header">
+          <label>Profile</label>
+      </div>
+      <form method="POST" action="save/">
+        {%csrf_token%}
+        <ul style="list-style-type: none">
+          <li>
+            <div class="col-md-4">
+              <label>Username:</label>
             </div>
-            {% for message in messages %}
-            <li{% if message.tags %} class="{{ message.tags }}"
-                  {% endif %}><font color="red">{{ message }}</li>
-            {% endfor %}  
-      </ul>
-    </form>
+            <input type="text" name="user_name" value="{{patient.user_name}}">
+          </li><br>
+          <li>
+            <div class="col-md-4">
+              <label>First Name:</label>
+            </div>
+            <input type="text" name="first_name" value="{{patient.first_name}}">
+          </li><br>
+          <li>
+            <div class="col-md-4">
+              <label>Last Name:</label>
+            </div class="col-md-4">
+            <input type="text" name="last_name" value="{{patient.last_name}}">
+          </li><br>
+          <li>
+            <div class="col-md-4">
+              <label> Email:</label>
+            </div>
+            <input type="text" name="email" value="{{patient.email}}">
+          </li><br>
+          <li>
+            <div class="col-md-4">
+            <label>Cell Phone</label>
+          </div>
+            <input type="text" name="cell_phone" value="{{patient.cell_phone}}">
+          </li><br>
+          <li>
+            <div class="col-md-4">
+            <label>Address:</label>
+          </div>
+            <input type="text" name="address" value="{{patient.address}}">
+          </li><br>
+          <li>
+            <div class="col-md-4">
+            <label>Insuarance Number:</label>
+          </div>
+            <input type="text" name="insuarance" value="{{patient.insuarance_number}}">
+          </li><br>
+
+          <div class="col-md-4">
+            <button class="success">Save</button>
+              </div>
+              {% for message in messages %}
+              <li{% if message.tags %} class="{{ message.tags }}"
+                    {% endif %}><font color="red">{{ message }}</li>
+              {% endfor %}  
+        </ul>
+      </form>
+      <br>
+    </div>
   </div>
 <style>
   @import url('https://netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css');
