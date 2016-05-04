@@ -141,11 +141,16 @@ def admin_create_verify(request,admin_name):
     if request.method == 'POST':
         user_name = request.POST.get('user_name',None)
         isdoctor = False
-
+        print ("blah")
         #setting the boolean 'isDoctor' besed on whether the user is to be
         #a Doctor of a nurse
-
+        #if request.POST.get('employeeType1',None).checked:
+        #    print ("fuck you")
         #Checking length
+        print request.POST.get('nurse',None)
+        if request.POST.get('nurse',None):
+            print "______________________"
+            print "00000"
         if len(user_name)<3:
             messages.add_message(request, messages.ERROR, 'This username is too short')
             return redirect( '/HealthNet/administration/' + admin_name + '/create/',permanent=True)
