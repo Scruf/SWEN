@@ -33,7 +33,7 @@ def patient(request):
         data ='%s(%s)'%(request.GET['callback'],json.dumps(patient_list))
         return HttpResponse(data,'text/javascript')
     else:
-        return HttpResponse("Didi not work")
+        return render(request,'HealthNet/calendar.html',{'apointements':json.dumps(data)})
 def doctor_names(request,doctor_name):
     try:
         doctor = Doctor.objects.get(username=doctor_name)
@@ -46,9 +46,10 @@ def doctor_names(request,doctor_name):
                 'last_name':hosp.last_name
             }
             doctor_list.append(names)
-        if 'callback' in request.GET:
-            data ='%s(%s)'%(request.GET['callback'],json.dumps(doctor_list))
-            return HttpResponse(data,'text/javascript')
+        if request.is_ajax():
+
+            data = json.dumps(doctor_list)
+            return HttpResponse(data,'application/json')
     except Doctor.DoesNotExist:
         print("Some basd stuff")
 
