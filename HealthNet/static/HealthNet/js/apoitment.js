@@ -17,17 +17,12 @@
       crossDomain:true,
       dataType:'jsonp',
       success: function(data){
+        if (data.error){
+             var message = "<h3>"+data.message+"</h3>";
+            $(message).insertAfter(".hours");
+            $(".date-input").val("");
+        }
 
-        data.filter(function(el){
-          if(el.availbale_hours && el.day && el.month){
-            $("<input type=time class=time><br>").insertBefore(".hours");
-          }
-          //if its not in the year and the month is greater
-          if (el.availbale_hours && el.day){
-              $("<input type=time class=time><br>").insertBefore(".hours");
-          }
-
-        })
       }
     });
   });
