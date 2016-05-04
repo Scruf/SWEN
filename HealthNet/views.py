@@ -190,7 +190,8 @@ def message(request,sender_name):
         'message':'context',
         'sender':sender_name
     }
-    return redirect(message_template.render(context,request))
+    return HttpResponse(message_template.render(context,request))
+
 def administration(request):
     template = loader.get_template('HealthNet/administration_sign.html')
     return HttpResponse(template.render(None,request))
@@ -692,25 +693,7 @@ def appoitment(request,user_name):
     return HttpResponse(appoitment_template.render(context,request))
 
 
-# def confirm_appoitment(request,user_name):
-#     if request.method == 'POST':
-#         patient = Patient.objects.get(user_name=user_name)
-#         doctor = Doctor.objects.get(patients=patient)
-#         appoitment_date = request.POST.get("date",None)
-#         month = appoitment_date.split("-")[1]
-#         day = appoitment_date.split("-")[2]
-#         year = appoitment_date.split("-")[0]
-#         full_date = year+"-"+month+"-"+day
-#
-#         reason_to = request.POST.get("reason",None)
-#         apoitment = Scheduler(start_date=full_date,patient=patient.user_name,\
-#                                 doctor=doctor.username,title=reason_to)
-#         # apoitment.save()
-#         logs = Logs(date=datetime.date.today(),action="Requestiong Appoitment",who_did=patient.user_name)
-#         logs.save()
-#         return redirect("/HealthNet/%s/appoitment/confirm/%s"%(user_name,'/'.join(full_date.split('-'))))
-#     else:
-#         return redirect("/HealthNet/%s"%user_name)
+
 
 def confirm_appoitment_dates(request,user_name,dates):
     doctor_user_name = Patient.objects.get(user_name=user_name)._doctor
