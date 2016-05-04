@@ -14,16 +14,21 @@
             var full_name = el.first_name+" "+el.last_name;
             names.push(full_name);
           });
-          function name_search(query){
-            if (query.length<3){
-              return Bacon.once([]);
-
-            }
-        
+          var options ={
+            url:"http://127.0.0.1:8000/HealthNet/api/doctor_names/"+doctor_user_name,
+            getValue:"first_name",
+            list:{
+              match:{
+                enabled: true
+              }
+            },
+          };
+          $('.doctors').easyAutocomplete(options);
           }
-        }
-      })
-  })
+        });
+      });
+
+
   $(".hours").click(function(){
     var date = $(".date-input").val();
     if (date=='' || date.length<1){
