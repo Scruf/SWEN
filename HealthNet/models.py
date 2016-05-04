@@ -64,6 +64,19 @@ class Doctor(models.Model):
     def __str__(self):
         return self.username+"-"+self.patients
 
+class Nurse(models.Model):
+    username = models.CharField(max_length=250)
+    first_name = models.CharField(max_length=250)
+    last_name = models.CharField(max_length=250)
+    cell_phone = models.CharField(max_length=250)
+    password = models.CharField(max_length=250)
+    email = models.CharField(max_length=250)
+    hospital_name = models.CharField(max_length=250)
+    patients = models.ManyToManyField(Patient)
+    apoitment_list = models.ManyToManyField(Apoitment)
+    def __str__(self):
+        return self.username+"-"+self.patients
+
 class Stuff(models.Model):
     hospital_name = models.CharField(max_length=250)
     username = models.CharField(max_length=250)
@@ -83,6 +96,7 @@ class Hospital(models.Model):
     patients_list =  models.ManyToManyField(Patient)
     doctors = models.ManyToManyField(Doctor)
     stuff = models.ManyToManyField(Stuff)
+    nurses = models.ManyToManyField(Nurse)
 
 
 #Doctor is the class that holds all of the information about a doctor
