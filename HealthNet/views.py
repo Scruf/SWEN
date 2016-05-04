@@ -288,15 +288,15 @@ def admin_create_verify(request,admin_name):
             messages.add_message(request, messages.ERROR, 'Email is already in use')
             return redirect( '/HealthNet/administration/' + admin_name + '/create/',permanent=True)
         except Patient.DoesNotExist:
-            print "Hooray to Satan"
+            print ("Hooray to Satan")
         try:
             doctor = Doctor.objects.get(email=email)
         except Doctor.MultipleObjectsReturned:
-            print "Doctor with this email already exists"
+            print ("Doctor with this email already exists")
             messages.add_message(request, messages.ERROR, 'Email is already in use')
             return redirect( '/HealthNet/administration/' + admin_name + '/create/',permanent=True)
         except Doctor.DoesNotExist:
-            print "Join the darkside"
+            print ("Join the darkside")
         hospital = request.POST.get('hospital',None)
         password = str(uuid.uuid1()).split("-")[0]
         doctor = Doctor(username=user_name,email=email,first_name=first_name,last_name=last_name,password=password,hospital_name=hospital)
@@ -396,14 +396,14 @@ def register(request):
     if request.method == 'POST':
         username = request.POST.get('username',None)
         if len(username)<5:
-            print "Eroor"
+            print ("Eroor")
             messages.add_message(request, messages.ERROR, '%s too short'%username)
             return redirect( '/HealthNet/signup/',permanent=True)
         else:
             try:
                 test_patient = Patient.objects.get(user_name=username)
             except Patient.DoesNotExist:
-                print "Robert"
+                print ("Robert")
             except Patient.MultipleObjectsReturned:
                 messages.add_message(request, messages.ERROR, 'This username: %s already exists'%username)
                 return redirect( '/HealthNet/signup/',permanent=True)
@@ -417,7 +417,7 @@ def register(request):
             try:
                 test_patient = Patient.objects.get(first_name=first_name,last_name=last_name)
             except Patient.DoesNotExist:
-                print "Robert"
+                print ("Robert")
             except Patient.MultipleObjectsReturned:
                 fullname = first_name + " " + last_name,
                 messages.add_message(request, messages.ERROR, 'First and last name already in the system: %s'%fullname)
@@ -430,7 +430,7 @@ def register(request):
             try:
                 test_patient = Patient.objects.get(email=email)
             except Patient.DoesNotExist:
-                print "Robert"
+                print ("Robert")
             except Patient.MultipleObjectsReturned:
                 messages.add_message(request, messages.ERROR, 'Email is already in use: %s'%email)
                 return redirect( '/HealthNet/signup/',permanent=True)
@@ -454,7 +454,7 @@ def register(request):
                 try:
                     cell_phone = request.POST.get('cell_phone',None)
                 except Patient.DoesNotExist:
-                    print "Robert"
+                    print ("Robert")
                 except Patient.MultipleObjectsReturned:
                     messages.add_message(request, messages.ERROR, 'Phone Number is ialready in use: %s'%cell_phone)
                     return redirect( '/HealthNet/signup/',permanent=True)
@@ -467,8 +467,12 @@ def register(request):
             return redirect( '/HealthNet/signup/',permanent=True)
         address = request.POST.get('address',None)
         if address is None or len(address)<5:
-            messages.add_message(request, messages.ERROR, 'Address too short')
+            messages.add_message(request, messages.ERROR, 'Street Address too short')
             return redirect( '/HealthNet/signup/',permanent=True)
+        addresstwo = request.POST.get('addresstwo',None)
+        if addresstwo is None or len(addresstwo)<5:
+            messages.add_message(request, messages.ERROR, 'City and State too short')
+            return redirect( '/HealthNet/signup/',permentant=True)
         insuarance = request.POST.get('insuarance_number',None)
         if len(insuarance)<5:
             messages.add_message(request, messages.ERROR, 'Insurance Number is too short')
@@ -477,7 +481,7 @@ def register(request):
             try:
                 test_patient = Patient.objects.get(insuarance_number=insuarance)
             except Patient.DoesNotExist:
-                print "Robert"
+                print ("Robert")
             except Patient.MultipleObjectsReturned:
                 messages.add_message(request, messages.ERROR, 'Insurance Number is already in use: %s'%insuarance)
                 return redirect( '/HealthNet/signup/',permanent=True)
@@ -510,7 +514,7 @@ def load_profile(request,user_name):
             "last_name":d.last_name
         }
         doctor_names.append(doctor_data)
-    print doctor_names
+    print (doctor_names)
     profile_template = loader.get_template('HealthNet/profile.html')
     context={
         'Patient':user,
@@ -551,6 +555,9 @@ def save_profile(request,user_name):
                 if user_name == first_name or user_name == last_name or user_name == user.first_name or user_name == user.last_name:
                     messages.add_message(request, messages.ERROR, 'Cannot set username to your first or last name')
                     return redirect( '/HealthNet/' + user.user_name + '/view/',permanent=True)
+                if len(user_name)<5:
+                    messages.add_message(request, messages.ERROR, 'Username is too short')
+                    return redirect('/HealthNet/' + user.user_name + '/view/',permentant=True);
                 try:
                     print ("trying to find patient")
                     test_patient = Patient.objects.get(user_name=user_name)
@@ -602,7 +609,7 @@ def save_profile(request,user_name):
                 log = Logs(date=datetime.date.today(),action="User edited profile",who_did=user.user_name,what_happened="User changed insurance number from " + user.insuarance_number + " to " + insuarance_number)
                 log.save()
 
-            user.user_name=user_name
+            user.user_name = user_name
             user.first_name = first_name
             user.last_name = last_name
             user.email = email
@@ -783,7 +790,7 @@ def doctor_edit_profile_save(request,doctor_user_name):
         try:
             doctor = Doctor.objects.get(username=user_name)
         except Doctor.DoesNotExist:
-            print "good job"
+            print ("good job")
         except Doctor.MultipleObjectsReturned:
             messages.add_message(request, messages.ERROR, 'Username is in use by someone else')
             return redirect( '/HealthNet/doctor/' + doctor_user_name + '/edit/',permanent=True)
@@ -825,7 +832,7 @@ def doctor_edit_profile_save(request,doctor_user_name):
                 try:
                     cell_phone = request.POST.get('cell_phone',None)
                 except Patient.DoesNotExist:
-                    print "Robert"
+                    print ("Robert")
                 except Patient.MultipleObjectsReturned:
                     messages.add_message(request, messages.ERROR, 'Phone number is of invalid format')
                     return redirect( '/HealthNet/doctor/' + doctor_user_name + '/edit/',permanent=True)
