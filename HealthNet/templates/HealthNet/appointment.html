@@ -9,14 +9,13 @@
     <script src="{{STATIC_URL}}/static/HealthNet/js/jquery-ui.js"></script>
     <script src="{{STATIC_URL}}/static/HealthNet/js/bootstrap-datepicker.js"></script>
     <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-colorpicker/2.3.3/css/bootstrap-colorpicker.css">
-
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bacon.js/0.7.84/Bacon.js"></script>
     {%load staticfiles%}
     <link rel="stylesheet" type="text/css" href="{% static 'HealthNet/css/bootstrap-datepicker.css'%}">
     <link rel="stylesheet" type="text/css" href="{% static 'HealthNet/css/bootstrap.min.css' %}">
 </head>
 
 <body>
-
 
 
     <!-- <link rel="stylesheet" type="text/css" href="{%static 'HealthNet/css/appointment.css' %}"> -->
@@ -31,6 +30,7 @@
                 <p class="header_p">Even though walk-ins are welcome, we encourage you to contact us via the form below to set your appointment. You will be contacted within 24 hours for confirmation.</p>
                 <hr>
                 <div class="jumbotron">
+                    <input type="text" class="doctors">
                       <input type="date" class="form-control date-input" name="date">
                       <br>
                       <button class="button btn-success hours">Check Availability</button>
@@ -40,6 +40,7 @@
             </div>
             <!-- well end -->
         </div>
+
 </body>
 
 

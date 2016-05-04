@@ -1,5 +1,29 @@
   $(document).ready(function(){
+  $('.doctors').click(function(){
+      var doctor_user_name = $(".doctor_name").val();
+      var url = "http://127.0.0.1:8000/HealthNet/api/doctor_names/"+doctor_user_name;
+      $.ajax({
+        url:url,
+        type:'GET',
+        data:({}),
+        crossDomain:true,
+        dataType:'jsonp',
+        success:function(data){
+          var names= [];
+          data.filter(function(el){
+            var full_name = el.first_name+" "+el.last_name;
+            names.push(full_name);
+          });
+          function name_search(query){
+            if (query.length<3){
+              return Bacon.once([]);
 
+            }
+        
+          }
+        }
+      })
+  })
   $(".hours").click(function(){
     var date = $(".date-input").val();
     if (date=='' || date.length<1){

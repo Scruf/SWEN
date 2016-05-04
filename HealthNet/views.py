@@ -34,6 +34,23 @@ def patient(request):
         return HttpResponse(data,'text/javascript')
     else:
         return HttpResponse("Didi not work")
+def doctor_names(request,doctor_name):
+    try:
+        doctor = Doctor.objects.get(username=doctor_name)
+        print doctor.hospital_name
+        hospital = Hospital.objects.get(hospital_name=doctor.hospital_name)
+        doctor_list = []
+        for hosp in hospital.doctors.all():
+            names = {
+                'first_name':hosp.first_name,
+                'last_name':hosp.last_name
+            }
+            doctor_list.append(names)
+        if 'callback' in request.GET:
+            data ='%s(%s)'%(request.GET['callback'],json.dumps(doctor_list))
+            return HttpResponse(data,'text/javascript')
+    except Doctor.DoesNotExist:
+        print("Some basd stuff")
 
 #date must be submittied in a form YYYYMMDD
 def check_fo_time(request,doctor_name,apoitment_date):
@@ -47,6 +64,7 @@ def check_fo_time(request,doctor_name,apoitment_date):
         available_time_list = doctor.apoitment_list.all()
         current_date = datetime.datetime.now()
         date_to_compare = datetime.datetime(year,month,day)
+
         if year < current_date.year:
             error = {
                 'error':True,
@@ -597,10 +615,18 @@ def appoitment(request,user_name):
     appoitment_template = loader.get_template('HealthNet/appointment.html')
     patient  = Patient.objects.get(user_name=user_name)
     doctor = Doctor.objects.get(username=patient._doctor)
-
+    hospital = Hospital.objects.get(hospital_name=doctor.hospital_name)
+    hospitl_list = []
+    for hosp in hospital.doctors.all():
+        names = {
+            'first_name':hosp.first_name,
+            'last_name':hosp.last_name
+        }
+        hospitl_list.append(names)
     context = {
         'username':user_name,
-        'doctor':doctor
+        'doctor':doctor,
+        'hospital_list':hospitl_list
     }
     return HttpResponse(appoitment_template.render(context,request))
 
@@ -771,8 +797,12 @@ def doctor_edit_profile_save(request,doctor_user_name):
 def doctor_apoitments_view(request,doctor_user_name):
     try:
         doctor = Doctor.objects.get(username=doctor_user_name)
+
+
+
         context = {
             'doctor':doctor
+
         }
         doctor_apoitment_template = loader.get_template('HealthNet/doctor_apoitment.html')
         log = Logs(date=datetime.date.today(),action="Doctor viewing appointments",who_did=doctor_user_name,what_happened="Doctor viewed appointments")
