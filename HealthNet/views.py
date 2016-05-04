@@ -13,7 +13,7 @@ import datetime
 import json
 from django.contrib import messages
 from django.http import HttpResponseRedirect
-
+from django.utils import timezone
 
 # Create your views here.
 REDIRECT_URL="http://dogr.io/wow/suchservice/muchtextsplitting/verydirectcompose.png"
@@ -46,141 +46,46 @@ def check_fo_time(request,doctor_name,apoitment_date):
         full_date = str(year)+"/"+str(month)+"/"+str(day)
         available_time_list = doctor.apoitment_list.all()
         current_date = datetime.datetime.now()
-
-        date_list = []
-        for a in available_time_list:
-            data = {
-                'year'
+        date_to_compare = datetime.datetime(year,month,day)
+        if year < current_date.year:
+            error = {
+                'error':True,
+                'message':"You cannot schedule in the past"
             }
-            month_list.append(a.date.month)
-            day_list.append(a.date.day)
-            year_list.append(a.date.year)
+            if 'callback' in request.GET:
+                data = '%s(%s)'%(request.GET['callback'],json.dumps(error))
+                return HttpResponse(data,'text/javascript')
+        if month <current_date.month:
+            error = {
+                'error':True,
+                'message':"You cannot schedule apoitment in the past"
+            }
+            if 'callback' in request.GET:
+                data ='%s(%s)'%(request.GET['callback'],json.dumps(error))
+                return HttpResponse(data,'text/javascript')
+        if month < current_date.month:
+            error = {
+                'error':True,
+                'message':'You cannot schedule apoitment in the past'
+            }
+            if 'callback' in request.GET:
+                data = '%s(%s)'%(request.GET['callback'],json.dumps(error))
+                return HttpResponse (data,'text/javascript')
+        apoitment_list = []
+        for ap in doctor.apoitment_list.all():
+            apoitment_list.append(ap)
+        if date_to_compare in apoitment_list:
+            error = {
+                'error':True,
+                'message':"Cannot schedule apoitment at this day"
+
+            }
+            if 'callback' in request.GET:
+                data = '%s(%s)'%(request.GET['callback'], json.dumps(error))
+                return HttpResponse(data,'text/javascript')
     except Doctor.DoesNotExist:
         return HttpResponse("WOO")
 
-    #
-    #     if year-current_date.year>1:
-    #         print("You cannot schedule an apoitment two years in advance")
-    #     elif year<current_date.year:
-    #         print("You cannot schedule an apoitment in the past")
-    #     elif month>12:
-    #         print("There no such month in the calendar yet!")
-    #     elif month <1:
-    #         print ("Month connot be less than one")
-    #     #end of sanity checks
-    #     else:
-    #         #check for a year
-    #         if year>max(year_list):
-    #             #Return the entire year as a free for apoitment
-    #             available_hour = []
-    #             hours = []
-    #             for hour in range(0,13):
-    #                 for minutes in range(0,60):
-    #                     time = {
-    #                         "hour":hour,
-    #                         "minute":minutes
-    #                     }
-    #                     hours.append(time)
-    #
-    #             data = {
-    #                 "date":full_date,
-    #                 "hours":hours,
-    #                 "availbale_hours":True,
-    #                 "day":True,
-    #                 "month":True
-    #             }
-    #             available_hour.append(data)
-    #             if 'callback' in request.GET:
-    #                 data ='%s(%s)'%(request.GET['callback'],json.dumps(available_hour))
-    #                 return HttpResponse(data,'text/javascript')
-    #
-    #
-    #         #sanity check for year
-    #
-    #     #check if the month is not in the list and its
-    #     if month not in month_list and month >= datetime.datetime.now().month:
-    #         available_hour = []
-    #         hours =  []
-    #         for hour in range(0,13):
-    #             for minutes in range(0,60):
-    #                 time = {
-    #                     'hour':hour,
-    #                     'minutes':minutes
-    #                     }
-    #                 hours.append(time)
-    #         data = {
-    #             "date":full_date,
-    #             "hours":hours,
-    #             "availbale_hours":True,
-    #             "month":False,
-    #             "day":True
-    #         }
-    #         available_hour.append(data)
-    #         if 'callback' in request.GET:
-    #             data = '%s(%s)'%(request.GET['callback'],json.dumps(available_hour))
-    #             return HttpResponse(data,'text/javascript')
-    #     # if the month in the month list than only specific days are availabl
-    #     if month in month_list:
-    #         if day > max(day_list):
-    #             available_hour=[]
-    #             date = {
-    #                 "date":full_date,
-    #                 "hours":[24],
-    #                 "available_hour":True,
-    #                 "month":False,
-    #                 "day":True,
-    #                 "reason":"Day is greater than all days"
-    #             }
-    #             available_hour.append(date)
-    #             if 'callback' in request.GET:
-    #                 data = '%s(%s)'%(request.GET['callback'],json.dumps(available_hour))
-    #                 return HttpResponse(data,'text/javascript')
-    #         # make sure to check for hours
-    #         elif day in day_list:
-    #             available_hour = []
-    #
-    #             date = {
-    #                 "date":full_date,
-    #                 "hours":[0],
-    #                 "available_hour":False,
-    #                 "month":False,
-    #                 "day":True,
-    #                 "reason":"This day was taken"
-    #             }
-    #             available_hour.append(date)
-    #             if 'callback' in request.GET:
-    #                 data = '%s(%s)'%(request.GET['callback'],json.dumps(available_hour))
-    #                 return HttpResponse(data,'text/javascript')
-    #         else:
-    #             if day < min(day_list) and day<current_date.day:
-    #                 availbale_hours = []
-    #                 date = {
-    #                     "date":full_date,
-    #                     "hours":[0],
-    #                     "availbale_hour":False,
-    #                     "month":False,
-    #                     "day":False,
-    #                     "reason":"Day cannot be lower than current date"
-    #                 }
-    #                 availbale_hours.append(date)
-    #                 if 'callback' in request.GET:
-    #                     data ='%s(%s)'%(request.GET['callback'],json.dumps(availbale_hours))
-    #                     return HttpResponse(data,'text/javascript')
-    #     doctor_list = []
-    #     doctor_data = {
-    #         "username":doctor.username,
-    #         "first_name":doctor.first_name,
-    #         "last_name":doctor.last_name,
-    #         "full_date":full_date
-    #     }
-    #     doctor_list.append(doctor_data)
-    #     if 'callback' in request.GET:
-    #         data ='%s(%s)'%(request.GET['callback'],json.dumps(doctor_list))
-    #         return HttpResponse(data,'text/javascript')
-    #     else:
-    #         print("It was not callback")
-    # except Doctor.DoesNotExist:
-    #     return HttpResponse("You do not have doctor yet please contact administration")
 
 
 
