@@ -1,6 +1,11 @@
-.container{
+.profile{
+	position: fixed;
+	top: 25%;
 	color: black;
-	padding-top: 50px;
+	background-color: #18bc9c;
+	width: 800px;
+	border-radius: 8px;
+	padding: 20px;
 }
 
 .success{
@@ -9,15 +14,11 @@
 }
 
 .header{
-	background-color: #2c3e50;
-	color: #2c3e50;
-	padding-top: 20px;
-	padding-bottom: 20px;
+	top: 50%;
+	left: 20%;
+	font-size: 30px;
 }
 
-.header-text{
-	position: relative;
-	left: 350px;
-	color: white;
-	font-size: 30px;
+input{
+	width: 300px;
 }
