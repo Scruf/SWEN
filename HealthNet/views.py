@@ -41,13 +41,13 @@ def doctor_names(request,doctor_name):
         hospital = Hospital.objects.get(hospital_name=doctor.hospital_name)
         doctor_list = []
         for hosp in hospital.doctors.all():
+            name = hosp.first_name+" "+hosp.last_name
             names = {
-                'first_name':hosp.first_name,
-                'last_name':hosp.last_name
+                'name':name,
+                'username':hosp.username
             }
             doctor_list.append(names)
         if request.is_ajax():
-
             data = json.dumps(doctor_list)
             return HttpResponse(data,'application/json')
     except Doctor.DoesNotExist:
@@ -63,6 +63,7 @@ def check_fo_time(request,doctor_name,apoitment_date):
         day = int(apoitment_date[6:8])
         full_date = str(year)+"/"+str(month)+"/"+str(day)
         available_time_list = doctor.apoitment_list.all()
+
         current_date = datetime.datetime.now()
         date_to_compare = datetime.datetime(year,month,day)
 
@@ -102,6 +103,15 @@ def check_fo_time(request,doctor_name,apoitment_date):
             if 'callback' in request.GET:
                 data = '%s(%s)'%(request.GET['callback'], json.dumps(error))
                 return HttpResponse(data,'text/javascript')
+        if date_to_compare not in apoitment_list and date_to_compare>=current_date:
+            date = {
+                'error':False,
+                'message':"Doctor is free at this day"
+            }
+            if 'callback' in request.GET:
+                data ='%s(%s)'%(request.GET['callback'],json.dumps(date))
+                return HttpResponse(data,'text/javascript')
+
     except Doctor.DoesNotExist:
         return HttpResponse("WOO")
 
