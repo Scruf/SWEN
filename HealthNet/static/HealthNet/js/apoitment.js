@@ -1,6 +1,7 @@
   $(document).ready(function() {
       var doctor_user_name = $(".doctor_name").val();
       var user_name = "";
+      var date = "";
       var options = {
           url: "http://127.0.0.1:8000/HealthNet/api/doctor_names/" + doctor_user_name,
           getValue: function(element){
@@ -20,7 +21,7 @@
       });
 
       $(".hours").click(function() {
-          var date = $(".date-input").val();
+          date = $(".date-input").val();
           var doctor_name = $('.doctors').val();
 
           if (date == '' || date.length < 1) {
@@ -42,7 +43,7 @@
               crossDomain: true,
               dataType: 'jsonp',
               success: function(data) {
-                console.log(doctor_user_name);
+
                   if (data.error) {
                       var message = "<h3>" + data.message + "</h3>";
                       $(message).insertAfter(".hours");
@@ -56,5 +57,13 @@
 
               }
           });
+
       });
+      $(".submit_apoitment").click(function(){
+        var patient_user_name = document.URL.split("/")[4];
+        if (date=""){
+          alert("Date Field cannot be left empty");
+          return;
+        }
+      })
   });

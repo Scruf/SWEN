@@ -125,6 +125,10 @@ def message(request,sender_name):
         'sender':sender_name
     }
     return HttpResponse(message_template.render(context,request))
+def apoitment_submit(request,patient_name,date):
+    return HttpResponse("Data was submitted")
+#end of apis
+
 
 def administration(request):
     template = loader.get_template('HealthNet/administration_sign.html')
