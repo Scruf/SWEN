@@ -4,7 +4,7 @@ from django.http import HttpResponse,HttpResponseServerError,JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 from django.contrib.sessions.models import Session
 from django.template import loader
-from .models import Patient,Hospital,Logs,Doctor,Apoitment,Scheduler,Administration
+from .models import Patient,Hospital,Logs,Doctor,Apoitment,Scheduler,Administration,Nurse
 import re
 import uuid
 from django.template.context import RequestContext
@@ -33,7 +33,25 @@ def patient(request):
         data ='%s(%s)'%(request.GET['callback'],json.dumps(patient_list))
         return HttpResponse(data,'text/javascript')
     else:
-        return HttpResponse("Didi not work")
+        return render(request,'HealthNet/calendar.html',{'apointements':json.dumps(data)})
+def doctor_names(request,doctor_name):
+    try:
+        doctor = Doctor.objects.get(username=doctor_name)
+        print doctor.hospital_name
+        hospital = Hospital.objects.get(hospital_name=doctor.hospital_name)
+        doctor_list = []
+        for hosp in hospital.doctors.all():
+            name = hosp.first_name+" "+hosp.last_name
+            names = {
+                'name':name,
+                'username':hosp.username
+            }
+            doctor_list.append(names)
+        if request.is_ajax():
+            data = json.dumps(doctor_list)
+            return HttpResponse(data,'application/json')
+    except Doctor.DoesNotExist:
+        print("Some basd stuff")
 
 #date must be submittied in a form YYYYMMDD
 def check_fo_time(request,doctor_name,apoitment_date):
@@ -45,8 +63,10 @@ def check_fo_time(request,doctor_name,apoitment_date):
         day = int(apoitment_date[6:8])
         full_date = str(year)+"/"+str(month)+"/"+str(day)
         available_time_list = doctor.apoitment_list.all()
+
         current_date = datetime.datetime.now()
         date_to_compare = datetime.datetime(year,month,day)
+
         if year < current_date.year:
             error = {
                 'error':True,
@@ -83,6 +103,15 @@ def check_fo_time(request,doctor_name,apoitment_date):
             if 'callback' in request.GET:
                 data = '%s(%s)'%(request.GET['callback'], json.dumps(error))
                 return HttpResponse(data,'text/javascript')
+        if date_to_compare not in apoitment_list and date_to_compare>=current_date:
+            date = {
+                'error':False,
+                'message':"Doctor is free at this day"
+            }
+            if 'callback' in request.GET:
+                data ='%s(%s)'%(request.GET['callback'],json.dumps(date))
+                return HttpResponse(data,'text/javascript')
+
     except Doctor.DoesNotExist:
         return HttpResponse("WOO")
 
@@ -112,7 +141,7 @@ def admin_verify(request):
             }
             admin_user_name = admin.user_name
             admin_template = loader.get_template('HealthNet/admin.html')
-            log = Logs(date=datetime.date.today(),action="Admin signin",who_did=email,what_happened="Admin sign in")
+            log = Logs(date=datetime.date.today(),action="Admin signed in",who_did=email,what_happened="An Admin signed in")
             log.save()
             return redirect('/HealthNet/administration/%s'%admin_user_name)
         except Administration.DoesNotExist:
@@ -140,8 +169,19 @@ def admin_create(request,admin_name):
 def admin_create_verify(request,admin_name):
     if request.method == 'POST':
         user_name = request.POST.get('user_name',None)
+        isdoctor = False
+        print ("blah")
+        #setting the boolean 'isDoctor' besed on whether the user is to be
+        #a Doctor of a nurse
+        #if request.POST.get('employeeType1',None).checked:
+        #    print ("fuck you")
+        #Checking length
+        print request.POST.get('nurse',None)
+        if request.POST.get('nurse',None):
+            print "______________________"
+            print "00000"
         if len(user_name)<3:
-            messages.add_message(request, messages.ERROR, 'Username too short')
+            messages.add_message(request, messages.ERROR, 'This username is too short')
             return redirect( '/HealthNet/administration/' + admin_name + '/create/',permanent=True)
         try:
             patient = Patient.objects.get(user_name=user_name)
@@ -151,20 +191,32 @@ def admin_create_verify(request,admin_name):
             return redirect( '/HealthNet/administration/' + admin_name + '/create/',permanent=True)
         except Patient.DoesNotExist:
             print("Ben Affleck was okay Batman")
+        #checking the username in the system
         try:
             print("%s"%user_name)
             print Doctor.objects.get(username=user_name).password
             doctor = Doctor.objects.get(username=user_name)
         except Doctor.MultipleObjectsReturned:
             print ("%s with this username already exists"%user_name)
-            messages.add_message(request, messages.ERROR, 'Username is already taken: %s'%user_name)
+            messages.add_message(request, messages.ERROR, 'This username is already taken: %s'%user_name)
             return redirect( '/HealthNet/administration/' + admin_name + '/create/',permanent=True)
         except Doctor.DoesNotExist:
             print ("Join the darkside")
+        try:
+            print("%s"%user_name)
+            nurse = Nurse.objects.get(username=user_name)
+        except Nurse.MultipleObjectsReturned:
+            print ("%s with this username already exists"%user_name)
+            messages.add_message(request, messages.ERROR, 'This username is already taken: %s'%user_name)
+            return redirect( '/HealthNet/administration/' + admin_name + '/create/',permanent=True)
+        except Nurse.DoesNotExist:
+            print ("Join the darkside")
+
+        #checking first and last names
         first_name = request.POST.get('first_name',None)
         last_name = request.POST.get('last_name',None)
         if len(first_name)<2 or len(last_name)<2:
-            messages.add_message(request, messages.ERROR, 'Name too short')
+            messages.add_message(request, messages.ERROR, 'Either first name or last name is too short')
             return redirect( '/HealthNet/administration/' + admin_name + '/create/',permanent=True)
         if first_name==user_name or last_name==user_name or (first_name + last_name)==user_name:
             messages.add_message(request, messages.ERROR, 'First or Last name cant be the username')
@@ -178,10 +230,19 @@ def admin_create_verify(request,admin_name):
                 doctor = Doctor.objects.get(first_name=first_name,last_name=last_name)
             except Doctor.MultipleObjectsReturned:
                 print ("Doctor with this first name: %s and this last name: %s already exists"%(first_name,last_name))
-                messages.add_message(request, messages.ERROR, 'First and last names are in the system already')
+                messages.add_message(request, messages.ERROR, 'These first and last names are in the system already')
                 return redirect( '/HealthNet/administration/' + admin_name + '/create/',permanent=True)
             except Doctor.DoesNotExist:
-                print ("Jointhe darkside")
+                print ("Join the darkside")
+            try:
+                nurse = Nurse.objects.get(first_name=first_name,last_name=last_name)
+            except Nurse.MultipleObjectsReturned:
+                print ("Doctor with this first name: %s and this last name: %s already exists"%(first_name,last_name))
+                messages.add_message(request, messages.ERROR, 'These first and last names are in the system already')
+                return redirect( '/HealthNet/administration/' + admin_name + '/create/',permanent=True)
+            except Nurse.DoesNotExist:
+                print ("Join the darkside")
+        #checking email
         email = request.POST.get('email',None)
         if not re.match(r'(\w+[.|\w])*@(\w+[.])*\w+', str(email)):
             messages.add_message(request, messages.ERROR, 'Invalid email')
@@ -189,29 +250,49 @@ def admin_create_verify(request,admin_name):
         try:
             patient = Patient.objects.get(email=email)
         except Patient.MultipleObjectsReturned:
-            print("Patient with this email exists")
-            messages.add_message(request, messages.ERROR, 'Email is already in use')
+            print("A patient with this email exists")
+            messages.add_message(request, messages.ERROR, 'This email is already in use')
             return redirect( '/HealthNet/administration/' + admin_name + '/create/',permanent=True)
         except Patient.DoesNotExist:
             print ("Hooray to Satan")
         try:
             doctor = Doctor.objects.get(email=email)
         except Doctor.MultipleObjectsReturned:
-            print ("Doctor with this email already exists")
-            messages.add_message(request, messages.ERROR, 'Email is already in use')
+            print ("A doctor with this email already exists")
+            messages.add_message(request, messages.ERROR, 'This email is already in use')
             return redirect( '/HealthNet/administration/' + admin_name + '/create/',permanent=True)
         except Doctor.DoesNotExist:
             print ("Join the darkside")
+        try:
+            nurse = Nurse.objects.get(email=email)
+        except Nurse.MultipleObjectsReturned:
+            print ("A nurse with this email already exists")
+            messages.add_message(request, messages.ERROR, 'This email is already in use')
+            return redirect( '/HealthNet/administration/' + admin_name + '/create/',permanent=True)
+        except Nurse.DoesNotExist:
+            print ("Join the darkside")
+
+        #saving everything at the end
         hospital = request.POST.get('hospital',None)
         password = str(uuid.uuid1()).split("-")[0]
-        doctor = Doctor(username=user_name,email=email,first_name=first_name,last_name=last_name,password=password,hospital_name=hospital)
-        doctor.save()
-        hospital = Hospital.objects.get(hospital_name=hospital)
-        hospital.doctors.add(doctor)
+        try:
+            hospital = Hospital.objects.get(hospital_name=hospital)
+        except Hospital.DoesNotExist:
+            messages.add_message(request, messages.ERROR,'There is no hospital with this name')
+            return redirect('/HealthNet/administration/' + admin_name + '/create/',permenent=True)
+        if isdoctor:
+            doctor = Doctor(username=user_name,email=email,first_name=first_name,last_name=last_name,password=password,hospital_name=hospital)
+            doctor.save()
+            hospital.doctors.add(doctor)
+            log = Logs(date=datetime.date.today(),action="New Doctor created",who_did=admin_name,what_happened="Doctor creation")
+            log.save()
+        elif not isdoctor:
+            nurse = Nurse(username=user_name,email=email,first_name=first_name,last_name=last_name,password=password,hospital_name=hospital)
+            nurse.save()
+            hospital.nurses.add(nurse)
+            log = Logs(date=datetime.date.today(),action="New Nurse created",who_did=admin_name,what_happened="Nurse creation")
+            log.save()
         hospital.save()
-        log = Logs(date=datetime.date.today(),action="New Doctor created",who_did=admin_name,what_happened="Doctor creation")
-
-        log.save()
         return redirect('/HealthNet/administration/%s'%admin_name)
 #admin stuff goes on top
 #whoever put not admin stuff in admin stuff will die horible and painful death
@@ -272,7 +353,7 @@ def thankyou(request):
                     'user_name':email,
                 }
                 user_name = Patient.objects.get(email=email,password=password).user_name
-                log = Logs(date=datetime.date.today(),action="Sign In",who_did=user_name,what_happened="Log In the System")
+                log = Logs(date=datetime.date.today(),action="Sign In",who_did=user_name,what_happened="A user of the system logged in")
                 log.save()
                 user_context = {
                     'user_name':user_name,
@@ -283,7 +364,7 @@ def thankyou(request):
             except Patient.DoesNotExist:
                 log = Logs(date=datetime.date.today(),action="Attempted Doctor logged in",who_did=email,what_happened="Doctor attempted to log into the system")
                 log.save()
-                return HttpResponse("Patient with this credentials does not exists")
+                return HttpResponse("Patient with these credentials does not exists")
 
 #signup prompts the user to sign up with their name and contact information and to provide
 #a unique username and password for their account
@@ -597,10 +678,18 @@ def appoitment(request,user_name):
     appoitment_template = loader.get_template('HealthNet/appointment.html')
     patient  = Patient.objects.get(user_name=user_name)
     doctor = Doctor.objects.get(username=patient._doctor)
-
+    hospital = Hospital.objects.get(hospital_name=doctor.hospital_name)
+    hospitl_list = []
+    for hosp in hospital.doctors.all():
+        names = {
+            'first_name':hosp.first_name,
+            'last_name':hosp.last_name
+        }
+        hospitl_list.append(names)
     context = {
         'username':user_name,
-        'doctor':doctor
+        'doctor':doctor,
+        'hospital_list':hospitl_list
     }
     return HttpResponse(appoitment_template.render(context,request))
 
@@ -771,8 +860,12 @@ def doctor_edit_profile_save(request,doctor_user_name):
 def doctor_apoitments_view(request,doctor_user_name):
     try:
         doctor = Doctor.objects.get(username=doctor_user_name)
+
+
+
         context = {
             'doctor':doctor
+
         }
         doctor_apoitment_template = loader.get_template('HealthNet/doctor_apoitment.html')
         log = Logs(date=datetime.date.today(),action="Doctor viewing appointments",who_did=doctor_user_name,what_happened="Doctor viewed appointments")
