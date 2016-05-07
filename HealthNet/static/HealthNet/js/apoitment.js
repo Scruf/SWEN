@@ -1,8 +1,12 @@
   $(document).ready(function() {
       var doctor_user_name = $(".doctor_name").val();
+      var user_name = "";
       var options = {
           url: "http://127.0.0.1:8000/HealthNet/api/doctor_names/" + doctor_user_name,
-          getValue: "name",
+          getValue: function(element){
+              user_name=element.username;
+              return element.name;
+          },
           list: {
               match: {
                   enabled: true
@@ -10,7 +14,10 @@
           },
       };
       $('.doctors').easyAutocomplete(options);
+      $('.doctor_names').click(function(){
+        $(".doctors").show();
 
+      });
 
       $(".hours").click(function() {
           var date = $(".date-input").val();
@@ -20,10 +27,13 @@
               alert("Date field cannot be left empty");
               return;
           }
-
           var doctor_user_name = $(".doctor_name").val();
-          console.log(doctor_name);
+          var returned_obj = $(".doctors");
+          console.log(returned_obj);
           var full_date = date.split("-").join("");
+          if (user_name!=""){
+            doctor_user_name=user_name;
+          }
           var url = "http://127.0.0.1:8000/HealthNet/api/apoitment/" + doctor_user_name + "/" + full_date;
           $.ajax({
               url: url,
@@ -32,13 +42,17 @@
               crossDomain: true,
               dataType: 'jsonp',
               success: function(data) {
+                console.log(doctor_user_name);
                   if (data.error) {
                       var message = "<h3>" + data.message + "</h3>";
                       $(message).insertAfter(".hours");
                       $(".date-input").val("");
                   }
-                  if (!data.error)
-                    console.log("No Error");
+                  if (!data.error){
+                    $(".time_input").insertAfter(".date-input");
+                    $(".time_input").show();
+
+                  }
 
               }
           });
