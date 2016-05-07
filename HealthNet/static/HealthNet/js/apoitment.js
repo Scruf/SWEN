@@ -2,6 +2,7 @@
       var doctor_user_name = $(".doctor_name").val();
       var user_name = "";
       var date = "";
+      var time = "";
       var options = {
           url: "http://127.0.0.1:8000/HealthNet/api/doctor_names/" + doctor_user_name,
           getValue: function(element){
@@ -52,6 +53,8 @@
                   if (!data.error){
                     $(".time_input").insertAfter(".date-input");
                     $(".time_input").show();
+                    $(".submit_apoitment").show();
+                    time = $(".time_input").val();
 
                   }
 
@@ -61,9 +64,14 @@
       });
       $(".submit_apoitment").click(function(){
         var patient_user_name = document.URL.split("/")[4];
-        if (date=""){
-          alert("Date Field cannot be left empty");
+        var time = $(".time_input");
+        var _date = $(".date_input").val();
+        if (time!=""){
+          console.log(time);
+        }else{
+          alert('Please enter the time you would like to meet with the doctor');
           return;
         }
+
       })
   });
