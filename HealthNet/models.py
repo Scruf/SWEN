@@ -17,6 +17,13 @@ class Apoitment(models.Model):
     def __str__(self):
         return self.date+" "+self.name+" "+self.reason
 #------------------------------------Logs----------------------------------
+#@title = name of the drug to be given
+#@details = the reason why this drug is being assigned_doctor
+#@dosage = the amount of drug to be given
+class Prescription(models.Model):
+    title = models.CharField(max_length=250)
+    details = models.CharField(max_length=250)
+    dosage = models.CharField(max_length=250)
 
 class Messages(models.Model):
     sender = models.CharField(max_length=250)
@@ -38,7 +45,6 @@ class  Patient(models.Model):
     last_name = models.CharField(max_length=50)
     email = models.CharField(max_length=50)
     user_id = models.UUIDField(primary_key=False,default=uuid.uuid1, editable=False)
-    diases_name = models.CharField(max_length=60)
     symptoms = models.TextField(max_length=400)
     cell_phone = models.CharField(max_length=12)
     hospital_name = models.CharField(max_length=250)
@@ -47,6 +53,8 @@ class  Patient(models.Model):
     gender = models.CharField(max_length=250)
     _doctor = models.CharField(max_length=250)
     assigned_doctor = models.BooleanField(default=False)
+    prescriptions = models.ManyToManyField(Prescription) # prescriptions
+    appointments = models.ManyToManyField(Apoitment) #appointment lists
 
     def __str__(self):
         return self.user_name+"-"+self.password
@@ -108,15 +116,6 @@ class Scheduler(models.Model):
     title = models.CharField(max_length=250)
     doctor = models.CharField(max_length=250)
     patient = models.CharField(max_length=250)
-
-#@title = name of the drug to be given
-#@details = the reason why this drug is being assigned_doctor
-#@dosage = the amount of drug to be given
-class Prescription(models.Model):
-    title = models.CharField(max_length=250)
-    details = models.CharField(max_length=250)
-    dosage = models.CharField(max_length=250)
-
 
 
 class Logs(models.Model):
