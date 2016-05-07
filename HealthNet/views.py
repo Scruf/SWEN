@@ -57,7 +57,7 @@ def addPrescription(request,username):#the context here is is just for doctor an
 def deletePrescription(request,username):
     #getting the prescription to be deleted
     patient = Patient.objects.get(user_name = username)
-    doctor = patient.
+    # doctor = patient.
     prescripts = patient.prescriptions.all()
     #need to find the prescription to be deleted
 
@@ -185,7 +185,13 @@ def message(request,sender_name):
         'sender':sender_name
     }
     return HttpResponse(message_template.render(context,request))
-def apoitment_submit(request,patient_name,date):
+def apoitment_submit(request):
+    if request.POST:
+        print ("IT was post")
+    if request.is_ajax():
+        return HttpResponse('You got ajax request')
+    else:
+        return HttpResponse('It was not ajax')
     return HttpResponse("Data was submitted")
 #end of apis
 
