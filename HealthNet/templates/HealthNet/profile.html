@@ -73,14 +73,19 @@
                 <div class="col-sm-4">
                     <a class="navbar-brand" href="#">{{Patient.first_name}} {{Patient.last_name}}</a>
                 </div>
-                <div class="col-sm-2">
+                <div class="col-sm-1">
                     <a href="/HealthNet/{{Patient.user_name}}/message" class="portfolio-link" data-toggle="modal">
                         <img src="{% static "HealthNet/img/circus.png"%}" style="width: 40%" class="img-responsive" alt="">
                     </a>
                 </div>
-                <div class="col-sm-2">
+                <div class="col-sm-1">
                     <a href="appoitment/" class="portfolio-link" data-toggle="modal">
                         <img src="{% static "HealthNet/img/game.png"%}" style="width: 40%" class="img-responsive" alt="">
+                    </a>
+                </div>
+                <div class="col-sm-2">
+                    <a href="/doctor/{{doctor_user_name}}/patients/" class="portfolio-link" data-toggle="modal">
+                        <img src="{% static "HealthNet/img/cabin.png"%}" style="width: 40%" class="img-responsive" alt="">
                     </a>
                 </div>
                 <div id="navbar" class="navbar-collapse collapse">
