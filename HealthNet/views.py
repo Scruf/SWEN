@@ -143,13 +143,17 @@ def apoitment_submit(request):
         apoitment.save()
         doctor.apoitment_list.add(apoitment)
         doctor.save()
-        print request.POST['patient_user_name']
-        print "-------------------------------"
-        print request.POST['time']
-        print "-------------------------------"
-        print request.POST['date']
-        print "-------------------------------"
-        print request.POST['doctor_name']
+        patient = Patient.objects.get(user_name=patient_user_name)
+        apoitment.name = patient_user_name
+        patient.appointments.add(apoitment)
+        patient.save()
+        # print request.POST['patient_user_name']
+        # print "-------------------------------"
+        # print request.POST['time']
+        # print "-------------------------------"
+        # print request.POST['date']
+        # print "-------------------------------"
+        # print request.POST['doctor_name']
         return redirect("/HealthNet/%s"%patient_user_name)
     if request.is_ajax():
         return HttpResponse('You got ajax request')
