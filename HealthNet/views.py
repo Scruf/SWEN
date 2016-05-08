@@ -138,8 +138,9 @@ def apoitment_submit(request):
         day = int(date.split("-")[2])
         hours = int(time.split(':')[0])
         minute = int(time.split(':')[1])
+
         apoitment_date = datetime.datetime(year,month,day,hours,minute)
-        apoitment = Apoitment(date=apoitment_date,name=doctor_name,reason="Requesting apoitment")
+        doctor_apoitment = Apoitment(date=apoitment_date,name=doctor_name,reason="Requesting apoitment")
         apoitment.save()
         doctor.apoitment_list.add(apoitment)
         doctor.save()
