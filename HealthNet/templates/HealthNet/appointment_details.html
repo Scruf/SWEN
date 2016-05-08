@@ -3,15 +3,29 @@
 
 <head>
 	<title>Appointment Details</title>
+	<style type="text/css">
+		.container{
+			left: 25%;
+			top: 25%;
+			background-color: #18bc9c;
+            border-radius: 8px;
+		}
+
+
+
+
+	</style>
 </head>
 
 <body>
-	<table>
-		<tr>
-			<th>Date</th>
-			<th>Time</th>
-			<th>Details</th>
-		</tr>
-	</table>
+	<div class="container">
+		<label>Your Appointment:</label>
+		<br><br>
+		<table>
+			<tr><td>Date: {{appointment.date}}</td></tr>
+			<tr><td>Time: {{appointment.time}}</td></tr>
+			<tr><td>Details: {{appointment.details}}</td></tr>
+		</table>
+	</div>
 </body>
 </html>
