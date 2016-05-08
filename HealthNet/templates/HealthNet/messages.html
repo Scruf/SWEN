@@ -2,10 +2,10 @@
 <html>
 
 <head>
+    <title>Messages</title>
     <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous"> {% load staticfiles %}
     <script src="{% static 'HealthNet/js/jquery.js'%}"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bacon.js/0.7.84/Bacon.js"></script>
-
     <style>
         .message {
             width: 800px;
@@ -17,8 +17,9 @@
             background-color: #18bc9c;
             border-radius: 8px;
         }
-        .btn-success{
+        .btn{
             background-color: #758e75;
+            color: white;
         }
     </style>
 </head>
@@ -49,10 +50,12 @@
                 </div>
                 <br>
                 <div class="row">
-                  <div class="col-sm-2">
-                  </div>
-                    <div class="col-sm-4">
+                    <div class="col-sm-2"></div>
+                    <div class="col-sm-1">
                         <button class="btn btn-success">Send</button>
+                    </div>
+                    <div class="col-sm-2">
+                        <a href="/HealthNet/{{Patient.user_name}}"><button class="btn btn-home">Home</button></a>
                     </div>
                 </div>
             </form>

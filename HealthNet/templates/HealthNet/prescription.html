@@ -19,16 +19,16 @@
 			</tr>
 			{% for p in patient %}
 			<tr>
-				<th>{{p.first_name}}</th>
-				<th>{{p.last_name}}</th>
-				<th>
+				<td>{{p.first_name}}</td>
+				<td>{{p.last_name}}</td>
+				<td>
 					<a href="/HealthNet/doctor/{{doctor.username}}/">
-					<button style="width: 45%">View</button>
-				  </a>
+						<button style="width: 45%">View</button>
+				 	</a>
 					<a href="/HealthNet/doctor/{{doctor.username}}/patients/{{p.user_name}}/add/">
-					<button style="width: 45%">Add</button>
+						<button style="width: 45%">Add</button>
 				  </a>
-				</th>
+				</td>
 			</tr>
 			{%endfor%}
 		</table>
