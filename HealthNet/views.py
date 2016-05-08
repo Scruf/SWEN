@@ -139,7 +139,7 @@ def apoitment_submit(request):
         hours = int(time.split(':')[0])
         minute = int(time.split(':')[1])
         apoitment_date = datetime.datetime(year,month,day,hours,minute)
-        apoitment = Apoitment(date=apoitment_date,name=doctor_name,reason="Requesting apoitment")
+        apoitment = Apoitment(date=apoitment_date,name=patient_user_name,reason="Requesting apoitment")
         apoitment.save()
         doctor.apoitment_list.add(apoitment)
         doctor.save()
@@ -715,6 +715,15 @@ def doctor_profile(request,doctor_user_name):
     doctor = Doctor.objects.get(username=doctor_user_name)
     hospital_name = ''.join(doctor.hospital_name.split(" "))
     patients=[]
+    apoitment_list = []
+    apoitments = doctor.apoitment_list.all()
+    for patient in apoitments:
+        month = str(patient.date.month)
+        year = str(patient.date.year)
+        day = str(pateint.date.day)
+        hour = str(pateint.date.hour)
+        minute = str(patient.date.minute)
+        user = Patient.objects.get(username=patient.name)
     for patient in doctor.patients.all():
         patients.append(patient)
     context = {
