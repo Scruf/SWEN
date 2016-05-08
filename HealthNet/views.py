@@ -140,13 +140,14 @@ def apoitment_submit(request):
         minute = int(time.split(':')[1])
 
         apoitment_date = datetime.datetime(year,month,day,hours,minute)
-        doctor_apoitment = Apoitment(date=apoitment_date,name=doctor_name,reason="Requesting apoitment")
-        apoitment.save()
-        doctor.apoitment_list.add(apoitment)
+        doctor_apoitment = Apoitment(date=apoitment_date,name=patient_user_name,reason="Requesting apoitment")
+        doctor_apoitment.save()
+        doctor.apoitment_list.add(doctor_apoitment)
         doctor.save()
+        patient_apoitment = Apoitment(date=apoitment_date,name=doctor_name,reason="Requesting apoitment")
+        patient_apoitment.save()
         patient = Patient.objects.get(user_name=patient_user_name)
-        apoitment.name = patient_user_name
-        patient.appointments.add(apoitment)
+        patient.appointments.add(patient_apoitment)
         patient.save()
         # print request.POST['patient_user_name']
         # print "-------------------------------"
