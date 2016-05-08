@@ -960,10 +960,11 @@ def addPrescription(request,username):#the context here is is just for doctor an
 def deletePrescription(request,username):
     #getting the prescription to be deleted
     patient = Patient.objects.get(user_name = username)
-    # doctor = patient.
+    doctor = patient._doctor
     prescripts = patient.prescriptions.all()
     #need to find the prescription to be deleted
 
+    patient_template = loader.get_template('HealthNet/prescription.html')
 
     log = Logs(date=datetime.date.today(),action="Prescription deleted",who_did=doctor,what_happened="A doctor added a new prescription to %s of %s"%patient %medicine)
     log.save()
