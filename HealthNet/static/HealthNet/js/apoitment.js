@@ -43,11 +43,12 @@
           }
           var doctor_user_name = $(".doctor_name").val();
           var returned_obj = $(".doctors");
-          console.log(returned_obj);
+
           var full_date = date.split("-").join("");
           if (user_name != "") {
               doctor_user_name = user_name;
           }
+          console.log(doctor_user_name);
           var url = "http://127.0.0.1:8000/HealthNet/api/apoitment/" + doctor_user_name + "/" + full_date;
           $.ajax({
               url: url,
@@ -80,7 +81,7 @@
           var doctors_name =$('.doctors');
           if (user_name!='')
             doctor_user_name=user_name
-
+          
           if (time != "") {
               var url = "http://127.0.0.1:8000/HealthNet/api/appoitment/submit/";
               $.ajax({
