@@ -20,8 +20,12 @@
 				<th>{{p.first_name}}</th>
 				<th>{{p.last_name}}</th>
 				<th>
+					<a href="/HealthNet/doctor/{{doctor.username}}/">
 					<button style="width: 45%">View</button>
+				  </a>
+					<a href="/HealthNet/doctor/{{doctor.username}}/patients/{{p.user_name}}/add/">
 					<button style="width: 45%">Add</button>
+				  </a>
 				</th>
 			</tr>
 			{%endfor%}

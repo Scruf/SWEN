@@ -897,9 +897,11 @@ def patient_pool_view(request,hospital_name,doctor_user_name,patient_uesr_name):
 
 
 #adding a prescription
-def addPrescription(request,username):#the context here is is just for doctor and patient
+def addPrescription(request,patient_uesr_name,doctor_user_name):#the context here is is just for doctor and patient
 
-    patient = Patient.objects.get(user_name=username)
+    patient = Patient.objects.get(user_name=patient_uesr_name)
+
+    doctor = patient._doctor
 
     medicine = request.POST.get('medicine')
     description = request.POST.get('description')
@@ -909,7 +911,7 @@ def addPrescription(request,username):#the context here is is just for doctor an
     #redirect needs to be changed
     if medicine is None or len(medicine)<3:
         messages.add_message(request, messages.ERROR, 'Medicine name is too short: %s'%medicine)
-        return redirect('/HealthNet/administration',permenent=True)
+        return redirect('/HealthNet/doctor/'+doctor_user_name+'/'+patient_uesr_name+'/prescription/',permenent=True)
     if description is None or len(description)<3:
         messages.add_message(request, messages.ERROR, 'Description is too short: %s'%description)
         return redirect('/HealthNet/administration',permenent=True)
@@ -928,7 +930,7 @@ def addPrescription(request,username):#the context here is is just for doctor an
     log = Logs(date=datetime.date.today(),action="Prescription added",who_did=doctor,what_happened="A doctor added a new prescription to %s of %s"%patient %medicine)
     log.save()
 
-    return redirect(permenent=True) #redirecting back to doctor page
+    return redirect('HealthNet/doctor/'+doctor.username+'/patients/',permenent=True) #redirecting back to doctor page
 
 #deleting a prescription
 def deletePrescription(request,username):
@@ -956,3 +958,14 @@ def patients(request,doctor_user_name):
     patient_template = loader.get_template('HealthNet/prescription.html')#loading the patient page
 
     return HttpResponse(patient_template.render(context,request))
+
+def statistics(request,admin_name):
+
+    
+
+    context = {
+
+    }
+    template = loader.get_template('HealthNet/statistics.html')#this doesn't exist yet
+
+    return HttpResponse(template.render(context,request))
