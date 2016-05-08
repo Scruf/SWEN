@@ -531,19 +531,36 @@ def load_profile(request,user_name):
     hospital = Hospital.objects.get(hospital_name=hospital_name)
     doctor_list = hospital.doctors.all()
     doctor_names = []
+    doctor = Doctor.objects.get(username=user._doctor)
+    apotiments = []
+    for patient in user.appointments.all():
+        month = str(patient.date.month)
+        year = str(patient.date.year)
+        day =  str(patient.date.day)
+        hour = str(patient.date.hour)
+        minute = str(patient.date.minute)
+        apoitment_doctor = Doctor.objects.get(username=patient.name)
+        day = {
+            'title':str(apoitment_doctor.first_name)+" "+str(apoitment_doctor.last_name),
+            'start':year+"-"+month+"-"+day+" "+hour+":"+minute
+        }
+
+        apotiments.append(day)
     for d in doctor_list:
         doctor_data  = {
             "first_name":d.first_name,
             "last_name":d.last_name
         }
         doctor_names.append(doctor_data)
-    print (doctor_names)
+
     profile_template = loader.get_template('HealthNet/profile.html')
     context={
         'Patient':user,
         'hospital_name':hospital_name,
-        'doctor_list':doctor_names
+        'doctor_list':doctor_names,
+        'apointments':apotiments
         }
+
     log = Logs(date=timezone.now(),action="Loaded profile",who_did=user_name,what_happened="User loaded profile")
     log.save()
     return HttpResponse(profile_template.render(context,request))
