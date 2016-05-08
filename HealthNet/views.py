@@ -19,65 +19,6 @@ from django.utils import timezone
 REDIRECT_URL="http://dogr.io/wow/suchservice/muchtextsplitting/verydirectcompose.png"
 #begining of apis this method is for practice use only
 
-#adding a prescription
-def addPrescription(request,username):#the context here is is just for doctor and patient
-
-    patient = Patient.objects.get(user_name=username)
-
-    medicine = request.POST.get('medicine')
-    description = request.POST.get('description')
-    dosage = request.POST.get('dosage')
-
-    #error checking
-    #redirect needs to be changed
-    if medicine is None or len(medicine)<3:
-        messages.add_message(request, messages.ERROR, 'Medicine name is too short: %s'%medicine)
-        return redirect('/HealthNet/administration',permenent=True)
-    if description is None or len(description)<3:
-        messages.add_message(request, messages.ERROR, 'Description is too short: %s'%description)
-        return redirect('/HealthNet/administration',permenent=True)
-    if dosage is None or len(dosage)<3:
-        messages.add_message(request, messages.ERROR, 'Dosage message too short: %s'%dosage)
-        return redirect('/HealthNet/administration',permenent=True)
-
-    #saving the prescription
-    prescription = Prescription(medicine=medicine,description=description,dosage=dosage)
-    prescription.save()
-
-    #adding to patient
-    patient.prescriptions.add(prescription)
-
-    #setting logs
-    log = Logs(date=datetime.date.today(),action="Prescription added",who_did=doctor,what_happened="A doctor added a new prescription to %s of %s"%patient %medicine)
-    log.save()
-
-    return redirect(permenent=True) #redirecting back to doctor page
-
-#deleting a prescription
-def deletePrescription(request,username):
-    #getting the prescription to be deleted
-    patient = Patient.objects.get(user_name = username)
-    # doctor = patient.
-    prescripts = patient.prescriptions.all()
-    #need to find the prescription to be deleted
-
-
-    log = Logs(date=datetime.date.today(),action="Prescription deleted",who_did=doctor,what_happened="A doctor added a new prescription to %s of %s"%patient %medicine)
-    log.save()
-
-    return HttpResponse(patient_template.render(context,request))#going back to patient view
-
-#loading the patient view page
-def patients(request,username):
-    doctor = Doctor.objects.get(username=username)
-    patients = doctor.patients.all()
-    context = {
-        'patient':patients,
-        'doctor':doctor
-    }
-    patient_template = loader.get_template('HealthNet/')#loading the patient page
-
-    return HttpResponse(patient_template.render(context,request))
 
 def patient(request):
     patient = Patient.objects.all()
@@ -544,7 +485,7 @@ def register(request):
         hospital_val = request.POST.get("hospital",None)
         symptoms = ' '
         p = Patient(user_name=username,password=password,first_name=first_name,last_name=last_name,email=email,user_id=uuid.uuid1(),\
-                     diases_name=" ",symptoms=symptoms,cell_phone=cell_phone,hospital_name=hospital_val,\
+                     symptoms=symptoms,cell_phone=cell_phone,hospital_name=hospital_val,\
                       address = address,insuarance_number=insuarance)
         p.save()
         log = Logs(date=datetime.date.today(),action="Register",who_did=username,what_happened="Signing up to the system")
@@ -723,7 +664,7 @@ def patien_to_save(request,hospital_name,user_name,doctor_user_name):
     doctor.save()
     logs = Logs(date=datetime.date.today(),action="Assigning Patient",who_did="%s"%doctor_user_name)
     logs.save()
-    return redirect("/HealthNet/%s/%s/pool"%(hospital_name,user_name))
+    return redirect("/HealthNet/%s/%s/pool"%(hospital_name,doctor_user_name))
 
 #loading doctor profile
 def doctor_profile(request,doctor_user_name):
@@ -952,4 +893,65 @@ def patient_pool_view(request,hospital_name,doctor_user_name,patient_uesr_name):
     patient_template = loader.get_template('HealthNet/patient_view.html')
     log = Logs(date=datetime.date.today(),action="Doctor viewed a patient in the patient pool",who_did=doctor_user_name,what_happened=doctor_user_name + " viewed " + patient_user_name + " at " + hospital_name)
     log.save()
+    return HttpResponse(patient_template.render(context,request))
+
+
+#adding a prescription
+def addPrescription(request,username):#the context here is is just for doctor and patient
+
+    patient = Patient.objects.get(user_name=username)
+
+    medicine = request.POST.get('medicine')
+    description = request.POST.get('description')
+    dosage = request.POST.get('dosage')
+
+    #error checking
+    #redirect needs to be changed
+    if medicine is None or len(medicine)<3:
+        messages.add_message(request, messages.ERROR, 'Medicine name is too short: %s'%medicine)
+        return redirect('/HealthNet/administration',permenent=True)
+    if description is None or len(description)<3:
+        messages.add_message(request, messages.ERROR, 'Description is too short: %s'%description)
+        return redirect('/HealthNet/administration',permenent=True)
+    if dosage is None or len(dosage)<3:
+        messages.add_message(request, messages.ERROR, 'Dosage message too short: %s'%dosage)
+        return redirect('/HealthNet/administration',permenent=True)
+
+    #saving the prescription
+    prescription = Prescription(medicine=medicine,description=description,dosage=dosage)
+    prescription.save()
+
+    #adding to patient
+    patient.prescriptions.add(prescription)
+
+    #setting logs
+    log = Logs(date=datetime.date.today(),action="Prescription added",who_did=doctor,what_happened="A doctor added a new prescription to %s of %s"%patient %medicine)
+    log.save()
+
+    return redirect(permenent=True) #redirecting back to doctor page
+
+#deleting a prescription
+def deletePrescription(request,username):
+    #getting the prescription to be deleted
+    patient = Patient.objects.get(user_name = username)
+    # doctor = patient.
+    prescripts = patient.prescriptions.all()
+    #need to find the prescription to be deleted
+
+
+    log = Logs(date=datetime.date.today(),action="Prescription deleted",who_did=doctor,what_happened="A doctor added a new prescription to %s of %s"%patient %medicine)
+    log.save()
+
+    return HttpResponse(patient_template.render(context,request))#going back to patient view
+
+#loading the patient view page
+def patients(request,doctor_user_name):
+    doctor = Doctor.objects.get(username=doctor_user_name)
+    patients = doctor.patients.all()
+    context = {
+        'patient':patients,
+        'doctor':doctor
+    }
+    patient_template = loader.get_template('HealthNet/prescription.html')#loading the patient page
+
     return HttpResponse(patient_template.render(context,request))

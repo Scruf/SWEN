@@ -15,10 +15,10 @@
 				<th>Last Name</th>
 				<th>Prescriptions</th>
 			</tr>
-			{% for p in Patients %}
+			{% for p in patient %}
 			<tr>
-				<th>{{p.patient_first_name}}</th>
-				<th>{{p.patient_last_name}}</th>
+				<th>{{p.first_name}}</th>
+				<th>{{p.last_name}}</th>
 				<th>
 					<button style="width: 45%">View</button>
 					<button style="width: 45%">Add</button>

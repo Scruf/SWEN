@@ -180,7 +180,7 @@
                 <div class="col-lg-4">
                     <div class="panel panel-default">
                         <div class="panel-heading">
-                            <i class="fa fa-bell fa-fw"></i> Notifications Panel
+                            <i class="fa fa-bell fa-fw"></i> Patients
                         </div>
                         <!-- /.panel-heading -->
                         <div class="panel-body">
@@ -188,14 +188,12 @@
                               {%for p in patient_list %}
                                 <a href="#" class="list-group-item">
                                     <i class="fa fa-comment fa-fw"></i> {{p.first_name}} {{p.last_name}}
-                                    <span class="pull-right text-muted small"><em>4 minutes ago</em>
-                                    </span>
                                 </a>
                                 {%endfor%}
 
                             </div>
                             <!-- /.list-group -->
-                            <a href="#" class="btn btn-default btn-block">View All Alerts</a>
+                            <a href="#" class="btn btn-default btn-block">View Patient List</a>
                         </div>
                         <!-- /.panel-body -->
                     </div>
