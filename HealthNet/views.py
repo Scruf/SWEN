@@ -128,7 +128,7 @@ def message(request,sender_name):
     return HttpResponse(message_template.render(context,request))
 def apoitment_submit(request):
     if request.POST:
-        print ("IT was post")
+        print request.POST
     if request.is_ajax():
         return HttpResponse('You got ajax request')
     else:
