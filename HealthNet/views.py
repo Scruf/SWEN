@@ -128,7 +128,33 @@ def message(request,sender_name):
     return HttpResponse(message_template.render(context,request))
 def apoitment_submit(request):
     if request.POST:
-        print ("IT was post")
+        patient_user_name = request.POST['patient_user_name']
+        time = request.POST['time']
+        date = request.POST['date']
+        doctor_name =  request.POST['doctor_name']
+        doctor = Doctor.objects.get(username=doctor_name)
+        year = int(date.split("-")[0])
+        month = int(date.split("-")[1])
+        day = int(date.split("-")[2])
+        hours = int(time.split(':')[0])
+        minute = int(time.split(':')[1])
+        apoitment_date = datetime.datetime(year,month,day,hours,minute)
+        apoitment = Apoitment(date=apoitment_date,name=doctor_name,reason="Requesting apoitment")
+        apoitment.save()
+        doctor.apoitment_list.add(apoitment)
+        doctor.save()
+        patient = Patient.objects.get(user_name=patient_user_name)
+        apoitment.name = patient_user_name
+        patient.appointments.add(apoitment)
+        patient.save()
+        # print request.POST['patient_user_name']
+        # print "-------------------------------"
+        # print request.POST['time']
+        # print "-------------------------------"
+        # print request.POST['date']
+        # print "-------------------------------"
+        # print request.POST['doctor_name']
+        return redirect("/HealthNet/%s"%patient_user_name)
     if request.is_ajax():
         return HttpResponse('You got ajax request')
     else:
@@ -485,7 +511,7 @@ def register(request):
         hospital_val = request.POST.get("hospital",None)
         symptoms = ' '
         p = Patient(user_name=username,password=password,first_name=first_name,last_name=last_name,email=email,user_id=uuid.uuid1(),\
-                     diases_name=" ",symptoms=symptoms,cell_phone=cell_phone,hospital_name=hospital_val,\
+                     symptoms=symptoms,cell_phone=cell_phone,hospital_name=hospital_val,\
                       address = address,insuarance_number=insuarance)
         p.save()
         log = Logs(date=datetime.date.today(),action="Register",who_did=username,what_happened="Signing up to the system")
@@ -664,7 +690,7 @@ def patien_to_save(request,hospital_name,user_name,doctor_user_name):
     doctor.save()
     logs = Logs(date=datetime.date.today(),action="Assigning Patient",who_did="%s"%doctor_user_name)
     logs.save()
-    return redirect("/HealthNet/%s/%s/pool"%(hospital_name,user_name))
+    return redirect("/HealthNet/%s/%s/pool"%(hospital_name,doctor_user_name))
 
 #loading doctor profile
 def doctor_profile(request,doctor_user_name):
@@ -897,9 +923,11 @@ def patient_pool_view(request,hospital_name,doctor_user_name,patient_uesr_name):
 
 
 #adding a prescription
-def addPrescription(request,username):#the context here is is just for doctor and patient
+def addPrescription(request,patient_uesr_name,doctor_user_name):#the context here is is just for doctor and patient
 
-    patient = Patient.objects.get(user_name=username)
+    patient = Patient.objects.get(user_name=patient_uesr_name)
+
+    doctor = patient._doctor
 
     medicine = request.POST.get('medicine')
     description = request.POST.get('description')
@@ -909,7 +937,7 @@ def addPrescription(request,username):#the context here is is just for doctor an
     #redirect needs to be changed
     if medicine is None or len(medicine)<3:
         messages.add_message(request, messages.ERROR, 'Medicine name is too short: %s'%medicine)
-        return redirect('/HealthNet/administration',permenent=True)
+        return redirect('/HealthNet/doctor/'+doctor_user_name+'/'+patient_uesr_name+'/prescription/',permenent=True)
     if description is None or len(description)<3:
         messages.add_message(request, messages.ERROR, 'Description is too short: %s'%description)
         return redirect('/HealthNet/administration',permenent=True)
@@ -928,16 +956,17 @@ def addPrescription(request,username):#the context here is is just for doctor an
     log = Logs(date=datetime.date.today(),action="Prescription added",who_did=doctor,what_happened="A doctor added a new prescription to %s of %s"%patient %medicine)
     log.save()
 
-    return redirect(permenent=True) #redirecting back to doctor page
+    return redirect('HealthNet/doctor/'+doctor.username+'/patients/',permenent=True) #redirecting back to doctor page
 
 #deleting a prescription
 def deletePrescription(request,username):
     #getting the prescription to be deleted
     patient = Patient.objects.get(user_name = username)
-    # doctor = patient.
+    doctor = patient._doctor
     prescripts = patient.prescriptions.all()
     #need to find the prescription to be deleted
 
+    patient_template = loader.get_template('HealthNet/prescription.html')
 
     log = Logs(date=datetime.date.today(),action="Prescription deleted",who_did=doctor,what_happened="A doctor added a new prescription to %s of %s"%patient %medicine)
     log.save()
@@ -955,3 +984,14 @@ def patients(request,doctor_user_name):
     patient_template = loader.get_template('HealthNet/prescription.html')#loading the patient page
 
     return HttpResponse(patient_template.render(context,request))
+
+def statistics(request,admin_name):
+
+    
+
+    context = {
+
+    }
+    template = loader.get_template('HealthNet/statistics.html')#this doesn't exist yet
+
+    return HttpResponse(template.render(context,request))

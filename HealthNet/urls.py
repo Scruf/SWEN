@@ -18,6 +18,7 @@ urlpatterns =[
     url(r'^administration/(?P<admin_name>\w+)/$',views.admin_profile,name='admin_profile'),
     url(r'^administration/(?P<admin_name>\w+)/create/verify/$',views.admin_create_verify,name='admin_create_verify'),
     url(r'^administration/(?P<admin_name>\w+)/logs$',views.admin_logs,name='admin_logs'),
+    url(r'^administration/(?P<admin_name>\w+)/stats/$',views.statistics,name='advanced_statistics'),
 
     # url(r'^administration/register/$',views.administration_save,name='administration_save'),
     #message url
@@ -45,5 +46,6 @@ urlpatterns =[
     url(r'^doctor/(?P<doctor_user_name>\w+)/edit/$',views.doctor_edit_profile,name='doctor_edit_profile'),
     url(r'^doctor/(?P<doctor_user_name>\w+)/edit/doctor_edit/$',views.doctor_edit_profile_save,name='doctor_edit_profile_save'),
     url(r'^doctor/(?P<doctor_user_name>\w+)/patients/$',views.patients,name='doctor_patients'),
+    url(r'^doctor/(?P<doctor_user_name>\w+)/patients/(?P<patient_uesr_name>\w+)/add/$',views.addPrescription,name='doctor_add_prescription')
     #urls for doctors go above
 ]
