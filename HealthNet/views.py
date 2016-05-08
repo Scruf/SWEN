@@ -549,6 +549,7 @@ def load_profile(request,user_name):
         }
 
         apotiments.append(day)
+    print apotiments
     for d in doctor_list:
         doctor_data  = {
             "first_name":d.first_name,
