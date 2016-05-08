@@ -33,9 +33,17 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/2.7.0/fullcalendar.min.js"></script>
     <script>
     $(document).ready(function(){
+      var list = {{apoitments|safe}};
+      var apoitment_list = []
+      list.filter(function(el){
+        var day ={
+          'title':el.title,
+          'start':moment(el.start)
+        }
+        apoitment_list.push(day);
+      })
       $('#calendar').fullCalendar({
-
-
+          events:apoitment_list
         });
       });
 
