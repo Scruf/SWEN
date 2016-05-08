@@ -485,7 +485,7 @@ def register(request):
         hospital_val = request.POST.get("hospital",None)
         symptoms = ' '
         p = Patient(user_name=username,password=password,first_name=first_name,last_name=last_name,email=email,user_id=uuid.uuid1(),\
-                     diases_name=" ",symptoms=symptoms,cell_phone=cell_phone,hospital_name=hospital_val,\
+                     symptoms=symptoms,cell_phone=cell_phone,hospital_name=hospital_val,\
                       address = address,insuarance_number=insuarance)
         p.save()
         log = Logs(date=datetime.date.today(),action="Register",who_did=username,what_happened="Signing up to the system")
@@ -664,7 +664,7 @@ def patien_to_save(request,hospital_name,user_name,doctor_user_name):
     doctor.save()
     logs = Logs(date=datetime.date.today(),action="Assigning Patient",who_did="%s"%doctor_user_name)
     logs.save()
-    return redirect("/HealthNet/%s/%s/pool"%(hospital_name,user_name))
+    return redirect("/HealthNet/%s/%s/pool"%(hospital_name,doctor_user_name))
 
 #loading doctor profile
 def doctor_profile(request,doctor_user_name):
