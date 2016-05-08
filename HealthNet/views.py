@@ -938,43 +938,55 @@ def patient_pool_view(request,hospital_name,doctor_user_name,patient_uesr_name):
     log.save()
     return HttpResponse(patient_template.render(context,request))
 
+def loadaddprescription(request,doctor_user_name,patient_uesr_name):
+    template = loader.get_template('HealthNet/addprescription.html')
+    context = {
+        'patient':patient_uesr_name,
+        'doctor':doctor_user_name
+    }
+
+    return HttpResponse(template.render(context,request))
 
 #adding a prescription
 def addPrescription(request,patient_uesr_name,doctor_user_name):#the context here is is just for doctor and patient
+    if request.method == 'POST':
+        patient = Patient.objects.get(user_name=patient_uesr_name)
 
-    patient = Patient.objects.get(user_name=patient_uesr_name)
+        doctor = patient._doctor
 
-    doctor = patient._doctor
+        medicine = request.POST.get('medication',None)
+        description = request.POST.get('description',None)
+        dosage = request.POST.get('dosage',None)
+        print (medicine)
+        print(dosage)
+        print(description)
 
-    medicine = request.POST.get('medicine')
-    description = request.POST.get('description')
-    dosage = request.POST.get('dosage')
+        #error checking
+        #redirect needs to be changed
+        if medicine is None or len(medicine)<3:
+            messages.add_message(request, messages.ERROR, 'Medicine name is too short: %s'%medicine)
+            return redirect('/HealthNet/doctor/'+doctor_user_name+'/patients/'+patient_uesr_name+'/add/',permenent=True)
+        if description is None or len(description)<3:
+            messages.add_message(request, messages.ERROR, 'Description is too short: %s'%description)
+            return redirect('/HealthNet/doctor/'+doctor_user_name+'/patients/'+patient_uesr_name+'/add/',permenent=True)
+        if dosage is None or len(dosage)<3:
+            messages.add_message(request, messages.ERROR, 'Dosage message too short: %s'%dosage)
+            return redirect('/HealthNet/doctor/'+doctor_user_name+'/patients/'+patient_uesr_name+'/add/',permenent=True)
 
-    #error checking
-    #redirect needs to be changed
-    if medicine is None or len(medicine)<3:
-        messages.add_message(request, messages.ERROR, 'Medicine name is too short: %s'%medicine)
-        return redirect('/HealthNet/doctor/'+doctor_user_name+'/'+patient_uesr_name+'/prescription/',permenent=True)
-    if description is None or len(description)<3:
-        messages.add_message(request, messages.ERROR, 'Description is too short: %s'%description)
-        return redirect('/HealthNet/administration',permenent=True)
-    if dosage is None or len(dosage)<3:
-        messages.add_message(request, messages.ERROR, 'Dosage message too short: %s'%dosage)
-        return redirect('/HealthNet/administration',permenent=True)
+        #saving the prescription
+        prescription = Prescription(title=medicine,details=description,dosage=dosage)
+        prescription.save()
 
-    #saving the prescription
-    prescription = Prescription(medicine=medicine,description=description,dosage=dosage)
-    prescription.save()
+        #adding to patient
+        patient.prescriptions.add(prescription)
 
-    #adding to patient
-    patient.prescriptions.add(prescription)
+        #setting logs
+        log = Logs(date=timezone.now(),action="A doctor added a new prescription to "+ patient_uesr_name + " of " + medicine,who_did=doctor,what_happened="A doctor added a new prescription to "+ patient_uesr_name + " of " + medicine)
+        log.save()
 
-    #setting logs
-    log = Logs(date=timezone.now(),action="Prescription added",who_did=doctor,what_happened="A doctor added a new prescription to %s of %s"%patient %medicine)
-    log.save()
-
-    return redirect('HealthNet/doctor/'+doctor.username+'/patients/',permenent=True) #redirecting back to doctor page
-
+        return redirect('/HealthNet/doctor/'+ doctor_user_name +'/patients/',permenent=True) #redirecting back to doctor page
+    else:
+        print "NOt POST"
 #deleting a prescription
 def deletePrescription(request,username):
     #getting the prescription to be deleted
