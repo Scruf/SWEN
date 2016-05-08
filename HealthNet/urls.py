@@ -46,6 +46,7 @@ urlpatterns =[
     url(r'^doctor/(?P<doctor_user_name>\w+)/edit/$',views.doctor_edit_profile,name='doctor_edit_profile'),
     url(r'^doctor/(?P<doctor_user_name>\w+)/edit/doctor_edit/$',views.doctor_edit_profile_save,name='doctor_edit_profile_save'),
     url(r'^doctor/(?P<doctor_user_name>\w+)/patients/$',views.patients,name='doctor_patients'),
-    url(r'^doctor/(?P<doctor_user_name>\w+)/patients/(?P<patient_uesr_name>\w+)/add/$',views.addPrescription,name='doctor_add_prescription')
+    url(r'^doctor/(?P<doctor_user_name>\w+)/patients/(?P<patient_uesr_name>\w+)/add/$',views.loadaddprescription,name='doctor_add_prescription'),
+    url(r'^doctor/(?P<doctor_user_name>\w+)/patients/(?P<patient_uesr_name>\w+)/add/confirm/$',views.addPrescription,name='addPrescription')
     #urls for doctors go above
 ]
