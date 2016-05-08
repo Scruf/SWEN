@@ -1,0 +1,36 @@
+<!DOCTYPE <!DOCTYPE html>
+<html>
+
+<head>
+	<link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous"> {% load staticfiles %}
+	<title>Appointment Details</title>
+	<style type="text/css">
+		.details{
+			height: 400px;
+			width: 400px;
+			left: 25%;
+			
+			background-color: #18bc9c;
+            border-radius: 8px;
+		}
+
+
+
+
+	</style>
+</head>
+
+<body>
+	<div class="container">
+		<div class="details"></div>
+			<label>Your Appointment:</label>
+			<br><br>
+			<table>
+				<tr><td>Date: {{appointment.date}}</td></tr>
+				<tr><td>Time: {{appointment.time}}</td></tr>
+				<tr><td>Details: {{appointment.details}}</td></tr>
+			</table>
+		</div>
+	</div>
+</body>
+</html>

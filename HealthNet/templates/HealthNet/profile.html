@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -13,33 +14,21 @@
     {% load staticfiles%}
     <link rel="stylesheet" href="{% static "HealthNet/css/fullcalendar.min.css" %}">
     <link rel="stylesheet" href="{% static "HealthNet/css/fullcalendar.print.css" %}" media='print'>
-    <script src="{% static "HealthNet/js/moment.js"%}"></script>
-    <script src="{% static "HealthNet/js/jquery1.min.js"%}"></script>
+    <script src="{% static "HealthNet/js/moment.js" %}"></script>
+      <script src="{% static "HealthNet/js/jquery1.min.js" %}"></script>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/2.7.0/fullcalendar.min.js"></script>
     <script>
-    $(document).ready(function() {
-      var list = {{apointments|safe}};
-      var apoitments = [];
-      console.log(list);
-      list.filter(function(el){
-        var day = {
-          'title':el.title,
-          'start':moment(el.start)
-        }
-        apoitments.push(day);
+    $(document).ready(function(){
+      $('#calendar').fullCalendar({
+
+
+        });
       });
-      console.log(apoitments);
-
-
-                $('#calendar').fullCalendar({
-                        events:apoitments
-                        });
-                });
 
     </script>
 
-    <!--  <script src="https://code.jquery.com/jquery-2.2.3.js" integrity="sha256-laXWtGydpwqJ8JA+X9x2miwmaiKhn8tVmOVEigRNtP4=" crossorigin="anonymous"></script> -->
+   <!--  <script src="https://code.jquery.com/jquery-2.2.3.js" integrity="sha256-laXWtGydpwqJ8JA+X9x2miwmaiKhn8tVmOVEigRNtP4=" crossorigin="anonymous"></script> -->
 
     <!-- Bootstrap Core CSS - Uses Bootswatch Flatly Theme: http://bootswatch.com/flatly/ -->
     <link href="../../static/HealthNet/css/bootstrap.min.css" rel="stylesheet">
@@ -90,8 +79,12 @@
                     </a>
                 </div>
                 <div class="col-sm-1">
+<<<<<<< HEAD
+                    <a href="appoitment/" class="portfolio-link" data-toggle="modal">
+=======
                     <a href="/HealthNet/{{Patient.user_name}}/appoitment/" class="portfolio-link" data-toggle="modal">
                         <!--needs to go to appointment list-->
+>>>>>>> 0de764aaad5aceb0b1b35da072511a6bd8f5c7bd
                         <img src="{% static "HealthNet/img/game.png"%}" class="img-responsive" alt="">
                     </a>
                 </div>
@@ -102,13 +95,12 @@
                         <img src="{% static "HealthNet/img/cabin.png"%}" class="img-responsive" alt="">
                     </a>
                 </div>
-
+                
                 <div class="col-sm-1">
                     <button type="submit" class ="btn btn-success"><a href="/HealthNet" style="color: white;text-decoration:none;">Logout</a></button>
 
                 </div>
-            </div>
-            <!--/.navbar-collapse -->
+            </div><!--/.navbar-collapse -->
         </div>
     </nav>
     <!-- End of MODIFIED NAVBAR -->
@@ -120,19 +112,24 @@
         <div class="container">
 
             <style>
-                #calendar {
+                #calendar{
                     width: 100%;
                     height: 100%;
                     background-color: white;
                     color: black;
                     padding: 20px;
                     border-radius: 2px;
-                }
+                   }
             </style>
             <div class="content">
                 <div id="calendar"></div>
+                <script>
+                    $(document).ready(function(){
+                        $('#calendar').fullCalendar({
 
-
+                        });
+                    });
+                </script>
             </div>
         </div>
     </header>
@@ -175,32 +172,25 @@
                             <ul class="list-inline item-details">
                                 <li>Username:
                                     <strong>{{Patient.user_name}}</strong>
-                                </li>
-                                <br>
+                                </li><br>
                                 <li>First Name:
                                     <strong>{{Patient.first_name}}</strong>
-                                </li>
-                                <br>
+                                </li><br>
                                 <li>Last Name:
                                     <strong>{{Patient.last_name}}</strong>
-                                </li>
-                                <br>
+                                </li><br>
                                 <li>Email:
                                     <strong>{{Patient.email}}</strong>
-                                </li>
-                                <br>
+                                </li><br>
                                 <li>Cell Phone:
                                     <strong>{{Patient.cell_phone}}</strong>
-                                </li>
-                                <br>
+                                </li><br>
                                 <li>Address:
                                     <strong>{{Patient.address}}</strong>
-                                </li>
-                                <br>
+                                </li><br>
                                 <li>Insuarance Number:
                                     <strong>{{Patient.insuarance_number}}</strong>
-                                </li>
-                                <br>
+                                </li><br>
                             </ul>
                             <a href="view">
                                 <button type="button" class="btn btn-default">Edit</button>
@@ -227,8 +217,7 @@
                             <h2>Project Title</h2>
                             <hr class="star-primary">
                             <img src="{%static "HealthNet/img/cake.png"%}"class="img-responsive img-centered" alt="">
-                            <p>Use this area of the page to describe your project. The icon above is part of a free icon set by <a href="https://sellfy.com/p/8Q9P/jV3VZ/">Flat Icons</a>. On their website, you can download their free set with 16 icons, or
-                                you can purchase the entire set with 146 icons for only $12!</p>
+                            <p>Use this area of the page to describe your project. The icon above is part of a free icon set by <a href="https://sellfy.com/p/8Q9P/jV3VZ/">Flat Icons</a>. On their website, you can download their free set with 16 icons, or you can purchase the entire set with 146 icons for only $12!</p>
                             <ul class="list-inline item-details">
                                 <li>Client:
                                     <strong><a href="https://startbootstrap.com">Start Bootstrap</a>
@@ -259,102 +248,101 @@
                 </div>
             </div>
             <section id="contact">
-                <div class="container">
-                    <div class="row">
-                        <div class="col-lg-12 text-center">
-                            <h2>Contact your doctor</h2>
-                            <hr class="star-primary">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12 text-center">
+                    <h2>Contact your doctor</h2>
+                    <hr class="star-primary">
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-8 col-lg-offset-2">
+                    <!-- To configure the contact form email address, go to mail/contact_me.php and update the email address in the PHP file on line 19. -->
+                    <!-- The form should work on most web servers, but if the form is not working you may need to configure your web server differently. -->
+                    <form method="POST" action="send/"name="sentMessage" id="contactForm" novalidate>
+                      {%csrf_token%}
+                        <div class="row control-group">
+                            <div class="form-group col-xs-12 floating-label-form-group controls">
+                                <label>Name</label>
+                                <input type="text" name="doctor_email" class="form-control" placeholder="Name" id="name" required data-validation-required-message="Please enter your name.">
+                                <p class="help-block text-danger"></p>
+                            </div>
                         </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-lg-8 col-lg-offset-2">
-                            <!-- To configure the contact form email address, go to mail/contact_me.php and update the email address in the PHP file on line 19. -->
-                            <!-- The form should work on most web servers, but if the form is not working you may need to configure your web server differently. -->
-                            <form method="POST" action="send/" name="sentMessage" id="contactForm" novalidate>
-                                {%csrf_token%}
-                                <div class="row control-group">
-                                    <div class="form-group col-xs-12 floating-label-form-group controls">
-                                        <label>Name</label>
-                                        <input type="text" name="doctor_email" class="form-control" placeholder="Name" id="name" required data-validation-required-message="Please enter your name.">
-                                        <p class="help-block text-danger"></p>
-                                    </div>
-                                </div>
 
-                                <div class="row control-group">
-                                    <div class="form-group col-xs-12 floating-label-form-group controls">
-                                        <label>Message</label>
-                                        <textarea rows="5" name="message" class="form-control" placeholder="Message" id="message" required data-validation-required-message="Please enter a message."></textarea>
-                                        <p class="help-block text-danger"></p>
-                                    </div>
-                                </div>
-                                <br>
-                                <div id="success"></div>
-                                <div class="row">
-                                    <div class="form-group col-xs-12">
-                                        <button type="submit" class="btn btn-success btn-lg">Send</button>
-                                    </div>
-                                </div>
-                            </form>
+                        <div class="row control-group">
+                            <div class="form-group col-xs-12 floating-label-form-group controls">
+                                <label>Message</label>
+                                <textarea rows="5" name="message" class="form-control" placeholder="Message" id="message" required data-validation-required-message="Please enter a message."></textarea>
+                                <p class="help-block text-danger"></p>
+                            </div>
+                        </div>
+                        <br>
+                        <div id="success"></div>
+                        <div class="row">
+                            <div class="form-group col-xs-12">
+                                <button type="submit" class="btn btn-success btn-lg">Send</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+		<div class="portfolio-modal modal fade" id="portfolioModal4" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-content">
+            <div class="close-modal" data-dismiss="modal">
+                <div class="lr">
+                    <div class="rl">
+                    </div>
+                </div>
+            </div>
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-8 col-lg-offset-2">
+                        <div class="modal-body">
+                            <h2>{{Patient.first_name}}  {{Patient.last_name}}</h2>
+                            <hr class="star-primary">
+                            <img src="{% static "HealthNet/img/game.png"%}" class="img-responsive img-centered" alt="">
+                            <p>Use this area of the page to describe your project. The icon above is part of a free icon set by <a href="https://sellfy.com/p/8Q9P/jV3VZ/">Flat Icons</a>. On their website, you can download their free set with 16 icons, or you can purchase the entire set with 146 icons for only $12!</p>
+                            <ul class="list-inline item-details">
+                                <li>Client:
+                                    <strong><a href="https://startbootstrap.com">Start Bootstrap</a>
+                                    </strong>
+                                </li>
+                                <li>Date:
+                                    <strong><a href="https://startbootstrap.com">April 2014</a>
+                                    </strong>
+                                </li>
+                                <li>Service:
+                                    <strong><a href="https://startbootstrap.com">Web Development</a>
+                                    </strong>
+                                </li>
+                            </ul>
+                            <button type="button" class="btn btn-default" data-dismiss="modal"><i class="fa fa-times"></i> Close</button>
                         </div>
                     </div>
                 </div>
-                <div class="portfolio-modal modal fade" id="portfolioModal4" tabindex="-1" role="dialog" aria-hidden="true">
-                    <div class="modal-content">
-                        <div class="close-modal" data-dismiss="modal">
-                            <div class="lr">
-                                <div class="rl">
-                                </div>
-                            </div>
-                        </div>
-                        <div class="container">
-                            <div class="row">
-                                <div class="col-lg-8 col-lg-offset-2">
-                                    <div class="modal-body">
-                                        <h2>{{Patient.first_name}}  {{Patient.last_name}}</h2>
-                                        <hr class="star-primary">
-                                        <img src="{% static "HealthNet/img/game.png"%}" class="img-responsive img-centered" alt="">
-                                        <p>Use this area of the page to describe your project. The icon above is part of a free icon set by <a href="https://sellfy.com/p/8Q9P/jV3VZ/">Flat Icons</a>. On their website, you can download their free set with
-                                            16 icons, or you can purchase the entire set with 146 icons for only $12!</p>
-                                        <ul class="list-inline item-details">
-                                            <li>Client:
-                                                <strong><a href="https://startbootstrap.com">Start Bootstrap</a>
-                                    </strong>
-                                            </li>
-                                            <li>Date:
-                                                <strong><a href="https://startbootstrap.com">April 2014</a>
-                                    </strong>
-                                            </li>
-                                            <li>Service:
-                                                <strong><a href="https://startbootstrap.com">Web Development</a>
-                                    </strong>
-                                            </li>
-                                        </ul>
-                                        <button type="button" class="btn btn-default" data-dismiss="modal"><i class="fa fa-times"></i> Close</button>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </section>
+            </div>
+        </div>
+    </div>
+    </section>
         </div>
     </div>
 
 
     <!-- Bootstrap Core JavaScript -->
-    <!--   <script src="../../static/HealthNet/js/bootstrap.min.js"></script> -->
+  <!--   <script src="../../static/HealthNet/js/bootstrap.min.js"></script> -->
 
     <!-- Plugin JavaScript -->
-    <!--   <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-easing/1.3/jquery.easing.min.js"></script> -->
+  <!--   <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-easing/1.3/jquery.easing.min.js"></script> -->
     <script src="../../static/HealthNet/js/classie.js"></script>
     <script src="../../static/HealthNet/js/cbpAnimatedHeader.js"></script>
 
     <!-- Contact Form JavaScript -->
-    <!--   <script src="../../static/HealthNet/js/jqBootstrapValidation.js"></script> -->
+  <!--   <script src="../../static/HealthNet/js/jqBootstrapValidation.js"></script> -->
 
 
     <!-- Custom Theme JavaScript -->
-    <!--   <script src="../../static/HealthNet/js/freelancer.js"></script> -->
+  <!--   <script src="../../static/HealthNet/js/freelancer.js"></script> -->
 
 </body>
 
