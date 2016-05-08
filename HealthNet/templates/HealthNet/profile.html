@@ -10,7 +10,7 @@
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title>{{user.user_name}}</title>
+    <title>{{Patient.first_name}} {{Patient.last_name}}</title>
     {% load staticfiles%}
     <link rel="stylesheet" href="{% static "HealthNet/css/fullcalendar.min.css" %}">
     <link rel="stylesheet" href="{% static "HealthNet/css/fullcalendar.print.css" %}" media='print'>
@@ -66,7 +66,7 @@
                 </button>
                 <div class="col-sm-2">
                     {%load staticfiles%}
-                    <a href="#portfolioModal1" class="portfolio-link" data-toggle="modal">
+                    <a href="view" class="portfolio-link" data-toggle="modal">
                         <img class="img-responsive" src="{% static "HealthNet/img/doge.jpg"%}" style="width: 40%" alt="">
                     </a>
                 </div>
@@ -75,24 +75,24 @@
                 </div>
                 <div class="col-sm-1">
                     <a href="/HealthNet/{{Patient.user_name}}/message" class="portfolio-link" data-toggle="modal">
-                        <img src="{% static "HealthNet/img/circus.png"%}" style="width: 40%" class="img-responsive" alt="">
+                        <img src="{% static "HealthNet/img/circus.png"%}" class="img-responsive" alt="">
                     </a>
                 </div>
                 <div class="col-sm-1">
-                    <a href="appoitment/" class="portfolio-link" data-toggle="modal">
-                        <img src="{% static "HealthNet/img/game.png"%}" style="width: 40%" class="img-responsive" alt="">
+                    <a href="" class="portfolio-link" data-toggle="modal">
+                        <!--needs to go to appointment list-->
+                        <img src="{% static "HealthNet/img/game.png"%}" class="img-responsive" alt="">
                     </a>
                 </div>
-                <div class="col-sm-2">
-                    <a href="/doctor/{{doctor.user_name}}patients/" class="portfolio-link" data-toggle="modal">
-                        <img src="{% static "HealthNet/img/cabin.png"%}" style="width: 40%" class="img-responsive" alt="">
+                <div class="col-sm-1">
+                    <a href="" class="portfolio-link" data-toggle="modal">
+                        <!--will be for prescriptions, change image later to match-->
+                        <img src="{% static "HealthNet/img/cabin.png"%}" class="img-responsive" alt="">
                     </a>
                 </div>
-                <div id="navbar" class="navbar-collapse collapse">
-                    <form method="POST" action="thankyou/" class="navbar-form navbar-right">
-                        <button type="submit" class ="btn btn-success"><a href="/HealthNet" style="color: white;text-decoration:none;">Logout</a></button>
-                        <button type="submit" class ="btn btn-success"><a href="/HealthNet" style="color: white;text-decoration:none;">Home</a></button>
-                    </form>
+                
+                <div class="col-sm-1">
+                    <button type="submit" class ="btn btn-success"><a href="/HealthNet" style="color: white;text-decoration:none;">Logout</a></button>
                 </div>
             </div><!--/.navbar-collapse -->
         </div>
@@ -128,12 +128,6 @@
         </div>
     </header>
 
-    <div>
-        <button>Prescriptions
-            <!--link prescription page here; will be a placeholder for now-->
-            <a href="">
-        </button>
-    </div>
     <!-- Footer -->
     <footer class="text-center">
         <div class="footer-below">
