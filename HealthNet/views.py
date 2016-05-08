@@ -958,6 +958,22 @@ def loadaddprescription(request,doctor_user_name,patient_uesr_name):
 
     return HttpResponse(template.render(context,request))
 
+def viewPrescriptions(request,doctor_user_name,patient_uesr_name):
+    template = loader.get_template('HealthNet/viewprescriptions.html')
+
+    patient = Patient.objects.get(user_name=patient_uesr_name)
+    pres = patient.prescriptions.all()
+
+    doctor = Doctor.objects.get(username=doctor_user_name)
+    print(doctor.username)
+    context = {
+        'prescriptions':pres,
+        'patient':patient,
+        'doctor':doctor.username
+    }
+
+    return HttpResponse(template.render(context,request))
+
 #adding a prescription
 def addPrescription(request,patient_uesr_name,doctor_user_name):#the context here is is just for doctor and patient
     if request.method == 'POST':
@@ -999,19 +1015,20 @@ def addPrescription(request,patient_uesr_name,doctor_user_name):#the context her
     else:
         print "NOt POST"
 #deleting a prescription
-def deletePrescription(request,username):
+def deletePrescription(request,patient_uesr_name,doctor_user_name,medicine_id):
     #getting the prescription to be deleted
-    patient = Patient.objects.get(user_name = username)
-    doctor = patient._doctor
-    prescripts = patient.prescriptions.all()
-    #need to find the prescription to be deleted
 
-    patient_template = loader.get_template('HealthNet/prescription.html')
+    patient = Patient.objects.get(user_name = patient_uesr_name)
+    doctor = Doctor.objects.get(username= doctor_user_name)
+    prescript = Prescription.objects.get(id=medicine_id)
 
-    log = Logs(date=timezone.now(),action="Prescription deleted",who_did=doctor,what_happened="A doctor added a new prescription to %s of %s"%patient %medicine)
+    log = Logs(date=timezone.now(),action=doctor_user_name + " deleted prescription of " + prescript.title + " from " + patient_uesr_name,who_did=doctor_user_name,what_happened="A doctor deleted a prescription")
     log.save()
 
-    return HttpResponse(patient_template.render(context,request))#going back to patient view
+    prescript.delete()
+    prescript.save()
+
+    return redirect('/HealthNet/doctor/'+ doctor_user_name +'/patients/',permentent=True)
 
 #loading the patient view page
 def patients(request,doctor_user_name):
