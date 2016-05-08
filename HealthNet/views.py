@@ -128,7 +128,33 @@ def message(request,sender_name):
     return HttpResponse(message_template.render(context,request))
 def apoitment_submit(request):
     if request.POST:
-        print request.POST
+        patient_user_name = request.POST['patient_user_name']
+        time = request.POST['time']
+        date = request.POST['date']
+        doctor_name =  request.POST['doctor_name']
+        doctor = Doctor.objects.get(username=doctor_name)
+        year = int(date.split("-")[0])
+        month = int(date.split("-")[1])
+        day = int(date.split("-")[2])
+        hours = int(time.split(':')[0])
+        minute = int(time.split(':')[1])
+        apoitment_date = datetime.datetime(year,month,day,hours,minute)
+        apoitment = Apoitment(date=apoitment_date,name=doctor_name,reason="Requesting apoitment")
+        apoitment.save()
+        doctor.apoitment_list.add(apoitment)
+        doctor.save()
+        patient = Patient.objects.get(user_name=patient_user_name)
+        apoitment.name = patient_user_name
+        patient.appointments.add(apoitment)
+        patient.save()
+        # print request.POST['patient_user_name']
+        # print "-------------------------------"
+        # print request.POST['time']
+        # print "-------------------------------"
+        # print request.POST['date']
+        # print "-------------------------------"
+        # print request.POST['doctor_name']
+        return redirect("/HealthNet/%s"%patient_user_name)
     if request.is_ajax():
         return HttpResponse('You got ajax request')
     else:
