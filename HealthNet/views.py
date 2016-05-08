@@ -542,9 +542,9 @@ def load_profile(request,user_name):
         hour = str(patient.date.hour)
         minute = str(patient.date.minute)
         print patient.name
-        # apoitment_doctor = Doctor.objects.get(username=patient.name)
+        apoitment_doctor = Doctor.objects.get(username=patient.name)
         day = {
-            # 'title':str(apoitment_doctor.first_name)+" "+str(apoitment_doctor.last_name),
+            'title':str(apoitment_doctor.first_name)+" "+str(apoitment_doctor.last_name),
             'start':year+"-"+month+"-"+day+" "+hour+":"+minute
         }
 
@@ -721,22 +721,32 @@ def doctor_profile(request,doctor_user_name):
     patients=[]
     apoitment_list = []
     apoitments = doctor.apoitment_list.all()
+
     for patient in apoitments:
+        print patient.name
         month = str(patient.date.month)
         year = str(patient.date.year)
         day = str(patient.date.day)
         hour = str(patient.date.hour)
         minute = str(patient.date.minute)
         user = Patient.objects.get(user_name=patient.name)
-    for patient in doctor.patients.all():
-        patients.append(patient)
+        day = {
+            'title':str(user.first_name)+" "+str(user.last_name),
+            'start':year+"-"+month+"-"+day+" "+hour+":"+minute
+        }
+        patients.append(user)
+        apoitment_list.append(day)
+    print apoitment_list
+
     context = {
         'doctor':doctor,
         'hospital_name':hospital_name,
-        'patient_list':patients
+        'patient_list':patients,
+        'apoitments':apoitment_list
     }
     logs = Logs(date=timezone.now(),action=doctor_user_name + " loaded profile",who_did="%s"%doctor_user_name)
     logs.save()
+
     return HttpResponse(doctor_template.render(context,request))
 
 #loading appointment page
