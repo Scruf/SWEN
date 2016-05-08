@@ -3,17 +3,20 @@
 
 <head>
 	<link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous"> {% load staticfiles %}
+	<script src="https://code.jquery.com/jquery-2.2.3.min.js" integrity="sha256-a23g1Nt4dtEYOj7bR+vTu7+T8VP13humZFBJNIYoEJo=" crossorigin="anonymous"></script>
 	<title>Appointment Details</title>
 	<style type="text/css">
-		.details{
+		.jumbotron{
 			height: 400px;
-			width: 400px;
-			left: 25%;
-
+			width: 800px;
 			background-color: #18bc9c;
             border-radius: 8px;
 		}
-
+		.appt_box{
+			background-color: white;
+			color: black;
+			border-radius: 8px;
+		}
 
 
 
@@ -21,16 +24,44 @@
 </head>
 
 <body>
-	<div class="container">
-		<div class="details"></div>
-			<label>Your Appointment:</label>
-			<br><br>
-			<table>
-				<tr><td>Date: {{appointment.date}}</td></tr>
-				<tr><td>Time: {{appointment.time}}</td></tr>
-				<tr><td>Details: {{appointment.details}}</td></tr>
-			</table>
+	<div class="container" style="margin-left: 25%;margin-top: 15%">
+	<div class="jumbotron">
+		<div class="row">
+			<div class="col-sm-1"></div>
+			<div class="col-sm-8">Your Appointment:</div>
 		</div>
+		<br><br>
+		<div class="row">
+			<div class="col-sm-1"></div>
+			<div class="col-sm-2">Date</div>
+			<div class="col-sm-8 appt_box">
+				<label>{{appointment.date}}</label>
+			</div>
+		</div>
+		<br><br>
+		<div class="row">
+			<div class="col-sm-1"></div>
+			<div class="col-sm-2">Time</div>
+			<div class="col-sm-8 appt_box">
+				<label>{{appointment.time}}</label>
+			</div>
+		</div>
+		<br><br>
+		<div class="row">
+			<div class="col-sm-1"></div>
+			<div class="col-sm-2">Details</div>
+			<div class="col-sm-8 appt_box">
+				<label>{{appointment.details}}</label>
+			</div>
+		</div>
+		<br><br>
+		<div>
+			<div class="col-sm-1"></div>
+			<a href=""><button>Modify</button></a><!--modify the appointment-->
+			<a href=""><button>Delete</button></a><!--delete the appointment-->
+			<a href=""><button>Home</button><!--go home-->
+		</div>
+	</div>
 	</div>
 </body>
 </html>
