@@ -88,7 +88,8 @@
                   type: 'POST',
                   data: ({
                       'patient_user_name': patient_user_name,
-                      'time': time
+                      'time': time,
+                      'date':date
                   }),
                   success: function(data) {
                       alert("Success");
