@@ -629,7 +629,19 @@ def apoitment_view_edit_submit(request,user_name,doctor_name,apoitment_id):
         hour = int(time.split(":")[0])
         minute = int(time.split(":")[1])
         date_to_compare = datetime.datetime(year,month,day,hour,minute)
-
+        user_apoitment = Patient.objects.get(user_name=user_name)
+        doctor = Doctor.objects.get(username=doctor_name)
+        patient_apoitment = None
+        for patient_ap in user_apoitment.appointments.all():
+            if patient_ap.date.year == year and patient_ap.date.month==month \
+                and patient_ap.date.day==day and patient_ap.date.hour == hour and patient_ap.date.minute == minute:
+                apoitment = patient_ap
+        
+        doctor_apoitment = None
+        for patient_ap in doctor.apoitment_list.all():
+            if patient_ap.date.year == year and patient_ap.date.month==month \
+                and patient_ap.date.day==day and patient_ap.date.hour == hour and patient_ap.date.minute == minute:
+                doctor_apoitment = patient_ap
 
     return HttpResponse("You edited")
 #end of appointments
