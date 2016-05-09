@@ -21,7 +21,9 @@ urlpatterns =[
     url(r'^administration/(?P<admin_name>\w+)/stats/$',views.statistics,name='advanced_statistics'),
     #url for apoitment modifications
     url(r'^(?P<user_name>\w+)/(?P<doctor_name>\w+)/(?P<apoitment_id>[0-9]+)/appoitment/views/$',views.apoitment_view,name='apoitment_view'),
-    #end of url modifications
+    url(r'^(?P<user_name>\w+)/(?P<doctor_name>\w+)/(?P<apoitment_id>[0-9]+)/appoitment/views/edit/$',views.apoitment_view_edit,name='apoitment_view_edit'),
+    url(r'^(?P<user_name>\w+)/(?P<doctor_name>\w+)/(?P<apoitment_id>[0-9]+)/appoitment/views/edit/submit/$',views.apoitment_view_edit_submit,name='apoitment_view_edit_submit'),
+    #end of appoitment modifications
     # url(r'^administration/register/$',views.administration_save,name='administration_save'),
     #message url
     url(r'^(?P<sender_name>\w+)/message/$',views.message,name='message'),

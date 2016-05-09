@@ -21,11 +21,14 @@
 
 
 	</style>
+
 </head>
 
 <body>
 	<div class="container" style="margin-left: 25%;margin-top: 15%">
 	<div class="jumbotron">
+  <form method = "POST" action='submit/'>
+    {%csrf_token%}
 		<div class="row">
 			<div class="col-sm-1"></div>
 			<div class="col-sm-8">Your Appointment:</div>
@@ -35,7 +38,7 @@
 			<div class="col-sm-1"></div>
 			<div class="col-sm-2">Date</div>
 			<div class="col-sm-8 appt_box">
-				<label>{{date}}</label>
+				<input type="date" class="form-control date" value="{{date}}" name="date">
 			</div>
 		</div>
 		<br><br>
@@ -43,7 +46,7 @@
 			<div class="col-sm-1"></div>
 			<div class="col-sm-2">Time</div>
 			<div class="col-sm-8 appt_box">
-				<label>{{time}}</label>
+			     <input type="time" class="form-control" value="{{time}}" name="time">
 			</div>
 		</div>
 		<br><br>
@@ -51,15 +54,15 @@
 			<div class="col-sm-1"></div>
 			<div class="col-sm-2">Details</div>
 			<div class="col-sm-8 appt_box">
-				<label>{{reason}}</label>
+				<input type="text" class="form-control" value="{{reason}}" name="reason">
 			</div>
 		</div>
 		<br><br>
 		<div>
 			<div class="col-sm-1"></div>
-			<a href="edit"><button>Modify</button></a><!--modify the appointment-->
-			<a href=""><button>Delete</button></a><!--delete the appointment-->
-			<a href=""><button>Home</button><!--go home-->
+			<a href="edit"><button class="button btn-success" type="Submit">Save</button></a><!--modify the appointment-->
+			<a href=""><button class="button btn-success" >Home</button><!--go home-->
+    </form>
 		</div>
 	</div>
 	</div>

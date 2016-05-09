@@ -590,8 +590,49 @@ def apoitment_view(request,user_name,doctor_name,apoitment_id):
     apoitment_template = loader.get_template('HealthNet/appointment_details.html')
     return HttpResponse(apoitment_template.render(context,request))
 
+def apoitment_view_edit(request,user_name,doctor_name,apoitment_id):
+    apoitment = Apoitment.objects.get(id=apoitment_id)
+    apoitment_edit_template = loader.get_template('HealthNet/apoitment_edit.html')
+    year = str(apoitment.date.year)
+    month = str(apoitment.date.month)
+    if len(month)==1:
+        month = '0'+month
+    day = str(apoitment.date.day)
+    if len(day)==1:
+        day = '0'+day
+    hour = str(apoitment.date.hour)
+    minute = str(apoitment.date.minute)
+    full_date = year+"-"+month+"-"+day
 
-    return HttpResponse('You are viewing apotment of %s and %s'%(user_name,doctor_name))
+    time = hour+":"+minute
+
+    context = {
+        'date':full_date,
+        'time':time,
+        'reason':apoitment.reason
+    }
+    return HttpResponse(apoitment_edit_template.render(context,request))
+def apoitment_view_edit_submit(request,user_name,doctor_name,apoitment_id):
+    if request.method == 'POST':
+        current_date = datetime.datetime.now()
+        submit_date = request.POST.get('date',None)
+        year = int(submit_date.split("-")[0])
+        month = int(submit_date.split("-")[1])
+        day = int(submit_date.split("-")[2])
+        date_to_compare = datetime.datetime(year,month,day)
+        if date_to_compare<current_date:
+            return HttpResponse("Cannot Schedule apoitment in past")
+        if year>date_to_compare.year:
+            return HttpResponse("Cannot schedule apoitent in the future")
+        #update for doctor first
+        time = request.POST.get('time',None)
+        hour = int(time.split(":")[0])
+        minute = int(time.split(":")[1])
+        date_to_compare = datetime.datetime(year,month,day,hour,minute)
+
+
+    return HttpResponse("You edited")
+#end of appointments
 def profile_edit(request,user_name):
     try:
         patient = Patient.objects.get(user_name=user_name)
