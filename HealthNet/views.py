@@ -131,6 +131,7 @@ def apoitment_submit(request):
         time = request.POST['time']
         date = request.POST['date']
         doctor_name =  request.POST['doctor_name']
+        reason = request.POST['reason']
         doctor = Doctor.objects.get(username=doctor_name)
         year = int(date.split("-")[0])
         month = int(date.split("-")[1])
@@ -139,11 +140,11 @@ def apoitment_submit(request):
         minute = int(time.split(':')[1])
 
         apoitment_date = datetime.datetime(year,month,day,hours,minute)
-        doctor_apoitment = Apoitment(date=apoitment_date,name=patient_user_name,reason="Requesting apoitment")
+        doctor_apoitment = Apoitment(date=apoitment_date,name=patient_user_name,reason=reason)
         doctor_apoitment.save()
         doctor.apoitment_list.add(doctor_apoitment)
         doctor.save()
-        patient_apoitment = Apoitment(date=apoitment_date,name=doctor_name,reason="Requesting apoitment")
+        patient_apoitment = Apoitment(date=apoitment_date,name=doctor_name,reason=reason)
         patient_apoitment.save()
         patient = Patient.objects.get(user_name=patient_user_name)
         patient.appointments.add(patient_apoitment)
@@ -578,11 +579,13 @@ def apoitment_view(request,user_name,doctor_name,apoitment_id):
     hour = str(apoitment.date.hour)
     minute = str(apoitment.date.minute)
     full_date = month+"/"+day+"/"+year
+
     time = hour+":"+minute
 
     context = {
         'date':full_date,
-        'time':time
+        'time':time,
+        'reason':apoitment.reason
     }
     apoitment_template = loader.get_template('HealthNet/appointment_details.html')
     return HttpResponse(apoitment_template.render(context,request))

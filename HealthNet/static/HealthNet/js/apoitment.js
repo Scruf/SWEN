@@ -79,9 +79,12 @@
           var patient_user_name = document.URL.split("/")[4];
           var time = $(".time_input").val();
           var doctors_name =$('.doctors');
+          var reason = $('.reason').val();
           if (user_name!='')
             doctor_user_name=user_name
-          
+          if (reason==' ' || reason.length==0)
+            reason ="Reason was not specified";
+
           if (time != "") {
               var url = "http://127.0.0.1:8000/HealthNet/api/appoitment/submit/";
               $.ajax({
@@ -94,7 +97,8 @@
                       'patient_user_name': patient_user_name,
                       'time': time,
                       'doctor_name':doctor_user_name,
-                      'date':date
+                      'date':date,
+                      'reason':reason
                   }),
                   success: function(data) {
 
