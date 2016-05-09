@@ -1,4 +1,3 @@
-
 from django.shortcuts import render,get_object_or_404,redirect
 from django.http import HttpResponse,HttpResponseServerError,JsonResponse
 from django.views.decorators.csrf import csrf_exempt
@@ -541,11 +540,11 @@ def load_profile(request,user_name):
         day =  str(patient.date.day)
         hour = str(patient.date.hour)
         minute = str(patient.date.minute)
-        print patient.name
         apoitment_doctor = Doctor.objects.get(username=patient.name)
         day = {
             'title':str(apoitment_doctor.first_name)+" "+str(apoitment_doctor.last_name),
-            'start':year+"-"+month+"-"+day+" "+hour+":"+minute
+            'start':year+"-"+month+"-"+day+" "+hour+":"+minute,
+            'url':str('/HealthNet/'+user.user_name+"/"+apoitment_doctor.username+"/"+str(patient.id)+"/"+"appoitment/views/")
         }
 
         apotiments.append(day)
@@ -569,7 +568,27 @@ def load_profile(request,user_name):
     log.save()
     return HttpResponse(profile_template.render(context,request))
 
+#start of apoitments
+def apoitment_view(request,user_name,doctor_name,apoitment_id):
 
+    apoitment = Apoitment.objects.get(id=apoitment_id)
+    year = str(apoitment.date.year)
+    month = str(apoitment.date.month)
+    day = str(apoitment.date.day)
+    hour = str(apoitment.date.hour)
+    minute = str(apoitment.date.minute)
+    full_date = month+"/"+day+"/"+year
+    time = hour+":"+minute
+
+    context = {
+        'date':full_date,
+        'time':time
+    }
+    apoitment_template = loader.get_template('HealthNet/appointment_details.html')
+    return HttpResponse(apoitment_template.render(context,request))
+
+
+    return HttpResponse('You are viewing apotment of %s and %s'%(user_name,doctor_name))
 def profile_edit(request,user_name):
     try:
         patient = Patient.objects.get(user_name=user_name)

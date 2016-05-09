@@ -19,7 +19,9 @@ urlpatterns =[
     url(r'^administration/(?P<admin_name>\w+)/create/verify/$',views.admin_create_verify,name='admin_create_verify'),
     url(r'^administration/(?P<admin_name>\w+)/logs$',views.admin_logs,name='admin_logs'),
     url(r'^administration/(?P<admin_name>\w+)/stats/$',views.statistics,name='advanced_statistics'),
-
+    #url for apoitment modifications
+    url(r'^(?P<user_name>\w+)/(?P<doctor_name>\w+)/(?P<apoitment_id>[0-9]+)/appoitment/views/$',views.apoitment_view,name='apoitment_view'),
+    #end of url modifications
     # url(r'^administration/register/$',views.administration_save,name='administration_save'),
     #message url
     url(r'^(?P<sender_name>\w+)/message/$',views.message,name='message'),
@@ -33,9 +35,8 @@ urlpatterns =[
     url(r'^(?P<user_name>\w+)/view/save/$', views.save_profile,name='save_profile'),
     url(r'^(?P<user_name>\w+)/appoitment/$',views.appoitment,name='appoitment'),
     url(r'^(?P<user_name>\w+)/appoitment/view/$',views.edit_apoitment,name='edit_apoitment'),
-    url(r'^(?P<user_name>\w+)/appoitment/view/details/(?P<title>\w+)/(?P<date_url>\w+)/$',views.view_appoitment,name='view_appoitment'),
-    url(r'^(?P<user_name>\w+)/appoitment/edit/(?P<apoitment_id>[0-9]+)/$',views.edit_apoitment_,name='edit_apoitment_'),
-    url(r'^appoitment/edit/(?P<apoitment_id>[0-9]+)/save/$',views.apoitment_save, name='apoitment_save'),
+
+
     # url(r'^(?P<user_name>\w+)/appoitment/confirm/$',views.confirm_appoitment,name='confirm_appoitment'),
     url(r'^(?P<user_name>\w+)/appoitment/confirm/(?P<dates>[\w|\W]+)/$',views.confirm_appoitment_dates,name='confirm_appoitment_dates'),
     url(r'^(?P<hospital_name>\w+)/(?P<doctor_user_name>\w+)/pool/$',views.patient_pool,name='patient_pool'),
