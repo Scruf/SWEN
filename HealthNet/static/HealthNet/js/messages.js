@@ -13,15 +13,19 @@ $(document).ready(function(){
       return "";
   }
   var user_name = $(".sender_name").val();
-  var sender = "";
+  var sender;
   var receiver= "";
   var username = "";
+  var area = "";
+  var sent_from="";
   var options = {
     url:"http://127.0.0.1:8000/HealthNet/api/message/"+user_name+"/view/",
     getValue: function(el){
       username = el.user_name;
-      sender = el.sender;
+      sender =el.sender;
+      sent_from = el.from;
       receiver = el.receiver;
+      area = el.area;
       return el.name;
     },
     list: {
@@ -30,8 +34,10 @@ $(document).ready(function(){
       }
     },
   };
+
   $('.to').easyAutocomplete(options);
   $('.send_message').click(function(){
+
     if (user_name==username){
       alert("You cannot send message to yourself");
       return;
@@ -56,6 +62,16 @@ $(document).ready(function(){
         'to':username,
         'time_stamp':new Date().toString(),
         'text_body':$(".body-area").val()
+      },
+      success: function(){
+
+        console.log(sent_from);
+        if(sent_from==='Doctor')
+          document.location.href='http://127.0.0.1:8000/HealthNet/doctor/'+user_name+"/";
+        if (sent_from==='Nurse')
+          document.location.href = 'http://127.0.0.1:8000/HealthNet/nurse/'+user_name+"/";
+        if(sent_from==='Patient')
+          document.location.href = 'http://127.0.0.1:8000/HealthNet/'+user_name+"/";
       }
     })
   });

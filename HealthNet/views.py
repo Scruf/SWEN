@@ -3,7 +3,7 @@ from django.http import HttpResponse,HttpResponseServerError,JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 from django.contrib.sessions.models import Session
 from django.template import loader
-from .models import Patient,Hospital,Logs,Doctor,Apoitment,Scheduler,Administration,Nurse,Prescription
+from .models import Patient,Hospital,Logs,Doctor,Apoitment,Scheduler,Messages,Administration,Nurse,Prescription
 import re
 import uuid
 from django.template.context import RequestContext
@@ -59,49 +59,31 @@ def api_messages_send(request):
         _receiver = request.POST.get('to')
         time_stamp = request.POST.get('time_stamp')
         text_body = request.POST.get('text_body')
-        sending_person = ''
-        receiveing_person = ''
+        message = Messages(sender=_sender,receiver=_receiver,text_body=text_body,time_stamp=time_stamp)
+        message.save()
         try:
-            sender = Patient.objects.get(user_name=_sender)
-            sending_person = 'Patient'
-        except Patient.DoesNotExist:
+            sender = Doctor.objects.get(username=_sender)
+        except Doctor.DoesNotExist:
             try:
-                sender = Doctor.objects.get(username=_sender)
-                sending_person = 'Doctor'
-            except Doctor.DoesNotExist:
+                sender = Patient.objects.get(user_name=_sender)
+            except Patient.DoesNotExist:
                 try:
                     sender = Nurse.objects.get(username=_sender)
-                    sending_person = 'Nurse'
                 except Nurse.DoesNotExist:
-                    print ("Maybe Admin")
-        try:
-            receiver = Patient.objects.get(user_name=_receiver)
-            receiveing_person = 'Patient'
-        except Patient.DoesNotExist:
-            try:
-                receiver = Doctor.objects.get(username=_receiver)
-                receiveing_person='Doctor'
-            except Doctor.DoesNotExist:
-                try:
-                    nurse = Nurse.objects.get(username=_receiver)
-                    receiveing_person='Nurse'
-                except Nurse.DoesNotExist:
-                    print ("Maybe Admin")
-        if sending_person=='Doctor' and receiveing_person=='Doctor':
-            sender_message = Messages(sender=_sender,receiver=_receiver,text_body=text_body)
-            
-            print _receiver
+                    print ("Unknown person")
         return HttpResponse("WOPOPO")
 def api_messages(request,user_name):
     try:
         patient = Patient.objects.get(user_name=user_name)
         hospital = Hospital.objects.get(hospital_name=patient.hospital_name)
         hospital_stuff = []
+
         for doctor in hospital.doctors.all():
             doctor_data = {
                 'error':False,
                 'area':'Doctor',
-                'sender':'patient',
+                'sender':False,
+                'from':'Patient',
                 'user_name':str(doctor.username),
                 'name':str(doctor.first_name+" "+doctor.last_name)
             }
@@ -110,7 +92,8 @@ def api_messages(request,user_name):
             nurse_data = {
                 'error':False,
                 'area':'Nurse',
-                'sender':'patient',
+                'from':'Patient',
+                'sender':False,
                 'user_name':str(nurse.username),
                 'name':str(nurse.first_name+" "+nurse.last_name)
             }
@@ -124,11 +107,19 @@ def api_messages(request,user_name):
             doctor = Doctor.objects.get(username=user_name)
             hospital = Hospital.objects.get(hospital_name=doctor.hospital_name)
             hospital_stuff = []
+            doctor_sender = {
+                'error':False,
+                'area':'Doctor',
+                'sender':True,
+                'name':''
+            }
+            hospital_stuff.append(doctor_sender)
             for patient in hospital.patients_list.all():
                 patient_data = {
                     'error':False,
                     'area':'Patient',
-                    'sender':'Doctor',
+                    'sender':False,
+                    'from':'Doctor',
                     'user_name':str(patient.user_name),
                     'name':str(patient.first_name)+" "+str(patient.last_name)
                 }
@@ -137,7 +128,8 @@ def api_messages(request,user_name):
                 nurse_data ={
                     'error':False,
                     'area':'Nurse',
-                    'sender':'Doctor',
+                    'from':'Doctor',
+                    'sender':False,
                     'user_name':str(nurse.username),
                     'name':str(nurse.first_name)+" "+str(nurse.last_name)
                 }
@@ -146,7 +138,7 @@ def api_messages(request,user_name):
                 doctor_data = {
                     'error':False,
                     'area':'Doctor',
-                    'sender':'Doctor',
+                    'from':'Doctor',
                     'user_name':str(doctor.username),
                     'name':str(doctor.first_name)+" "+str(doctor.last_name)
                 }
@@ -159,11 +151,20 @@ def api_messages(request,user_name):
                 nurse = Nurse.objects.get(username=user_name)
                 hospital = Hospital.objects.get(hospital_name=nurse.hospital_name)
                 hospital_stuff = []
+                sender_nurse = {
+                    'error':False,
+                    'area':'Nurse',
+                    'from':'Nurse',
+                    'sender':True,
+                    'name':''
+                    }
+                hospital_stuff.append(sender_nurse)
                 for patient in hospital.patients_list.all():
                     patient_data = {
                         'error':False,
                         'area':'Patient',
-                        'sender':'Doctor',
+                        'from':'Nurse',
+                        'sender':False,
                         'user_name':str(patient.user_name),
                         'name':str(patient.first_name)+" "+str(patient.last_name)
                     }
@@ -172,7 +173,7 @@ def api_messages(request,user_name):
                     nurse_data ={
                         'error':False,
                         'area':'Nurse',
-                        'sender':'Doctor',
+                        'from':'Nurse',
                         'user_name':str(nurse.username),
                         'name':str(nurse.first_name)+" "+str(nurse.last_name)
                     }
@@ -181,7 +182,8 @@ def api_messages(request,user_name):
                     doctor_data = {
                         'error':False,
                         'area':'Doctor',
-                        'sender':'Doctor',
+                        'sender':False,
+                        'from':'Nurse',
                         'user_name':str(doctor.username),
                         'name':str(doctor.first_name)+" "+str(doctor.last_name)
                     }
