@@ -625,7 +625,6 @@ def apoitment_view_edit_submit(request,user_name,doctor_name,apoitment_id):
         old_apoitment = Apoitment.objects.get(id=apoitment_id)
         current_date = datetime.datetime.now()
         submit_date = request.POST.get('date',None)
-<<<<<<< HEAD
         try:
             year = int(submit_date.split("-")[0])
             month = int(submit_date.split("-")[1])
@@ -680,44 +679,6 @@ def apoitment_view_edit_submit(request,user_name,doctor_name,apoitment_id):
         except year is None or month is None or day is None:
             messages.add_message(request, messages.ERROR, 'Please enter a valid time')
             return redirect('/HealthNet/'+ user_name + '/' + doctor_name + '/' + apoitment_id+'/appoitment/views/edit/',permement=True)
-=======
-        year = int(submit_date.split("-")[0])
-        month = int(submit_date.split("-")[1])
-        day = int(submit_date.split("-")[2])
-        date_to_compare = datetime.datetime(year,month,day)
-        if date_to_compare<current_date:
-            return HttpResponse("Cannot Schedule apoitment in past")
-        if year>date_to_compare.year:
-            return HttpResponse("Cannot schedule apoitent in the future")
-        #update for doctor first
-        time = request.POST.get('time',None)
-        reason = request.POST.get('reason',None)
-        hour = int(time.split(":")[0])
-        minute = int(time.split(":")[1])
-        date_to_compare = datetime.datetime(year,month,day,hour,minute)
-        user_apoitment = Patient.objects.get(user_name=user_name)
-        doctor = Doctor.objects.get(username=doctor_name)
-        patient_apoitment = Apoitment.objects.get(id=apoitment_id)
-        doctor_apoitment_id = 0
-        for doctor_ap in Doctor.objects.get(username=doctor_name).apoitment_list.all():
-            if doctor_ap.date == patient_apoitment.date:
-                doctor_apoitment_id = doctor_ap.id
-        doctor_apoitment = Apoitment.objects.get(id=doctor_apoitment_id)
-        patient_apoitment.delete()
-        doctor_apoitment.delete()
-        patient_apoitment.save()
-        doctor_apoitment.save()
-        doctor_new_apoitment = Apoitment(date=date_to_compare,name=user_name,reason=reason)
-        doctor_new_apoitment.save()
-        doctor = Doctor.objects.get(username=doctor_name)
-        doctor.apoitment_list.add(doctor_new_apoitment)
-        doctor.save()
-        patient_new_apoitment = Apoitment(date=date_to_compare,name=doctor_name,reason=reason)
-        patient_new_apoitment.save()
-        patient = Patient.objects.get(user_name=user_name)
-        patient.appointments.add(patient_new_apoitment)
-        patient.save()
-        return redirect('/HealthNet/%s'%user_name)
 
 def apoitment_view_edit_delete(request,user_name,doctor_name,apoitment_id):
     patient_apoitment = Apoitment.objects.get(id=apoitment_id)
@@ -731,7 +692,6 @@ def apoitment_view_edit_delete(request,user_name,doctor_name,apoitment_id):
     patient_apoitment.save()
     doctor_apoitment.save()
     return redirect('/HealthNet/%s'%user_name)
->>>>>>> 01e02be28d9037ec9112e0eca7284d9104aeea93
 
 #end of appointments
 def profile_edit(request,user_name):
