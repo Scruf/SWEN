@@ -49,13 +49,13 @@ hr { margin-top: 5px;margin-bottom: 10px; }
     <hr>
     <div class="row">
         <div class="col-sm-3 col-md-2">
-            <a href="send" class="btn btn-danger btn-sm btn-block" role="button"><i class="glyphicon glyphicon-edit"></i> Compose</a>
+            <a href="/send" class="btn btn-danger btn-sm btn-block" role="button"><i class="glyphicon glyphicon-edit"></i> Compose</a>
             <hr>
             <ul class="nav nav-pills nav-stacked">
-                <li class="active"><a href="#"><span class="badge pull-right">{{inbox}}</span> Inbox </a>
+                <li><a href=""><span class="badge pull-right">{{message_count_receive}}</span> Inbox </a>
                 </li>
 
-                <li><a href="send/view"><span class="badge pull-right">{{send}}</span>Sent Mail</a></li>
+                <li class="active"><span class="badge pull-right">{{message_count_send}}</span>Sent Mail</li>
 
             </ul>
         </div>

@@ -70,28 +70,8 @@ def api_messages_send(request):
                 try:
                     sender = Nurse.objects.get(username=_sender)
                 except Nurse.DoesNotExist:
-<<<<<<< HEAD
-                    print ("Unknown person")
-=======
-                    print ("Maybe Admin")
-        try:
-            receiver = Patient.objects.get(user_name=_receiver)
-            receiveing_person = 'Patient'
-        except Patient.DoesNotExist:
-            try:
-                receiver = Doctor.objects.get(username=_receiver)
-                receiveing_person='Doctor'
-            except Doctor.DoesNotExist:
-                try:
-                    nurse = Nurse.objects.get(username=_receiver)
-                    receiveing_person='Nurse'
-                except Nurse.DoesNotExist:
-                    print ("Maybe Admin")
-        if sending_person=='Doctor' and receiveing_person=='Doctor':
-            sender_message = Messages(sender=_sender,receiver=_receiver,text_body=text_body)
+                    print ("Message")
 
-            print _receiver
->>>>>>> 9bf22c415fad0dc45ce0fe9d1c7d4e71a9004e9d
         return HttpResponse("WOPOPO")
 def api_messages(request,user_name):
     try:
@@ -286,11 +266,125 @@ def check_fo_time(request,doctor_name,apoitment_date):
 #start of messages
 def message(request,sender_name):
     message_template = loader.get_template('HealthNet/messges_view.html')
+    message_count_receive = 0
+    message_count_send = 0
+    inbox =  0
+    patient_list = []
+    patient_list_doctor_name = ""
+    #patient
+    try:
+        patient = Patient.objects.get(user_name=sender_name)
+        message_count_receive = Messages.objects.filter(receiver=sender_name).count()
+        message_count_send = Messages.objects.filter(sender=sender_name).count()
+        for message in Messages.objects.filter(receiver=sender_name):
+            message_content = {
+                'from':message.sender,
+                'text_body':message.text_body,
+                'time_stamp':message.time_stamp
+            }
+            patient_list.append(message_content)
+        patient_list_doctor_name = Doctor.objects.get(username=patient._doctor).first_name+" "+Doctor.objects.get(username=patient._doctor).last_name
+        inbox = message_count_send + message_count_receive
+    except Patient.DoesNotExist:
+        try:
+            doctor = Doctor.objects.get(username=sender_name)
+            message_count_receive = Messages.objects.filter(receiver=sender_name).count()
+            message_count_send = Messages.objects.filter(sender=sender_name).count()
+            for message in Messages.objects.filter(receiver=sender_name):
+                message_content = {
+                    'from':message.sender,
+                    'text_body':message.text_body,
+                    'time_stamp':message.time_stamp
+                }
+                patient_list.append(message_content)
+            inbox =  message_count_send + message_count_receive
+        except Doctor.DoesNotExist:
+            try:
+                nurse = Nurse.objects.get(username=sender_name)
+                message_count_receive = Messages.objects.filter(receiver=sender_name).count()
+                message_count_send = Messages.objects.filter(sender=sender_name).count()
+                for message in Messages.objects.filter(receiver=sender_name):
+                    message_content = {
+                        'from':message.sender,
+                        'text_body':message.text_body,
+                        'time_stamp':message.time_stamp
+                    }
+                    patient_list.append(message_content)
+                inbox = message_count_send + message_count_receive
+            except Nurse.DoesNotExist:
+                print("I am Batman")
+
     context = {
         'message':'context',
-        'sender':sender_name
+        'sender':sender_name,
+        'send':message_count_send,
+        'receive':message_count_receive,
+        'inbox':inbox,
+        'patient_list':patient_list,
+
     }
+    print context
     return HttpResponse(message_template.render(context,request))
+def message_view_send(request,sender_name):
+    views_send_message_template = loader.get_template('HealthNet/message_view_sent.html')
+    message_count_receive = 0
+    message_count_send = 0
+    inbox =  0
+    patient_list = []
+    patient_list_doctor_name = ""
+    #patient
+    try:
+        patient = Patient.objects.get(user_name=sender_name)
+        message_count_receive = Messages.objects.filter(sender=sender_name).count()
+        message_count_send = Messages.objects.filter(receiver=sender_name).count()
+        for message in Messages.objects.filter(sender=sender_name):
+            message_content = {
+                'from':message.sender,
+                'text_body':message.text_body,
+                'time_stamp':message.time_stamp
+            }
+            patient_list.append(message_content)
+        patient_list_doctor_name = Doctor.objects.get(username=patient._doctor).first_name+" "+Doctor.objects.get(username=patient._doctor).last_name
+        inbox = message_count_send + message_count_receive
+    except Patient.DoesNotExist:
+        try:
+            doctor = Doctor.objects.get(username=sender_name)
+            message_count_receive = Messages.objects.filter(sender=sender_name).count()
+            message_count_send = Messages.objects.filter(receiver=sender_name).count()
+            for message in Messages.objects.filter(sender=sender_name):
+                message_content = {
+                    'from':message.sender,
+                    'text_body':message.text_body,
+                    'time_stamp':message.time_stamp
+                }
+                patient_list.append(message_content)
+            inbox =  message_count_send + message_count_receive
+        except Doctor.DoesNotExist:
+            try:
+                nurse = Nurse.objects.get(username=sender_name)
+                message_count_receive = Messages.objects.filter(sender=sender_name).count()
+                message_count_send = Messages.objects.filter(receiver=sender_name).count()
+                for message in Messages.objects.filter(sender=sender_name):
+                    message_content = {
+                        'from':message.sender,
+                        'text_body':message.text_body,
+                        'time_stamp':message.time_stamp
+                    }
+                    patient_list.append(message_content)
+                inbox = message_count_send + message_count_receive
+            except Nurse.DoesNotExist:
+                print("I am Batman")
+    context = {
+        'message':'context',
+        'sender':sender_name,
+        'send':message_count_send,
+        'receive':message_count_receive,
+        'inbox':inbox,
+        'patient_list':patient_list,
+
+    }
+    print context
+    return HttpResponse(views_send_message_template.render(context,request))
 
 def message_send_view(request,sender_name):
     message_template = loader.get_template('HealthNet/messages.html')
@@ -742,13 +836,14 @@ def load_profile(request,user_name):
             "last_name":d.last_name
         }
         doctor_names.append(doctor_data)
-
+    user_message_count = Messages.objects.filter(receiver=user_name).count()
     profile_template = loader.get_template('HealthNet/profile.html')
     context={
         'Patient':user,
         'hospital_name':hospital_name,
         'doctor_list':doctor_names,
-        'apointments':apotiments
+        'apointments':apotiments,
+        'message_count':user_message_count
         }
 
     log = Logs(date=timezone.now(),action="Loaded profile",who_did=user_name,what_happened="User loaded profile")
@@ -1053,13 +1148,14 @@ def doctor_profile(request,doctor_user_name):
     for p in patients:
         if p not in patient_list:
             patient_list.append(p)
-
+    doctor_messages_received = Messages.objects.filter(receiver=doctor_user_name).count()
     context = {
         'doctor':doctor,
         'hospital_name':hospital_name,
         'patient_list':patient_list,
         'apoitments':apoitment_list,
-        'count':count
+        'count':count,
+        'message_count':doctor_messages_received
     }
     logs = Logs(date=timezone.now(),action=doctor_user_name + " loaded profile",who_did="%s"%doctor_user_name)
     logs.save()
@@ -1510,12 +1606,15 @@ def nurse_profile(request,nurse_user_name):
             'title':str(apoitment.reason)
             }
         apoitment_list.append(date)
+    message_count = Messages.objects.filter(receiver=nurse_user_name).count()
+    sent_messages_count = Messages.objects.filter(sender=nurse_user_name).count()
 
     context = {
         'nurse':nurse,
         'hospital_name':nurse.hospital_name,
         'patient_list':patients,
-        'apoitments':apoitment_list
+        'apoitments':apoitment_list,
+        'received':message_count
         #'count':count
     }
     logs = Logs(date=timezone.now(),action=nurse_user_name + " loaded profile",who_did="%s"%nurse_user_name)
