@@ -847,7 +847,7 @@ def doctor_profile(request,doctor_user_name):
     apoitments = doctor.apoitment_list.all()
 
     for patient in apoitments:
-        print patient.name
+
         month = str(patient.date.month)
         year = str(patient.date.year)
         day = str(patient.date.day)
@@ -855,8 +855,10 @@ def doctor_profile(request,doctor_user_name):
         minute = str(patient.date.minute)
         user = Patient.objects.get(user_name=patient.name)
         day = {
+            'url':str('/HealthNet/doctor/'+doctor_user_name+"/"+user.user_name+"/"+str(patient.id)+"/appoitment/view/"),
             'title':str(user.first_name)+" "+str(user.last_name),
             'start':year+"-"+month+"-"+day+" "+hour+":"+minute
+
         }
         patients.append(user)
         apoitment_list.append(day)
@@ -880,7 +882,91 @@ def doctor_profile(request,doctor_user_name):
 
     return HttpResponse(doctor_template.render(context,request))
 
+def doctor_apoitment_view(request,doctor_name,user_name,apoitment_id):
+    doctor_appoitment_template = loader.get_template('HealthNet/doctor_appoitment_details.html')
+    apoitment = Apoitment.objects.get(id=apoitment_id)
+    year = str(apoitment.date.year)
+    month = str(apoitment.date.month)
+    day = str(apoitment.date.day)
+    hour = str(apoitment.date.hour)
+    minute = str(apoitment.date.minute)
+    full_date = month+"/"+day+"/"+year
+    time = hour+":"+minute
+    reason = apoitment.reason
+    context = {
+        'doctor_user_name':doctor_name,
+        'full_date':full_date,
+        'time':time,
+        'reason':reason
+    }
+    return HttpResponse(doctor_appoitment_template.render(context,request))
+
+def doctor_apoitment_view_edit(request,doctor_name,user_name,apoitment_id):
+    apoitment = Apoitment.objects.get(id=apoitment_id)
+    apoitment_edit_template = loader.get_template('HealthNet/doctor_appoitment_view_edit.html')
+    year = str(apoitment.date.year)
+    month = str(apoitment.date.month)
+    if len(month)==1:
+        month = '0'+month
+    day = str(apoitment.date.day)
+    if len(day)==1:
+        day = '0'+day
+    hour = str(apoitment.date.hour)
+    minute = str(apoitment.date.minute)
+    full_date = year+"-"+month+"-"+day
+
+    time = hour+":"+minute
+
+    context = {
+        'date':full_date,
+        'time':time,
+        'reason':apoitment.reason
+    }
+    return HttpResponse(apoitment_edit_template.render(context,request))
+def doctor_apoitment_view_edit_submit(request,doctor_name,user_name,apoitment_id):
+    if request.method == 'POST':
+        old_apoitment = Apoitment.objects.get(id=apoitment_id)
+        current_date = datetime.datetime.now()
+        submit_date = request.POST.get('date',None)
+        year = int(submit_date.split("-")[0])
+        month = int(submit_date.split("-")[1])
+        day = int(submit_date.split("-")[2])
+        date_to_compare = datetime.datetime(year,month,day)
+        if date_to_compare<current_date:
+            return HttpResponse("Cannot Schedule apoitment in past")
+        if year>date_to_compare.year:
+            return HttpResponse("Cannot schedule apoitent in the future")
+        #update for doctor first
+        time = request.POST.get('time',None)
+        reason = request.POST.get('reason',None)
+        hour = int(time.split(":")[0])
+        minute = int(time.split(":")[1])
+        date_to_compare = datetime.datetime(year,month,day,hour,minute)
+        user_apoitment = Patient.objects.get(user_name=user_name)
+        doctor = Doctor.objects.get(username=doctor_name)
+        doctor_apoitment = Apoitment.objects.get(id=apoitment_id)
+        patient_apoitment_id = 0
+        for patient_ap in Patient.objects.get(user_name=user_name).appointments.all():
+            if patient_ap.date == doctor_apoitment.date:
+                patient_apoitment_id = patient_ap.id
+        patient_apoitment = Apoitment.objects.get(id=patient_apoitment_id)
+        patient_apoitment.delete()
+        doctor_apoitment.delete()
+        patient_apoitment.save()
+        doctor_apoitment.save()
+        doctor_new_apoitment = Apoitment(date=date_to_compare,name=user_name,reason=reason)
+        doctor_new_apoitment.save()
+        doctor = Doctor.objects.get(username=doctor_name)
+        doctor.apoitment_list.add(doctor_new_apoitment)
+        doctor.save()
+        patient_new_apoitment = Apoitment(date=date_to_compare,name=doctor_name,reason=reason)
+        patient_new_apoitment.save()
+        patient = Patient.objects.get(user_name=user_name)
+        patient.appointments.add(patient_new_apoitment)
+        patient.save()
+        return redirect('/HealthNet/doctor/%s'%doctor_name)
 #loading appointment page
+
 def appoitment(request,user_name):
 
     appoitment_template = loader.get_template('HealthNet/appointment.html')
