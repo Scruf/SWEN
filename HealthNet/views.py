@@ -313,7 +313,7 @@ def admin_create_verify(request,admin_name):
 
         #saving everything at the end
         hospital = request.POST.get('hospital',None)
-        password = str(uuid.uuid1()).split("-")[0]
+        password = "12345"
         try:
             hospital = Hospital.objects.get(hospital_name=hospital)
         except Hospital.DoesNotExist:
@@ -382,11 +382,13 @@ def thankyou(request):
         password = request.POST.get('password',None)
         try:
             doctor = Doctor.objects.get(email=email,password=password)
+            print ("found doctor")
             log = Logs(date=timezone.now(),action="Sign In",who_did=email,what_happened="Doctor logged in")
             log.save()
             return redirect('/HealthNet/doctor/%s'%doctor.username)
         except Doctor.DoesNotExist:
             try:
+                print("opps")
                 t = Patient.objects.get(email=email,password=password)
                 context ={
                     'user_name':email,
@@ -401,9 +403,9 @@ def thankyou(request):
                 log.save()
                 return redirect('/HealthNet/%s'%user_name,None)
             except Patient.DoesNotExist:
-                log = Logs(date=timezone.now(),action="Attempted Doctor logged in",who_did=email,what_happened="Doctor attempted to log into the system")
+                log = Logs(date=timezone.now(),action="A user failed to log in",who_did=email,what_happened="User attempted to log into the system")
                 log.save()
-                return HttpResponse("Patient with these credentials does not exists")
+                return redirect('/HealthNet/')
 
 #signup prompts the user to sign up with their name and contact information and to provide
 #a unique username and password for their account
@@ -533,7 +535,10 @@ def load_profile(request,user_name):
     hospital = Hospital.objects.get(hospital_name=hospital_name)
     doctor_list = hospital.doctors.all()
     doctor_names = []
-    doctor = Doctor.objects.get(username=user._doctor)
+    try:
+        doctor = Doctor.objects.get(username=user._doctor)
+    except Doctor.DoesNotExist:
+        print("bad call")
     apotiments = []
     for patient in user.appointments.all():
         month = str(patient.date.month)
@@ -636,7 +641,7 @@ def apoitment_view_edit_submit(request,user_name,doctor_name,apoitment_id):
             if patient_ap.date.year == year and patient_ap.date.month==month \
                 and patient_ap.date.day==day and patient_ap.date.hour == hour and patient_ap.date.minute == minute:
                 apoitment = patient_ap
-        
+
         doctor_apoitment = None
         for patient_ap in doctor.apoitment_list.all():
             if patient_ap.date.year == year and patient_ap.date.month==month \
@@ -811,13 +816,20 @@ def doctor_profile(request,doctor_user_name):
         }
         patients.append(user)
         apoitment_list.append(day)
-    print apoitment_list
+
+    #getting all free patients
+    count = -1
+    for free_patiens in Patient.objects.all():
+        if not free_patiens.assigned_doctor:
+            count = count + 1
+    print (count)
 
     context = {
         'doctor':doctor,
         'hospital_name':hospital_name,
         'patient_list':patients,
-        'apoitments':apoitment_list
+        'apoitments':apoitment_list,
+        'count':count
     }
     logs = Logs(date=timezone.now(),action=doctor_user_name + " loaded profile",who_did="%s"%doctor_user_name)
     logs.save()
@@ -829,7 +841,10 @@ def appoitment(request,user_name):
 
     appoitment_template = loader.get_template('HealthNet/appointment.html')
     patient  = Patient.objects.get(user_name=user_name)
-    doctor = Doctor.objects.get(username=patient._doctor)
+    try:
+        doctor = Doctor.objects.get(username=patient._doctor)
+    except Doctor.DoesNotExist:
+        return redirect("/HealthNet/"+user_name+"/",permentant=True)    
     hospital = Hospital.objects.get(hospital_name=doctor.hospital_name)
     hospitl_list = []
     for hosp in hospital.doctors.all():
