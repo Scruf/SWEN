@@ -17,6 +17,7 @@
     <script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
     <!-- load jquery -->
     <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.0.8/angular.min.js"></script>
+
 </head>
 
 
@@ -56,17 +57,19 @@
             </div>
             <div class="dummy">
                 <label>Account type:</label><br>
-                <div class="col-sm-2"></div><input class="doctor" type="radio" name="employeeType1" value='1'>Doctor<br>
-                <div class="col-sm-2"></div><input class="nurse" type="radio" name="employeeType1" value='0'>Nurse<br>
+                <div class="col-sm-2"></div><input class="doctor" type="radio" name="doctor" >Doctor<br>
+                <div class="col-sm-2"></div><input class="nurse" type="radio" name="nurse" >Nurse<br>
             </div><br>
             <script>
               $(document).ready(function(){
                 $('.doctor').click(function(){
                   $('.doctor').attr('value',true);
+                  $('.nurse').attr('value',false);
                 });
                 $('.nurse').click(function(){
                   $('.nurse').attr('value',true);
-                })
+                  $('.doctor').attr('value',false);
+                });
 
               });
             </script>

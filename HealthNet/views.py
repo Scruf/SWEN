@@ -208,17 +208,8 @@ def admin_create(request,admin_name):
 def admin_create_verify(request,admin_name):
     if request.method == 'POST':
         user_name = request.POST.get('user_name',None)
-        isdoctor = False
-        print ("blah")
-        #setting the boolean 'isDoctor' besed on whether the user is to be
-        #a Doctor of a nurse
-        #if request.POST.get('employeeType1',None).checked:
-        #    print ("fuck you")
-        #Checking length
-        print request.POST.get('nurse',None)
-        if request.POST.get('nurse',None):
-            print "______________________"
-            print "00000"
+
+
         if len(user_name)<3:
             messages.add_message(request, messages.ERROR, 'This username is too short')
             return redirect( '/HealthNet/administration/' + admin_name + '/create/',permanent=True)
@@ -319,13 +310,13 @@ def admin_create_verify(request,admin_name):
         except Hospital.DoesNotExist:
             messages.add_message(request, messages.ERROR,'There is no hospital with this name')
             return redirect('/HealthNet/administration/' + admin_name + '/create/',permenent=True)
-        if isdoctor:
+        if request.POST.get('doctor',None):
             doctor = Doctor(username=user_name,email=email,first_name=first_name,last_name=last_name,password=password,hospital_name=hospital)
             doctor.save()
             hospital.doctors.add(doctor)
             log = Logs(date=timezone.now(),action="New Doctor created",who_did=admin_name,what_happened="Doctor creation")
             log.save()
-        elif not isdoctor:
+        if request.POST.get('nurse',None):
             nurse = Nurse(username=user_name,email=email,first_name=first_name,last_name=last_name,password=password,hospital_name=hospital)
             nurse.save()
             hospital.nurses.add(nurse)
