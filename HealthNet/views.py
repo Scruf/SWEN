@@ -617,8 +617,11 @@ def apoitment_view_edit(request,user_name,doctor_name,apoitment_id):
         'reason':apoitment.reason
     }
     return HttpResponse(apoitment_edit_template.render(context,request))
+
+
 def apoitment_view_edit_submit(request,user_name,doctor_name,apoitment_id):
     if request.method == 'POST':
+        old_apoitment = Apoitment.objects.get(id=apoitment_id)
         current_date = datetime.datetime.now()
         submit_date = request.POST.get('date',None)
         year = int(submit_date.split("-")[0])
@@ -631,11 +634,13 @@ def apoitment_view_edit_submit(request,user_name,doctor_name,apoitment_id):
             return HttpResponse("Cannot schedule apoitent in the future")
         #update for doctor first
         time = request.POST.get('time',None)
+        reason = request.POST.get('reason',None)
         hour = int(time.split(":")[0])
         minute = int(time.split(":")[1])
         date_to_compare = datetime.datetime(year,month,day,hour,minute)
         user_apoitment = Patient.objects.get(user_name=user_name)
         doctor = Doctor.objects.get(username=doctor_name)
+<<<<<<< HEAD
         patient_apoitment = None
         for patient_ap in user_apoitment.appointments.all():
             if patient_ap.date.year == year and patient_ap.date.month==month \
@@ -649,6 +654,29 @@ def apoitment_view_edit_submit(request,user_name,doctor_name,apoitment_id):
                 doctor_apoitment = patient_ap
 
     return HttpResponse("You edited")
+=======
+        patient_apoitment = Apoitment.objects.get(id=apoitment_id)
+        doctor_apoitment_id = 0
+        for doctor_ap in Doctor.objects.get(username=doctor_name).apoitment_list.all():
+            if doctor_ap.date == patient_apoitment.date:
+                doctor_apoitment_id = doctor_ap.id
+        doctor_apoitment = Apoitment.objects.get(id=doctor_apoitment_id)
+        patient_apoitment.delete()
+        doctor_apoitment.delete()
+        patient_apoitment.save()
+        doctor_apoitment.save()
+        doctor_new_apoitment = Apoitment(date=date_to_compare,name=user_name,reason=reason)
+        doctor_new_apoitment.save()
+        doctor = Doctor.objects.get(username=doctor_name)
+        doctor.apoitment_list.add(doctor_new_apoitment)
+        doctor.save()
+        patient_new_apoitment = Apoitment(date=date_to_compare,name=doctor_name,reason=reason)
+        patient_new_apoitment.save()
+        patient = Patient.objects.get(user_name=user_name)
+        patient.appointments.add(patient_new_apoitment)
+        patient.save()
+        return redirect('/HealthNet/%s'%user_name)
+>>>>>>> 7df8dfee6e35ca3a9ffaeab65bb508f0e5b5425a
 #end of appointments
 def profile_edit(request,user_name):
     try:
