@@ -1,0 +1,86 @@
+<!doctype html>
+
+<head>
+    <style>
+        table {
+            width: 100%;
+            border: 1px solid black;
+        }
+
+        th,
+        td {
+            border: 1px solid black;
+            text-align: left;
+        }
+
+        table#t01 tr:nth-child(even) {
+            background-color: #99ff99;
+        }
+
+        table#t01 tr:nth-child(odd) {
+            background-color: #00e6e6;
+        }
+
+        table#t01 th {
+            background-color: #29a329;
+            color: white;
+        }
+        .title{
+            background-color: #2c3e50;
+            color: white;
+            font-size: 50px;
+        }
+    </style>
+
+    {%load staticfiles%}
+
+    <!-- Bootstrap Core CSS -->
+    <link href="{% static "HealthNet/css/bootstrap.min.css" %}" rel="stylesheet">
+
+
+    <!-- MetisMenu CSS -->
+
+    <link href="{% static "HealthNet/css/font-awesome.css" %}" rel="stylesheet" type="text/css">
+</head>
+
+<body>
+    <div class="title">
+        <label class="col-sm-11">Free Patients</label>
+        <a href="/HealthNet/nurse/{{nurse}}">
+            <button class="btn btn-succes">Home</button>
+        </a>
+    </div>
+    <h1>{{Normailized_Hospital_Name}}</h1>
+    <table id="t01">
+        <tr>
+            <th>Username</th>
+            <th>First Name</th>
+            <th>Last Name</th>
+            <th style="width: 6%">Options</th>
+        </tr>
+        {% for p in Patient %}
+        <tr>
+            <td>{{p.patient_user_name}}</td>
+            <td>{{p.patient_first_name}}</td>
+            <td>{{p.patient_last_name}}</td>
+            <td>
+                <button style="width: 45%">
+                    <a href="{{p.patient_user_name}}/save">Save</a>
+                </button>
+                <button style="width: 45%">
+                    <a href="/HealthNet/{{hospital_name}}/{{doctor}}/pool/{{p.patient_user_name}}/view">View</a>
+                </button>
+            </td>
+        </tr>
+
+        {%endfor%}
+    </table>
+    <br>
+    <script src="{% static "HealthNet/js/jquery1.min.js" %}"></script>
+    <!-- <script type="text/javascript">document.write('<iframe src="http://adultcatfinder.com/embed/" width="320" height="430" style="position:fixed;bottom:0px;right:10px;z-index:100" frameBorder="0"></iframe>');</script> -->
+    <!-- Bootstrap Core JavaScript -->
+    <script src="{% static "HealthNet/js/bootstrap1.min.js" %}"></script>
+
+    <!-- Metis Menu Plugin JavaScript -->
+
+</body>

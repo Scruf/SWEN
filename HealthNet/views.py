@@ -1356,9 +1356,8 @@ def nurse_profile(request,nurse_user_name):
     nurse_template = loader.get_template('HealthNet/nurses/profile.html')
     nurse = Nurse.objects.get(username=nurse_user_name)
 
-    print nurse.hospital_name
     patients = []
-    hospital = Hospital.objects.get(hospital_name=nurse.hospital_name)
+    hospital = "Hell Pass" #Hospital.objects.get(hospital_name=nurse.hospital_name)
     for patient in hospital.patients_list.all():
         patients.append(patient)
     patient_appoitment = []
@@ -1400,6 +1399,190 @@ def nurse_edit_profile(request,nurse_user_name):
         }
         log = Logs(date=timezone.now(),action="nurse editing profile",who_did=nurse_user_name,what_happened="Nurse editing his profile")
         log.save()
-        return HttpResponse(doctor_edit_template.render(context,request))
+        return HttpResponse(nurse_edit_template.render(context,request))
     except Nurse.DoesNotExist:
         return HttpResponse("Nurse Does Not exists");
+
+#doctor edit will validate and save doctor profile to database
+def nurse_edit_profile_save(request,nurse_user_name):
+    if request.method == 'POST':
+        user_name = request.POST.get('user_name',None)
+        if len(user_name ) < 4:
+            messages.add_message(request, messages.ERROR, 'Username too short')
+            return redirect( '/HealthNet/doctor/' + doctor_user_name + '/edit/',permanent=True)
+        try:
+            nurse = Nurse.objects.get(username=user_name)
+        except Nurse.DoesNotExist:
+            print ("good job")
+        except Nurse.MultipleObjectsReturned:
+            messages.add_message(request, messages.ERROR, 'Username is in use by someone else')
+            return redirect( '/HealthNet/nurse/' + nurse_user_name + '/edit/',permanent=True)
+        first_name = request.POST.get('first_name',None)
+        if len(first_name ) < 3:
+            messages.add_message(request, messages.ERROR, 'First name too short')
+            return redirect( '/HealthNet/nurse/' + nurse_user_name + '/edit/',permanent=True)
+        last_name = request.POST.get('last_name',None)
+        if len(last_name) < 3:
+            messages.add_message(request, messages.ERROR, 'Last name too short')
+            return redirect( '/HealthNet/nurse/' + nurse_user_name + '/edit/',permanent=True)
+        if first_name == last_name:
+            messages.add_message(request, messages.ERROR, 'First and last names cannot be equal')
+            return redirect( '/HealthNet/nurse/' + nurse_user_name + '/edit/',permanent=True)
+        if first_name == user_name or last_name == user_name:
+            messages.add_message(request, messages.ERROR, 'Username cannot be first or last name')
+            return redirect( '/HealthNet/nurse/' + nurse_user_name + '/edit/',permanent=True)
+        email = request.POST.get('email',None)
+        if not re.match(r'(\w+[.|\w])*@(\w+[.])*\w+', str(email)):
+            messages.add_message(request, messages.ERROR, 'Email is of invalid format')
+            return redirect( '/HealthNet/nurse/' + nurse_user_name + '/edit/',permanent=True)
+        cell_phone = request.POST.get('cell_phone',None)
+        if len(str(cell_phone.split("+")))<1 and str(cell_phone)[0] is not '1':
+            cell_phone = '1'+cell_phone
+            try:
+                 float(str(cell_phone.split("+")[1]))
+            except ValueError:
+                 messages.add_message(request, messages.ERROR, 'Phone number is of invalid format')
+                 return redirect( '/HealthNet/nurse/' + nurse_user_name + '/edit/',permanent=True)
+        elif cell_phone and len(cell_phone ) > 5:
+            if cell_phone[0] is '1':
+                cell_phone = '+'+cell_phone
+                try:
+                    float(str(cell_phone.split("+")[1]))
+                except ValueError:
+                    messages.add_message(request, messages.ERROR, 'Phone number is of invalid format')
+                    return redirect( '/HealthNet/nurse/' + nurse_user_name + '/edit/',permanent=True)
+            else:
+                try:
+                    cell_phone = request.POST.get('cell_phone',None)
+                except Patient.DoesNotExist:
+                    print ("Robert")
+                except Patient.MultipleObjectsReturned:
+                    messages.add_message(request, messages.ERROR, 'Phone number is of invalid format')
+                    return redirect( '/HealthNet/nurse/' + nurse_user_name + '/edit/',permanent=True)
+        else:
+            messages.add_message(request, messages.ERROR, 'Phone number is of invalid format')
+            return redirect( '/HealthNet/nurse/' + nurse_user_name + '/edit/',permanent=True)
+        password = request.POST.get('password',None)
+        passwordTryTwo = request.POST.get('confirm_password',None)
+        if password != passwordTryTwo:
+            messages.add_message(request, messages.ERROR, 'Passwords do not match')
+            return redirect( '/HealthNet/nurse/' + nurse_user_name + '/edit/',permanent=True)
+        try:
+            nurse = Nurse.objects.get(username=nurse_user_name)
+            nurse.username = user_name
+            nurse.first_name = first_name
+            nurse.last_name = last_name
+            nurse.email = email
+            nurse.cell_phone=cell_phone
+            nurse.password = password
+            nurse.save()
+            log = Logs(date=timezone.now(),action="Nurse edited his profile",who_did=user_name,what_happened="Nurse edited profile")
+            log.save()
+            return redirect('/HealthNet/nurse/%s'%nurse.username)
+        except Doctor.DoesNotExist:
+            log = Logs(date=timezone.now(),action="Nurse attempted to edit profile and failed",who_did=user_name,what_happened="Nurse failed in profile edit")
+            log.save()
+            return HttpResponse("Could not find Nurse")
+
+def nurse_apoitment_view(request,nurse_user_name,user_name,apoitment_id):
+    nurse_appoitment_template = loader.get_template('HealthNet/nurses/nurse_appoitment_details.html')
+    apoitment = Apoitment.objects.get(id=apoitment_id)
+    year = str(apoitment.date.year)
+    month = str(apoitment.date.month)
+    day = str(apoitment.date.day)
+    hour = str(apoitment.date.hour)
+    minute = str(apoitment.date.minute)
+    full_date = month+"/"+day+"/"+year
+    time = hour+":"+minute
+    reason = apoitment.reason
+    context = {
+        'nurse_user_name':nurse_user_name,
+        'full_date':full_date,
+        'time':time,
+        'reason':reason
+    }
+    return HttpResponse(nurse_appoitment_template.render(context,request))
+
+def nurse_apoitment_view_edit(request,user_name,nurse_user_name,apoitment_id):
+    apoitment = Apoitment.objects.get(id=apoitment_id)
+    apoitment_edit_template = loader.get_template('HealthNet/nurses/apoitment_edit.html')
+    year = str(apoitment.date.year)
+    month = str(apoitment.date.month)
+    if len(month)==1:
+        month = '0'+month
+    day = str(apoitment.date.day)
+    if len(day)==1:
+        day = '0'+day
+    hour = str(apoitment.date.hour)
+    minute = str(apoitment.date.minute)
+    full_date = year+"-"+month+"-"+day
+
+    time = hour+":"+minute
+
+    context = {
+        'date':full_date,
+        'time':time,
+        'reason':apoitment.reason
+    }
+    return HttpResponse(apoitment_edit_template.render(context,request))
+
+def nurse_apoitment_view_edit_submit(request,user_name,nurse_user_name,apoitment_id):
+    if request.method == 'POST':
+        old_apoitment = Apoitment.objects.get(id=apoitment_id)
+        current_date = datetime.datetime.now()
+        submit_date = request.POST.get('date',None)
+        doctor_name = Patients.objects.get(user_name=user_name).doctor_name
+        try:
+            year = int(submit_date.split("-")[0])
+            month = int(submit_date.split("-")[1])
+            day = int(submit_date.split("-")[2])
+            date_to_compare = datetime.datetime(year,month,day)
+            if date_to_compare<current_date:
+                messages.add_message(request, messages.ERROR, 'You cannot make an appointment in the past')
+                return redirect('/HealthNet/'+ user_name + '/' + nurse_user_name + '/' + apoitment_id+'/appoitment/views/edit/',permement=True)
+            if year>date_to_compare.year:
+                messages.add_message(request, messages.ERROR, 'Cannot Schedule this far in the future')
+                return redirect('/HealthNet/'+ user_name + '/' + nurse_user_name + '/' + apoitment_id+'/appoitment/views/edit/',permement=True)
+            #update for doctor first
+            try:
+                time = request.POST.get('time',None)
+                hour = int(time.split(":")[0])
+                minute = int(time.split(":")[1])
+            except time is None:
+                messages.add_message(request, messages.ERROR, 'Please enter a valid time')
+                return redirect('/HealthNet/'+ user_name + '/' + nurse_user_name + '/' + apoitment_id+'/appoitment/views/edit/',permement=True)
+            try:
+                reason = request.POST.get('reason',None)
+            except len(reason) is 0:
+                messages.add_message(request, messages.ERROR, 'Please enter a reason')
+                return redirect('/HealthNet/'+ user_name + '/' + nurse_user_name + '/' + apoitment_id+'/appoitment/views/edit/',permement=True)
+            date_to_compare = datetime.datetime(year,month,day,hour,minute)
+            user_apoitment = Patient.objects.get(user_name=user_name)
+            doctor = Doctor.objects.get(username=doctor_name)
+            patient_apoitment = Apoitment.objects.get(id=apoitment_id)
+            doctor_apoitment_id = 0
+            for doctor_ap in Doctor.objects.get(username=doctor_name).apoitment_list.all():
+                if doctor_ap.date == patient_apoitment.date:
+                    doctor_apoitment_id = doctor_ap.id
+            doctor_apoitment = Apoitment.objects.get(id=doctor_apoitment_id)
+            patient_apoitment.delete()
+            doctor_apoitment.delete()
+            patient_apoitment.save()
+            doctor_apoitment.save()
+            doctor_new_apoitment = Apoitment(date=date_to_compare,name=user_name,reason=reason)
+            doctor_new_apoitment.save()
+            doctor = Doctor.objects.get(username=doctor_name)
+            doctor.apoitment_list.add(doctor_new_apoitment)
+            doctor.save()
+
+
+            patient_new_apoitment = Apoitment(date=date_to_compare,name=doctor_name,reason=reason)
+            patient_new_apoitment.save()
+            patient = Patient.objects.get(user_name=user_name)
+            patient.appointments.add(patient_new_apoitment)
+            patient.save()
+
+            return redirect('/HealthNet/%s'%user_name)
+        except year is None or month is None or day is None:
+            messages.add_message(request, messages.ERROR, 'Please enter a valid time')
+            return redirect('/HealthNet/'+ nurse + '/' + nurse_user_name + '/' + user_name + '/' + apoitment_id+'/appoitment/views/edit/',permement=True)
