@@ -8,7 +8,6 @@ import uuid
 from django.template.context import RequestContext
 from django.core.mail import send_mail
 import datetime
-import pymongo
 
 
 
@@ -26,17 +25,4 @@ def index(request):
     return redirect('/HealthNet/')
 
 def sign_up(request):
-    if request.method=='POST':
-        name = request.POST.get('name',None),
-        user_name = request.POST.get('username',None)
-        password = request.POST.get('password',None)
-        args_to_push = {
-            'name':str(name),
-            'user_name':str(user_name),
-            'password':str(password)
-        }
-        client = pymongo.MongoClient(MONGODB_URI)
-        db = client.get_default_database()
-        users = db['HealthNetUsers']
-        users.insert(args_to_push)
-        return HttpResponse("Succesfully pushed to momngo")
+    return HttpResponse("Succesfully pushed to momngo")
