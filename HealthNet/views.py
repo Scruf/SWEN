@@ -70,7 +70,28 @@ def api_messages_send(request):
                 try:
                     sender = Nurse.objects.get(username=_sender)
                 except Nurse.DoesNotExist:
+<<<<<<< HEAD
                     print ("Unknown person")
+=======
+                    print ("Maybe Admin")
+        try:
+            receiver = Patient.objects.get(user_name=_receiver)
+            receiveing_person = 'Patient'
+        except Patient.DoesNotExist:
+            try:
+                receiver = Doctor.objects.get(username=_receiver)
+                receiveing_person='Doctor'
+            except Doctor.DoesNotExist:
+                try:
+                    nurse = Nurse.objects.get(username=_receiver)
+                    receiveing_person='Nurse'
+                except Nurse.DoesNotExist:
+                    print ("Maybe Admin")
+        if sending_person=='Doctor' and receiveing_person=='Doctor':
+            sender_message = Messages(sender=_sender,receiver=_receiver,text_body=text_body)
+
+            print _receiver
+>>>>>>> 9bf22c415fad0dc45ce0fe9d1c7d4e71a9004e9d
         return HttpResponse("WOPOPO")
 def api_messages(request,user_name):
     try:
@@ -1349,10 +1370,11 @@ def doctor_apoitments_view(request,doctor_user_name):
 def patient_pool_view(request,hospital_name,doctor_user_name,patient_uesr_name):
     patient = Patient.objects.get(user_name=patient_uesr_name)
     context = {
-        'patient':patient
+        'patient':patient,
+        'doctor':doctor_user_name
     }
     patient_template = loader.get_template('HealthNet/patient_view.html')
-    log = Logs(date=timezone.now(),action="Doctor viewed a patient in the patient pool",who_did=doctor_user_name,what_happened=doctor_user_name + " viewed " + patient_user_name + " at " + hospital_name)
+    log = Logs(date=timezone.now(),action="Doctor viewed a patient in the patient pool",who_did=doctor_user_name,what_happened=doctor_user_name + " viewed " + patient_uesr_name + " at " + hospital_name)
     log.save()
     return HttpResponse(patient_template.render(context,request))
 
@@ -1727,3 +1749,16 @@ def patient_view_prescriptions(request,user_name):
            'prescriptions':pres
        }
        return HttpResponse(template.render(context,request))
+
+
+def discharge(request,doctor_user_name,user_name):
+    hospital = Patient.objects.get(user_name=user_name).hospital_name
+    doctor = Doctor.objects.get(username=doctor_user_name)
+    patient = Patient.objects.get(user_name)
+
+    #removing from hospital and from doctor list
+    patientid = patient.id
+    Patients.objects.get(id=patientid).delete()
+
+
+    return redirect('/HealthNet/doctor/' + doctor_user_name + '/',permentent=True)
