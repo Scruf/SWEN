@@ -3,26 +3,41 @@
 
 <head>
 	{%load staticfiles%}
-	  <link href="../../static/HealthNet/css/bootstrap.min.css" rel="stylesheet">
-		  <script src="{% static "HealthNet/js/jquery1.min.js" %}"></script>
-	<title></title>
+	<link href="../../static/HealthNet/css/bootstrap.min.css" rel="stylesheet">
+	<script src="{% static "HealthNet/js/jquery1.min.js" %}"></script>
+	<title>{{patient.first_name}}'s prescriptions</title>
+	<link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
+	<style>
+	.jumbotron{
+		height: 400px;
+		width: 800px;
+		background-color: #18bc9c;
+        border-radius: 8px;
+	}
+	</style>
 </head>
 
 <body>
 	<!--uses default colors; will style later-->
-	<div class="container">Prescriptions for {{patient.first_name}} {{patient.last_name}} {{patient.user_name}}
+	<div class="container">
+		<div class="jumbotron" style="font-size: 30px">Prescriptions for {{patient.first_name}} {{patient.last_name}} 
 		<table>
+			<br><br>
 			{% for p in prescriptions %}
-			<tr>
-				<td>{{p.title}}</td>
-				<td>{{p.dosage}}</td>
-        <td>{{p.details}}</td>
+			<tr class="row">
+				<td class="col-sm-4">{{p.title}}</td>
+				<td class="col-sm-4">{{p.dosage}}</td>
+				<td class="col-sm-4">{{p.details}}</td>
 			</tr>
+			<tr> </tr>
 			{%endfor%}
 		</table>
+	<br>
     <a href="/HealthNet/{{patient.user_name}}/">
-      <button style="width: 6%">Home</button>
+      <button style="width: 10%; font-size: 14px">Home</button>
     </a>
+    </div>
 	</div>
 </body>
 </html>

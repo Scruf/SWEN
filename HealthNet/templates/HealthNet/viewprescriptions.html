@@ -1,11 +1,11 @@
-<!DOCTYPE <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 
 <head>
 	{%load staticfiles%}
 	<script src="{% static "HealthNet/js/jquery1.min.js" %}"></script>
-	  <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
-		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
+	<link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
 	<title>Prescription for {{patient.first_name}} {{patient.last_name}} </title>
 </head>
 <style>
@@ -20,20 +20,17 @@
 	<!--uses default colors; will style later-->
 
 	<div class="container">
-
 		<div class="jumbotron">
-		<ul>
-			{% for p in prescriptions %}
-				<li>{{p.title}} | {{p.dosage}} | {{p.details}} 	<a href="/HealthNet/doctor/{{doctor}}/patients/{{patient.user_name}}/viewprescriptions/{{p.id}}/">
-						<button class="btn btn-danger">Delete</button>	</a></li>
-					<hr>
-
-
-				</td>
-			</tr>
-			{%endfor%}
-		</ul>
-		</div<
+			<ul>
+				{% for p in prescriptions %}
+				<li>{{p.title}} | {{p.dosage}} | {{p.details}} 	
+					<a href="/HealthNet/doctor/{{doctor}}/patients/{{patient.user_name}}/viewprescriptions/{{p.id}}/">
+						<button class="btn btn-danger">Delete</button>
+					</a>
+				</li>
+				{%endfor%}
+			</ul>
+		</div>
 	</div>
 </body>
 </html>
