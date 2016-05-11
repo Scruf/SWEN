@@ -873,12 +873,15 @@ def doctor_profile(request,doctor_user_name):
     for free_patiens in Patient.objects.all():
         if not free_patiens.assigned_doctor:
             count = count + 1
-    print (count)
+    patient_list = []
+    for p in patients:
+        if p not in patient_list:
+            patient_list.append(p)
 
     context = {
         'doctor':doctor,
         'hospital_name':hospital_name,
-        'patient_list':patients,
+        'patient_list':patient_list,
         'apoitments':apoitment_list,
         'count':count
     }
