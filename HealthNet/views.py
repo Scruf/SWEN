@@ -117,14 +117,20 @@ def check_fo_time(request,doctor_name,apoitment_date):
 
 
 
-
+#start of messages
 def message(request,sender_name):
-    message_template = loader.get_template('HealthNet/messages.html')
+    message_template = loader.get_template('HealthNet/messges_view.html')
     context = {
         'message':'context',
         'sender':sender_name
     }
     return HttpResponse(message_template.render(context,request))
+
+def message_send_view(request,sender_name):
+    return HttpResponse("Sending message")
+
+#end of messages
+
 def apoitment_submit(request):
     if request.POST:
         patient_user_name = request.POST['patient_user_name']
@@ -1311,12 +1317,34 @@ def statistics(request,admin_name):
 def nurse_profile(request,nurse_user_name):
     nurse_template = loader.get_template('HealthNet/nurses/profile.html')
     nurse = Nurse.objects.get(username=nurse_user_name)
-    hospital_name = nurse.hospital_name
+
+    print nurse.hospital_name
+    patients = []
+    hospital = Hospital.objects.get(hospital_name=nurse.hospital_name)
+    for patient in hospital.patients_list.all():
+        patients.append(patient)
+    patient_appoitment = []
+    for patient in patients:
+        for apoitment in patient.appointments.all():
+            patient_appoitment.append(apoitment)
+    apoitment_list = []
+    for apoitment in patient_appoitment:
+        year = str(apoitment.date.year)
+        month = str(apoitment.date.month)
+        day = str(apoitment.date.day)
+        hour = str(apoitment.date.hour)
+        minute = str(apoitment.date.minute)
+        date = {
+            'start':year+"-"+month+"-"+day+" "+hour+":"+minute,
+            'title':str(apoitment.reason)
+            }
+        apoitment_list.append(date)
+
     context = {
         'nurse':nurse,
-        'hospital_name':hospital_name,
+        'hospital_name':nurse.hospital_name,
         'patient_list':patients,
-        #'apoitments':apoitment_list,
+        'apoitments':apoitment_list
         #'count':count
     }
     logs = Logs(date=timezone.now(),action=nurse_user_name + " loaded profile",who_did="%s"%nurse_user_name)

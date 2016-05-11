@@ -55,7 +55,7 @@ class  Patient(models.Model):
     assigned_doctor = models.BooleanField(default=False)
     prescriptions = models.ManyToManyField(Prescription) # prescriptions
     appointments = models.ManyToManyField(Apoitment) #appointment lists
-
+    patient_message_list = models.ManyToManyField(Messages)
     def __str__(self):
         return self.user_name+"-"+self.password
 #Doctor is a model where all doctors are
@@ -69,6 +69,7 @@ class Doctor(models.Model):
     hospital_name = models.CharField(max_length=250)
     patients = models.ManyToManyField(Patient)
     apoitment_list = models.ManyToManyField(Apoitment)
+    doctor_message_list = models.ManyToManyField(Messages)
     def __str__(self):
         return self.username+"-"+self.patients
 
@@ -82,6 +83,7 @@ class Nurse(models.Model):
     hospital_name = models.CharField(max_length=250)
     patients = models.ManyToManyField(Patient)
     apoitment_list = models.ManyToManyField(Apoitment)
+    nurse_messages = models.ManyToManyField(Messages)
     def __str__(self):
         return self.username+"-"+self.patients
 
