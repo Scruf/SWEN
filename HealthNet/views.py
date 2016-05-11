@@ -37,7 +37,6 @@ def patient(request):
 def doctor_names(request,doctor_name):
     try:
         doctor = Doctor.objects.get(username=doctor_name)
-        print doctor.hospital_name
         hospital = Hospital.objects.get(hospital_name=doctor.hospital_name)
         doctor_list = []
         for hosp in hospital.doctors.all():
@@ -100,7 +99,6 @@ def api_messages(request,user_name):
             }
             hospital_stuff.append(nurse_data)
             if request.is_ajax():
-                print hospital_stuff
                 data = json.dumps(hospital_stuff)
                 return HttpResponse(data,'application/json')
     except Patient.DoesNotExist:
@@ -323,7 +321,6 @@ def message(request,sender_name):
         'patient_list':patient_list,
 
     }
-    print context
     return HttpResponse(message_template.render(context,request))
 def message_view_send(request,sender_name):
     views_send_message_template = loader.get_template('HealthNet/message_view_sent.html')
@@ -383,7 +380,6 @@ def message_view_send(request,sender_name):
         'patient_list':patient_list,
 
     }
-    print context
     return HttpResponse(views_send_message_template.render(context,request))
 
 def message_send_view(request,sender_name):
@@ -494,7 +490,6 @@ def admin_create_verify(request,admin_name):
         #checking the username in the system
         try:
             print("%s"%user_name)
-            print Doctor.objects.get(username=user_name).password
             doctor = Doctor.objects.get(username=user_name)
         except Doctor.MultipleObjectsReturned:
             print ("%s with this username already exists"%user_name)
@@ -643,7 +638,6 @@ def thankyou(request):
         password = request.POST.get('password',None)
         try:
             doctor = Doctor.objects.get(email=email,password=password)
-            print ("found doctor")
             log = Logs(date=timezone.now(),action="Sign In",who_did=email,what_happened="Doctor logged in")
             log.save()
             return redirect('/HealthNet/doctor/%s'%doctor.username)
@@ -829,7 +823,6 @@ def load_profile(request,user_name):
         }
 
         apotiments.append(day)
-    print apotiments
     for d in doctor_list:
         doctor_data  = {
             "first_name":d.first_name,
@@ -1490,7 +1483,6 @@ def viewPrescriptions(request,doctor_user_name,patient_uesr_name):
     pres = patient.prescriptions.all()
 
     doctor = Doctor.objects.get(username=doctor_user_name)
-    print(doctor.username)
     context = {
         'prescriptions':pres,
         'patient':patient,
@@ -1509,9 +1501,6 @@ def addPrescription(request,patient_uesr_name,doctor_user_name):#the context her
         medicine = request.POST.get('medication',None)
         description = request.POST.get('description',None)
         dosage = request.POST.get('dosage',None)
-        print (medicine)
-        print(dosage)
-        print(description)
 
         #error checking
         #redirect needs to be changed
@@ -1538,7 +1527,7 @@ def addPrescription(request,patient_uesr_name,doctor_user_name):#the context her
 
         return redirect('/HealthNet/doctor/'+ doctor_user_name +'/patients/',permenent=True) #redirecting back to doctor page
     else:
-        print "NOt POST"
+        print ("NOt POST")
 #deleting a prescription
 def deletePrescription(request,patient_uesr_name,doctor_user_name,medicine_id):
     #getting the prescription to be deleted
