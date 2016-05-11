@@ -117,14 +117,20 @@ def check_fo_time(request,doctor_name,apoitment_date):
 
 
 
-
+#start of messages
 def message(request,sender_name):
-    message_template = loader.get_template('HealthNet/messages.html')
+    message_template = loader.get_template('HealthNet/messges_view.html')
     context = {
         'message':'context',
         'sender':sender_name
     }
     return HttpResponse(message_template.render(context,request))
+
+def message_send_view(request,sender_name):
+    return HttpResponse("Sending message")
+
+#end of messages
+
 def apoitment_submit(request):
     if request.POST:
         patient_user_name = request.POST['patient_user_name']

@@ -32,6 +32,7 @@ urlpatterns =[
     # url(r'^administration/register/$',views.administration_save,name='administration_save'),
     #message url
     url(r'^(?P<sender_name>\w+)/message/$',views.message,name='message'),
+    url(r'^(?P<sender_name>\w+)/message/send/$',views.message_send_view,name='message'),
     #end of message url
     url(r'^sign/$', views.sign_in, name='sign'),
     url(r'^thankyou/$', views.thankyou, name=''),
