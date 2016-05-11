@@ -23,12 +23,15 @@
 		<div class="jumbotron">
 			<ul>
 				{% for p in prescriptions %}
-				<li>{{p.title}} | {{p.dosage}} | {{p.details}} 	
+				<li>{{p.title}} | {{p.dosage}} | {{p.details}}
 					<a href="/HealthNet/doctor/{{doctor}}/patients/{{patient.user_name}}/viewprescriptions/{{p.id}}/">
 						<button class="btn btn-danger">Delete</button>
 					</a>
 				</li>
 				{%endfor%}
+				<a href="/HealthNet/doctor/{{doctor}}/patients/">
+					<button style="width: 45%">Back</button>
+				</a>
 			</ul>
 		</div>
 	</div>
