@@ -62,6 +62,7 @@ urlpatterns =[
 
     #nurses
     url(r'^nurse/(?P<nurse_user_name>\w+)/$',views.nurse_profile,name='nurse_profile'),
-    url(r'^nurse/(?P<nurse_user_name>\w+)/edit/$',views.nurse_edit_profile,name='nurse_edit_profile')
+    url(r'^nurse/(?P<nurse_user_name>\w+)/edit/$',views.nurse_edit_profile,name='nurse_edit_profile'),
+    url(r'^nurse/(?P<nurse_user_name>\w+)/edit/nurse_edit/$',views.nurse_edit_profile_save,name='nurse_edit_profile_save')
 
 ]

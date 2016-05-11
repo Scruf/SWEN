@@ -1334,6 +1334,89 @@ def nurse_edit_profile(request,nurse_user_name):
         }
         log = Logs(date=timezone.now(),action="nurse editing profile",who_did=nurse_user_name,what_happened="Nurse editing his profile")
         log.save()
-        return HttpResponse(doctor_edit_template.render(context,request))
+        return HttpResponse(nurse_edit_template.render(context,request))
     except Nurse.DoesNotExist:
         return HttpResponse("Nurse Does Not exists");
+
+#doctor edit will validate and save doctor profile to database
+def nurse_edit_profile_save(request,nurse_user_name):
+    if request.method == 'POST':
+        user_name = request.POST.get('user_name',None)
+        if len(user_name ) < 4:
+            messages.add_message(request, messages.ERROR, 'Username too short')
+            return redirect( '/HealthNet/doctor/' + doctor_user_name + '/edit/',permanent=True)
+        try:
+            nurse = Nurse.objects.get(username=user_name)
+        except Nurse.DoesNotExist:
+            print ("good job")
+        except Nurse.MultipleObjectsReturned:
+            messages.add_message(request, messages.ERROR, 'Username is in use by someone else')
+            return redirect( '/HealthNet/nurse/' + nurse_user_name + '/edit/',permanent=True)
+        first_name = request.POST.get('first_name',None)
+        if len(first_name ) < 3:
+            messages.add_message(request, messages.ERROR, 'First name too short')
+            return redirect( '/HealthNet/nurse/' + nurse_user_name + '/edit/',permanent=True)
+        last_name = request.POST.get('last_name',None)
+        if len(last_name) < 3:
+            messages.add_message(request, messages.ERROR, 'Last name too short')
+            return redirect( '/HealthNet/nurse/' + nurse_user_name + '/edit/',permanent=True)
+        if first_name == last_name:
+            messages.add_message(request, messages.ERROR, 'First and last names cannot be equal')
+            return redirect( '/HealthNet/nurse/' + nurse_user_name + '/edit/',permanent=True)
+        if first_name == user_name or last_name == user_name:
+            messages.add_message(request, messages.ERROR, 'Username cannot be first or last name')
+            return redirect( '/HealthNet/nurse/' + nurse_user_name + '/edit/',permanent=True)
+        email = request.POST.get('email',None)
+        if not re.match(r'(\w+[.|\w])*@(\w+[.])*\w+', str(email)):
+            messages.add_message(request, messages.ERROR, 'Email is of invalid format')
+            return redirect( '/HealthNet/nurse/' + nurse_user_name + '/edit/',permanent=True)
+        cell_phone = request.POST.get('cell_phone',None)
+        if len(str(cell_phone.split("+")))<1 and str(cell_phone)[0] is not '1':
+            cell_phone = '1'+cell_phone
+            try:
+                 float(str(cell_phone.split("+")[1]))
+            except ValueError:
+                 messages.add_message(request, messages.ERROR, 'Phone number is of invalid format')
+                 return redirect( '/HealthNet/nurse/' + nurse_user_name + '/edit/',permanent=True)
+        elif cell_phone and len(cell_phone ) > 5:
+            if cell_phone[0] is '1':
+                cell_phone = '+'+cell_phone
+                try:
+                    float(str(cell_phone.split("+")[1]))
+                except ValueError:
+                    messages.add_message(request, messages.ERROR, 'Phone number is of invalid format')
+                    return redirect( '/HealthNet/nurse/' + nurse_user_name + '/edit/',permanent=True)
+            else:
+                try:
+                    cell_phone = request.POST.get('cell_phone',None)
+                except Patient.DoesNotExist:
+                    print ("Robert")
+                except Patient.MultipleObjectsReturned:
+                    messages.add_message(request, messages.ERROR, 'Phone number is of invalid format')
+                    return redirect( '/HealthNet/nurse/' + nurse_user_name + '/edit/',permanent=True)
+        else:
+            messages.add_message(request, messages.ERROR, 'Phone number is of invalid format')
+            return redirect( '/HealthNet/nurse/' + nurse_user_name + '/edit/',permanent=True)
+        password = request.POST.get('password',None)
+        passwordTryTwo = request.POST.get('confirm_password',None)
+        if password != passwordTryTwo:
+            messages.add_message(request, messages.ERROR, 'Passwords do not match')
+            return redirect( '/HealthNet/nurse/' + nurse_user_name + '/edit/',permanent=True)
+        try:
+            nurse = Nurse.objects.get(username=nurse_user_name)
+            nurse.username = user_name
+            nurse.first_name = first_name
+            nurse.last_name = last_name
+            nurse.email = email
+            nurse.cell_phone=cell_phone
+            nurse.password = password
+            nurse.save()
+            log = Logs(date=timezone.now(),action="Nurse edited his profile",who_did=user_name,what_happened="Nurse edited profile")
+            log.save()
+            return redirect('/HealthNet/nurse/%s'%nurse.username)
+        except Doctor.DoesNotExist:
+            log = Logs(date=timezone.now(),action="Nurse attempted to edit profile and failed",who_did=user_name,what_happened="Nurse failed in profile edit")
+            log.save()
+            return HttpResponse("Could not find Nurse")
+
+            
