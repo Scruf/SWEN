@@ -22,6 +22,7 @@ urlpatterns =[
     #url for apoitment modifications
     url(r'^(?P<user_name>\w+)/(?P<doctor_name>\w+)/(?P<apoitment_id>[0-9]+)/appoitment/views/$',views.apoitment_view,name='apoitment_view'),
     url(r'^(?P<user_name>\w+)/(?P<doctor_name>\w+)/(?P<apoitment_id>[0-9]+)/appoitment/views/edit/$',views.apoitment_view_edit,name='apoitment_view_edit'),
+    url(r'^(?P<user_name>\w+)/(?P<doctor_name>\w+)/(?P<apoitment_id>[0-9]+)/appoitment/views/delete/$',views.apoitment_view_edit_delete,name='apoitment_view_edit_delete'),
     url(r'^(?P<user_name>\w+)/(?P<doctor_name>\w+)/(?P<apoitment_id>[0-9]+)/appoitment/views/edit/submit/$',views.apoitment_view_edit_submit,name='apoitment_view_edit_submit'),
     #end of appoitment modifications
     # url(r'^administration/register/$',views.administration_save,name='administration_save'),
