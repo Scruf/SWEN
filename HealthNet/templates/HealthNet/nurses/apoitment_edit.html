@@ -1,64 +1,70 @@
-<style>
- table {
-    width:100%;
-}
-table, th, td {
-    border: 1px solid black;
-    border-collapse: collapse;
-}
-th, td {
-    padding: 5px;
-    text-align: left;
-}
-table#t01 tr:nth-child(even) {
-    background-color: #99ff99;
-}
-table#t01 tr:nth-child(odd) {
-   background-color:#00e6e6;
-}
-table#t01 th	{
-    background-color: #29a329;
-    color: white;
-}
-</style>
+<!DOCTYPE <!DOCTYPE html>
+<html>
 
-{% load staticfiles %}
-<link rel="stylesheet" type="text/css" href="{% static 'HealthNet/css/bootstrap.min.css'%}" />
+<head>
+	<link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous"> {% load staticfiles %}
+	<script src="https://code.jquery.com/jquery-2.2.3.min.js" integrity="sha256-a23g1Nt4dtEYOj7bR+vTu7+T8VP13humZFBJNIYoEJo=" crossorigin="anonymous"></script>
+	<title>Appointment Details</title>
+	<style type="text/css">
+		.jumbotron{
+			height: 400px;
+			width: 800px;
+			background-color: #18bc9c;
+            border-radius: 8px;
+		}
+		.appt_box{
+			background-color: white;
+			color: black;
+			border-radius: 8px;
+		}
 
-<link rel="stylesheet" type="text/css" href="{% static 'HealthNet/css/jumbotron.css' %}" />
 
-<link rel="stylesheet" type="text/css" href="{% static 'HealthNet/css/ie10-viewport-bug-workaround.css' %}" />
 
-<script src="{% static 'HealthNet/js/bootstrap.min.js'%} "></script>
+	</style>
 
-<script src="{% static 'HealthNet/js/ie10-viewport-bug-workaround.js'%}"></script>
+</head>
 
-<script src="{% static 'HealthNet/js/ie-emulation-modes-warning.js' %}"> </script>
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.0/jquery.min.js"></script>
-<h1>{{Normailized_Hospital_Name}}</h1>
-<table id="t01">
-  <tr>
-    <th>Date</th>
-    <th>Doctor</th>
-    <th>Reason</th>
-  </tr>
-  {% for ap in Appoitment_prop %}
-  <tr>
-
-    <td>{{ap.date}}</td>
-    <td>{{ap.doctor}}</td>
-    <td>{{ap.reason}}</td>
-    <th><button><a href="{{ap.id}}/">Edit</button></th>
-    {% if messages %}
-    <ul class="messages">
-        {% for message in messages %}
-        <li{% if message.tags %} class="{{ message.tags }}"
-              {% endif %}><font color="red">{{ message }}</li>
-        {% endfor %}
-    </ul>
-    {% endif %}
-  </tr>
-
-{%endfor%}
-</table>
-<br>
+<body>
+	<div class="container" style="margin-left: 25%;margin-top: 15%">
+	<div class="jumbotron">
+  <form method = "POST" action='submit/'>
+    {%csrf_token%}
+		<div class="row">
+			<div class="col-sm-1"></div>
+			<div class="col-sm-8">Your Appointment:</div>
+		</div>
+		<br><br>
+		<div class="row">
+			<div class="col-sm-1"></div>
+			<div class="col-sm-2">Date</div>
+			<div class="col-sm-8 appt_box">
+				<input type="date" class="form-control date" value="{{date}}" name="date">
+			</div>
+		</div>
+		<br><br>
+		<div class="row">
+			<div class="col-sm-1"></div>
+			<div class="col-sm-2">Time</div>
+			<div class="col-sm-8 appt_box">
+			     <input type="time" class="form-control" value="{{time}}" name="time">
+			</div>
+		</div>
+		<br><br>
+		<div class="row">
+			<div class="col-sm-1"></div>
+			<div class="col-sm-2">Details</div>
+			<div class="col-sm-8 appt_box">
+				<input type="text" class="form-control" value="{{reason}}" name="reason">
+			</div>
+		</div>
+		<br><br>
+		<div>
+			<div class="col-sm-1"></div>
+			<a href="submit"><button class="button btn-success" type="Submit">Save</button></a><!--modify the appointment-->
+      <a href="/HealthNet/nurse/{{nurse}}/"><button >Home</button><!--go home--></a>
+    </form>
+		</div>
+	</div>
+	</div>
+</body>
+</html>

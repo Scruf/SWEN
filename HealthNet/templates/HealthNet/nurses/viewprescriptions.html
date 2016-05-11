@@ -1,0 +1,28 @@
+<!DOCTYPE <!DOCTYPE html>
+<html lang="en">
+
+<head>
+	{%load staticfiles%}
+	  <link href="../../static/HealthNet/css/bootstrap.min.css" rel="stylesheet">
+		  <script src="{% static "HealthNet/js/jquery1.min.js" %}"></script>
+	<title></title>
+</head>
+
+<body>
+	<!--uses default colors; will style later-->
+	<div class="container">Prescriptions for {{patient.first_name}} {{patient.last_name}} {{patient.user_name}}
+		<table>
+			{% for p in prescriptions %}
+			<tr>
+				<td>{{p.title}}</td>
+				<td>{{p.dosage}}</td>
+        <td>{{p.details}}</td>
+			</tr>
+			{%endfor%}
+		</table>
+    <a href="/HealthNet/nurse/{{nurse}}/">
+      <button style="width: 100%">Home</button>
+    </a>
+	</div>
+</body>
+</html>
