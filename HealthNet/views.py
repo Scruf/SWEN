@@ -1604,3 +1604,15 @@ def nurse_view_prescriptions(request,nurse_user_name,user_name):
         }
 
         return HttpResponse(template.render(context,request))
+
+def patient_view_prescriptions(request,user_name):
+       template = loader.get_template('HealthNet/patientprescriptions/view_prescription.html')
+
+       patient = Patient.objects.get(user_name=user_name)
+       pres = patient.prescriptions.all()
+
+       context = {
+           'patient':patient,
+           'prescriptions':pres
+       }
+       return HttpResponse(template.render(context,request))

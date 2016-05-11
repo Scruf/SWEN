@@ -44,6 +44,7 @@ urlpatterns =[
     url(r'^(?P<user_name>\w+)/view/save/$', views.save_profile,name='save_profile'),
     url(r'^(?P<user_name>\w+)/appoitment/$',views.appoitment,name='appoitment'),
     url(r'^(?P<user_name>\w+)/appoitment/view/$',views.edit_apoitment,name='edit_apoitment'),
+    url(r'^(?P<user_name>\w+)/viewprescriptions/$',views.patient_view_prescriptions,name='view_prescriptions'),
 
 
     # url(r'^(?P<user_name>\w+)/appoitment/confirm/$',views.confirm_appoitment,name='confirm_appoitment'),
