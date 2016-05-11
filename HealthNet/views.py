@@ -1238,10 +1238,11 @@ def doctor_apoitments_view(request,doctor_user_name):
 def patient_pool_view(request,hospital_name,doctor_user_name,patient_uesr_name):
     patient = Patient.objects.get(user_name=patient_uesr_name)
     context = {
-        'patient':patient
+        'patient':patient,
+        'doctor':doctor_user_name
     }
     patient_template = loader.get_template('HealthNet/patient_view.html')
-    log = Logs(date=timezone.now(),action="Doctor viewed a patient in the patient pool",who_did=doctor_user_name,what_happened=doctor_user_name + " viewed " + patient_user_name + " at " + hospital_name)
+    log = Logs(date=timezone.now(),action="Doctor viewed a patient in the patient pool",who_did=doctor_user_name,what_happened=doctor_user_name + " viewed " + patient_uesr_name + " at " + hospital_name)
     log.save()
     return HttpResponse(patient_template.render(context,request))
 
