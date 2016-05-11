@@ -52,34 +52,143 @@ def doctor_names(request,doctor_name):
             return HttpResponse(data,'application/json')
     except Doctor.DoesNotExist:
         print("Some basd stuff")
+def api_messages_send(request):
+    if request.method == 'POST':
+
+        _sender = request.POST.get('sender')
+        _receiver = request.POST.get('to')
+        time_stamp = request.POST.get('time_stamp')
+        text_body = request.POST.get('text_body')
+        sending_person = ''
+        receiveing_person = ''
+        try:
+            sender = Patient.objects.get(user_name=_sender)
+            sending_person = 'Patient'
+        except Patient.DoesNotExist:
+            try:
+                sender = Doctor.objects.get(username=_sender)
+                sending_person = 'Doctor'
+            except Doctor.DoesNotExist:
+                try:
+                    sender = Nurse.objects.get(username=_sender)
+                    sending_person = 'Nurse'
+                except Nurse.DoesNotExist:
+                    print ("Maybe Admin")
+        try:
+            receiver = Patient.objects.get(user_name=_receiver)
+            receiveing_person = 'Patient'
+        except Patient.DoesNotExist:
+            try:
+                receiver = Doctor.objects.get(username=_receiver)
+                receiveing_person='Doctor'
+            except Doctor.DoesNotExist:
+                try:
+                    nurse = Nurse.objects.get(username=_receiver)
+                    receiveing_person='Nurse'
+                except Nurse.DoesNotExist:
+                    print ("Maybe Admin")
+        if sending_person=='Doctor' and receiveing_person=='Doctor':
+            sender_message = Messages(sender=_sender,receiver=_receiver,text_body=text_body)
+            
+            print _receiver
+        return HttpResponse("WOPOPO")
 def api_messages(request,user_name):
     try:
         patient = Patient.objects.get(user_name=user_name)
         hospital = Hospital.objects.get(hospital_name=patient.hospital_name)
         hospital_stuff = []
-        for doctor in doctors.all():
+        for doctor in hospital.doctors.all():
             doctor_data = {
                 'error':False,
                 'area':'Doctor',
+                'sender':'patient',
+                'user_name':str(doctor.username),
                 'name':str(doctor.first_name+" "+doctor.last_name)
             }
             hospital_stuff.append(doctor_data)
-        for nurse in nurses.all():
+        for nurse in hospital.nurses.all():
             nurse_data = {
                 'error':False,
                 'area':'Nurse',
+                'sender':'patient',
+                'user_name':str(nurse.username),
                 'name':str(nurse.first_name+" "+nurse.last_name)
             }
             hospital_stuff.append(nurse_data)
             if request.is_ajax():
+                print hospital_stuff
                 data = json.dumps(hospital_stuff)
                 return HttpResponse(data,'application/json')
     except Patient.DoesNotExist:
         try:
             doctor = Doctor.objects.get(username=user_name)
+            hospital = Hospital.objects.get(hospital_name=doctor.hospital_name)
+            hospital_stuff = []
+            for patient in hospital.patients_list.all():
+                patient_data = {
+                    'error':False,
+                    'area':'Patient',
+                    'sender':'Doctor',
+                    'user_name':str(patient.user_name),
+                    'name':str(patient.first_name)+" "+str(patient.last_name)
+                }
+                hospital_stuff.append(patient_data)
+            for nurse in hospital.nurses.all():
+                nurse_data ={
+                    'error':False,
+                    'area':'Nurse',
+                    'sender':'Doctor',
+                    'user_name':str(nurse.username),
+                    'name':str(nurse.first_name)+" "+str(nurse.last_name)
+                }
+                hospital_stuff.append(nurse_data)
+            for doctor in hospital.doctors.all():
+                doctor_data = {
+                    'error':False,
+                    'area':'Doctor',
+                    'sender':'Doctor',
+                    'user_name':str(doctor.username),
+                    'name':str(doctor.first_name)+" "+str(doctor.last_name)
+                }
+                hospital_stuff.append(doctor_data)
+            if request.is_ajax():
+                data = json.dumps(hospital_stuff)
+                return HttpResponse(data,'application/json')
         except Doctor.DoesNotExist:
             try:
                 nurse = Nurse.objects.get(username=user_name)
+                hospital = Hospital.objects.get(hospital_name=nurse.hospital_name)
+                hospital_stuff = []
+                for patient in hospital.patients_list.all():
+                    patient_data = {
+                        'error':False,
+                        'area':'Patient',
+                        'sender':'Doctor',
+                        'user_name':str(patient.user_name),
+                        'name':str(patient.first_name)+" "+str(patient.last_name)
+                    }
+                    hospital_stuff.append(patient_data)
+                for nurse in hospital.nurses.all():
+                    nurse_data ={
+                        'error':False,
+                        'area':'Nurse',
+                        'sender':'Doctor',
+                        'user_name':str(nurse.username),
+                        'name':str(nurse.first_name)+" "+str(nurse.last_name)
+                    }
+                    hospital_stuff.append(nurse_data)
+                for doctor in hospital.doctors.all():
+                    doctor_data = {
+                        'error':False,
+                        'area':'Doctor',
+                        'sender':'Doctor',
+                        'user_name':str(doctor.username),
+                        'name':str(doctor.first_name)+" "+str(doctor.last_name)
+                    }
+                    hospital_stuff.append(doctor_data)
+                if request.is_ajax():
+                    data = json.dumps(hospital_stuff)
+                    return HttpResponse(data,'application/json')
             except Nurse.DoesNotExist:
                 error_message = []
                 data = {

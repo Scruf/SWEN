@@ -29,7 +29,7 @@ class Messages(models.Model):
     sender = models.CharField(max_length=250)
     receiver = models.CharField(max_length=250)
     text_body = models.CharField(max_length=500)
-    time_stamp = models.DateTimeField()
+    time_stamp = models.CharField(max_length=250)
 
 
 
