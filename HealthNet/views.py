@@ -588,6 +588,7 @@ def apoitment_view(request,user_name,doctor_name,apoitment_id):
     time = hour+":"+minute
 
     context = {
+        'user_name':user_name,
         'date':full_date,
         'time':time,
         'reason':apoitment.reason
@@ -640,21 +641,6 @@ def apoitment_view_edit_submit(request,user_name,doctor_name,apoitment_id):
         date_to_compare = datetime.datetime(year,month,day,hour,minute)
         user_apoitment = Patient.objects.get(user_name=user_name)
         doctor = Doctor.objects.get(username=doctor_name)
-<<<<<<< HEAD
-        patient_apoitment = None
-        for patient_ap in user_apoitment.appointments.all():
-            if patient_ap.date.year == year and patient_ap.date.month==month \
-                and patient_ap.date.day==day and patient_ap.date.hour == hour and patient_ap.date.minute == minute:
-                apoitment = patient_ap
-
-        doctor_apoitment = None
-        for patient_ap in doctor.apoitment_list.all():
-            if patient_ap.date.year == year and patient_ap.date.month==month \
-                and patient_ap.date.day==day and patient_ap.date.hour == hour and patient_ap.date.minute == minute:
-                doctor_apoitment = patient_ap
-
-    return HttpResponse("You edited")
-=======
         patient_apoitment = Apoitment.objects.get(id=apoitment_id)
         doctor_apoitment_id = 0
         for doctor_ap in Doctor.objects.get(username=doctor_name).apoitment_list.all():
@@ -676,7 +662,20 @@ def apoitment_view_edit_submit(request,user_name,doctor_name,apoitment_id):
         patient.appointments.add(patient_new_apoitment)
         patient.save()
         return redirect('/HealthNet/%s'%user_name)
->>>>>>> 7df8dfee6e35ca3a9ffaeab65bb508f0e5b5425a
+
+def apoitment_view_edit_delete(request,user_name,doctor_name,apoitment_id):
+    patient_apoitment = Apoitment.objects.get(id=apoitment_id)
+    doctor_apoitment_id = 0
+    for doc_ap in Doctor.objects.get(username=doctor_name).apoitment_list.all():
+        if patient_apoitment.date == doc_ap.date:
+            doctor_apoitment_id = doc_ap.id
+    doctor_apoitment = Apoitment.objects.get(id=doctor_apoitment_id)
+    patient_apoitment.delete()
+    doctor_apoitment.delete()
+    patient_apoitment.save()
+    doctor_apoitment.save()
+    return redirect('/HealthNet/%s'%user_name)
+
 #end of appointments
 def profile_edit(request,user_name):
     try:
@@ -872,7 +871,7 @@ def appoitment(request,user_name):
     try:
         doctor = Doctor.objects.get(username=patient._doctor)
     except Doctor.DoesNotExist:
-        return redirect("/HealthNet/"+user_name+"/",permentant=True)    
+        return redirect("/HealthNet/"+user_name+"/",permentant=True)
     hospital = Hospital.objects.get(hospital_name=doctor.hospital_name)
     hospitl_list = []
     for hosp in hospital.doctors.all():
