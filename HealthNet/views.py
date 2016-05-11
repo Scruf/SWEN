@@ -52,7 +52,41 @@ def doctor_names(request,doctor_name):
             return HttpResponse(data,'application/json')
     except Doctor.DoesNotExist:
         print("Some basd stuff")
-
+def api_messages(request,user_name):
+    try:
+        patient = Patient.objects.get(user_name=user_name)
+        hospital = Hospital.objects.get(hospital_name=patient.hospital_name)
+        hospital_stuff = []
+        for doctor in doctors.all():
+            doctor_data = {
+                'error':False,
+                'area':'Doctor',
+                'name':str(doctor.first_name+" "+doctor.last_name)
+            }
+            hospital_stuff.append(doctor_data)
+        for nurse in nurses.all():
+            nurse_data = {
+                'error':False,
+                'area':'Nurse',
+                'name':str(nurse.first_name+" "+nurse.last_name)
+            }
+            hospital_stuff.append(nurse_data)
+            if request.is_ajax():
+                data = json.dumps(hospital_stuff)
+                return HttpResponse(data,'application/json')
+    except Patient.DoesNotExist:
+        try:
+            doctor = Doctor.objects.get(username=user_name)
+        except Doctor.DoesNotExist:
+            try:
+                nurse = Nurse.objects.get(username=user_name)
+            except Nurse.DoesNotExist:
+                error_message = []
+                data = {
+                    'error':True,
+                    'body':'Unknown User'
+                }
+    return HttpResponse("Woo")
 #date must be submittied in a form YYYYMMDD
 def check_fo_time(request,doctor_name,apoitment_date):
     try:
@@ -127,7 +161,11 @@ def message(request,sender_name):
     return HttpResponse(message_template.render(context,request))
 
 def message_send_view(request,sender_name):
-    return HttpResponse("Sending message")
+    message_template = loader.get_template('HealthNet/messages.html')
+    context = {
+        'sender':sender_name
+    }
+    return HttpResponse(message_template.render(context,request))
 
 #end of messages
 

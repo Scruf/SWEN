@@ -11,6 +11,7 @@ urlpatterns =[
     url(r'^api/apoitment/(?P<doctor_name>\w+)/(?P<apoitment_date>\w+)/$',views.check_fo_time,name='check_for_time'),
     url(r'^api/doctor_names/(?P<doctor_name>\w+)/$', views.doctor_names,name='doctor_names'),
     url(r'^api/appoitment/submit/$',views.apoitment_submit,name='apoitment_submit'),
+    url(r'^api/message/(?P<user_name>\w+)/view/$',views.api_messages,name='api_messages'),
     #end of apis
     url(r'^administration/$', views.administration,name='administration'),
     url(r'^administration/(?P<admin_name>\w+)/create/$',views.admin_create,name='admin_create'),
