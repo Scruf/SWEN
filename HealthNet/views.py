@@ -379,7 +379,6 @@ def thankyou(request):
             return redirect('/HealthNet/doctor/%s'%doctor.username)
         except Doctor.DoesNotExist:
             try:
-                print("opps")
                 t = Patient.objects.get(email=email,password=password)
                 context ={
                     'user_name':email,
@@ -394,9 +393,24 @@ def thankyou(request):
                 log.save()
                 return redirect('/HealthNet/%s'%user_name,None)
             except Patient.DoesNotExist:
-                log = Logs(date=timezone.now(),action="A user failed to log in",who_did=email,what_happened="User attempted to log into the system")
-                log.save()
-                return redirect('/HealthNet/')
+                try:
+                    t = Nurse.objects.get(email=email,password=password)
+                    context ={
+                        'user_name':email,
+                    }
+                    user_name = Nurse.objects.get(email=email,password=password).username
+                    log = Logs(date=timezone.now(),action="Sign In",who_did=user_name,what_happened="A user of the system logged in")
+                    log.save()
+                    user_context = {
+                        'user_name':user_name,
+                    }
+                    log = Logs(date=timezone.now(),action="Nurse logged in",who_did=email,what_happened="Nurse logged into the system")
+                    log.save()
+                    return redirect('/HealthNet/nurse/%s'%user_name,None)
+                except Nurse.DoesNotExist:
+                    log = Logs(date=timezone.now(),action="A user failed to log in",who_did=email,what_happened="User attempted to log into the system")
+                    log.save()
+                    return redirect('/HealthNet/')
 
 #signup prompts the user to sign up with their name and contact information and to provide
 #a unique username and password for their account
@@ -1287,3 +1301,36 @@ def statistics(request,admin_name):
     template = loader.get_template('HealthNet/statistics.html')#this doesn't exist yet
 
     return HttpResponse(template.render(context,request))
+
+
+#all the nurse stuff
+#loading doctor profile
+def nurse_profile(request,nurse_user_name):
+    nurse_template = loader.get_template('HealthNet/nurses/profile.html')
+    nurse = Nurse.objects.get(username=nurse_user_name)
+    hospital_name = nurse.hospital_name
+    context = {
+        'nurse':nurse,
+        'hospital_name':hospital_name,
+        'patient_list':patients,
+        #'apoitments':apoitment_list,
+        #'count':count
+    }
+    logs = Logs(date=timezone.now(),action=nurse_user_name + " loaded profile",who_did="%s"%nurse_user_name)
+    logs.save()
+
+    return HttpResponse(nurse_template.render(context,request))
+
+#doctor edit will load the template with doctors details to be edited
+def nurse_edit_profile(request,nurse_user_name):
+    nurse_edit_template = loader.get_template('HealthNet/nurses/nurse_edit.html')
+    try:
+        nurse = Nurse.objects.get(username=nurse_user_name)
+        context = {
+            'nurse':nurse
+        }
+        log = Logs(date=timezone.now(),action="nurse editing profile",who_did=nurse_user_name,what_happened="Nurse editing his profile")
+        log.save()
+        return HttpResponse(doctor_edit_template.render(context,request))
+    except Nurse.DoesNotExist:
+        return HttpResponse("Nurse Does Not exists");
