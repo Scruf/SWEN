@@ -45,6 +45,7 @@ urlpatterns =[
     url(r'^(?P<user_name>\w+)/view/save/$', views.save_profile,name='save_profile'),
     url(r'^(?P<user_name>\w+)/appoitment/$',views.appoitment,name='appoitment'),
     url(r'^(?P<user_name>\w+)/appoitment/view/$',views.edit_apoitment,name='edit_apoitment'),
+    url(r'^(?P<user_name>\w+)/viewprescriptions/$',views.patient_view_prescriptions,name='view_prescriptions'),
 
 
     # url(r'^(?P<user_name>\w+)/appoitment/confirm/$',views.confirm_appoitment,name='confirm_appoitment'),
@@ -69,5 +70,6 @@ urlpatterns =[
     url(r'^nurse/(?P<nurse_user_name>\w+)/edit/nurse_edit/$',views.nurse_edit_profile_save,name='nurse_edit_profile_save'),
     url(r'^nurse/(?P<nurse_user_name>\w+)/(?P<user_name>\w+)/(?P<apoitment_id>[0-9]+)/appoitment/view/$',views.nurse_apoitment_view,name='nurse_apoitment_view'),
     url(r'^nurse/(?P<nurse_user_name>\w+)/(?P<user_name>\w+)/(?P<apoitment_id>[0-9]+)/appoitment/view/edit/$',views.nurse_apoitment_view_edit,name='nurse_apoitment_view_edit'),
-    url(r'^nurse/(?P<nurse_user_name>\w+)/(?P<user_name>\w+)/(?P<apoitment_id>[0-9]+)/appoitment/view/edit/submit/$',views.nurse_apoitment_view_edit_submit,name='nurse_apoitment_view_edit_submit')
+    url(r'^nurse/(?P<nurse_user_name>\w+)/(?P<user_name>\w+)/(?P<apoitment_id>[0-9]+)/appoitment/view/edit/submit/$',views.nurse_apoitment_view_edit_submit,name='nurse_apoitment_view_edit_submit'),
+    url(r'^nurse/(?P<nurse_user_name>\w+)/(?P<user_name>\w+)/viewprescriptions/',views.nurse_view_prescriptions,name='nurse_view_prescriptions')
 ]

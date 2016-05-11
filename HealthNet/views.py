@@ -1481,6 +1481,7 @@ def nurse_profile(request,nurse_user_name):
         hour = str(apoitment.date.hour)
         minute = str(apoitment.date.minute)
         date = {
+            'url':str('/HealthNet/nurse/'+nurse_user_name+'/'+ patient.user_name +'/'+str(apoitment.id)+'/appoitment/view/'),
             'start':year+"-"+month+"-"+day+" "+hour+":"+minute,
             'title':str(apoitment.reason)
             }
@@ -1594,7 +1595,7 @@ def nurse_edit_profile_save(request,nurse_user_name):
             return HttpResponse("Could not find Nurse")
 
 def nurse_apoitment_view(request,nurse_user_name,user_name,apoitment_id):
-    nurse_appoitment_template = loader.get_template('HealthNet/nurses/nurse_appoitment_details.html')
+    nurse_appoitment_template = loader.get_template('HealthNet/nurses/nurse_appointment_details.html')
     apoitment = Apoitment.objects.get(id=apoitment_id)
     year = str(apoitment.date.year)
     month = str(apoitment.date.month)
@@ -1631,7 +1632,8 @@ def nurse_apoitment_view_edit(request,user_name,nurse_user_name,apoitment_id):
     context = {
         'date':full_date,
         'time':time,
-        'reason':apoitment.reason
+        'reason':apoitment.reason,
+        'nurse':nurse_user_name
     }
     return HttpResponse(apoitment_edit_template.render(context,request))
 
@@ -1695,3 +1697,31 @@ def nurse_apoitment_view_edit_submit(request,user_name,nurse_user_name,apoitment
         except year is None or month is None or day is None:
             messages.add_message(request, messages.ERROR, 'Please enter a valid time')
             return redirect('/HealthNet/'+ nurse + '/' + nurse_user_name + '/' + user_name + '/' + apoitment_id+'/appoitment/views/edit/',permement=True)
+
+
+def nurse_view_prescriptions(request,nurse_user_name,user_name):
+        template = loader.get_template('HealthNet/nurses/viewprescriptions.html')
+
+        patient = Patient.objects.get(user_name=user_name)
+        pres = patient.prescriptions.all()
+
+        nurse = Nurse.objects.get(username=nurse_user_name)
+        context = {
+            'prescriptions':pres,
+            'patient':patient,
+            'nurse':nurse.username
+        }
+
+        return HttpResponse(template.render(context,request))
+
+def patient_view_prescriptions(request,user_name):
+       template = loader.get_template('HealthNet/patientprescriptions/view_prescription.html')
+
+       patient = Patient.objects.get(user_name=user_name)
+       pres = patient.prescriptions.all()
+
+       context = {
+           'patient':patient,
+           'prescriptions':pres
+       }
+       return HttpResponse(template.render(context,request))

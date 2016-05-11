@@ -198,11 +198,14 @@
                                 <a href="#" class="list-group-item">
                                     <i class="fa fa-comment fa-fw"></i> {{p.first_name}} {{p.last_name}}
                                 </a>
+                                <a href="/HealthNet/nurse/{{nurse.username}}/{{p.user_name}}/viewprescriptions/">
+                      						<button style="width: 45%">View Prescriptions</button>
+                      				 	</a>
                                 {%endfor%}
 
                             </div>
                             <!-- /.list-group -->
-                            <a href="/HealthNet/nurse/{{nurse.username}}/patients/" class="btn btn-default btn-block">View Patient List</a>
+
                         </div>
                         <!-- /.panel-body -->
                     </div>
