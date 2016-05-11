@@ -50,6 +50,14 @@ table#t01 th	{
     <td>{{ap.reason}}</td>
     <th><button><a href="{{ap.id}}/">Edit</button></th>
     <th><button><a href="/HealthNet/{{p.patient_user_name}}">Delete</a></button></th>
+    {% if messages %}
+    <ul class="messages">
+        {% for message in messages %}
+        <li{% if message.tags %} class="{{ message.tags }}"
+              {% endif %}><font color="red">{{ message }}</li>
+        {% endfor %}
+    </ul>
+    {% endif %}
   </tr>
 
 {%endfor%}

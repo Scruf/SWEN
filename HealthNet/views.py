@@ -624,59 +624,61 @@ def apoitment_view_edit_submit(request,user_name,doctor_name,apoitment_id):
         old_apoitment = Apoitment.objects.get(id=apoitment_id)
         current_date = datetime.datetime.now()
         submit_date = request.POST.get('date',None)
-        year = int(submit_date.split("-")[0])
-        month = int(submit_date.split("-")[1])
-        day = int(submit_date.split("-")[2])
-        date_to_compare = datetime.datetime(year,month,day)
-        if date_to_compare<current_date:
-            return HttpResponse("Cannot Schedule apoitment in past")
-        if year>date_to_compare.year:
-            return HttpResponse("Cannot schedule apoitent in the future")
-        #update for doctor first
-        time = request.POST.get('time',None)
-        reason = request.POST.get('reason',None)
-        hour = int(time.split(":")[0])
-        minute = int(time.split(":")[1])
-        date_to_compare = datetime.datetime(year,month,day,hour,minute)
-        user_apoitment = Patient.objects.get(user_name=user_name)
-        doctor = Doctor.objects.get(username=doctor_name)
-<<<<<<< HEAD
-        patient_apoitment = None
-        for patient_ap in user_apoitment.appointments.all():
-            if patient_ap.date.year == year and patient_ap.date.month==month \
-                and patient_ap.date.day==day and patient_ap.date.hour == hour and patient_ap.date.minute == minute:
-                apoitment = patient_ap
+        try:
+            year = int(submit_date.split("-")[0])
+            month = int(submit_date.split("-")[1])
+            day = int(submit_date.split("-")[2])
+            date_to_compare = datetime.datetime(year,month,day)
+            if date_to_compare<current_date:
+                messages.add_message(request, messages.ERROR, 'You cannot make an appointment in the past')
+                return redirect('/HealthNet/'+ user_name + '/' + doctor_name + '/' + apoitment_id+'/appoitment/views/edit/',permement=True)
+            if year>date_to_compare.year:
+                messages.add_message(request, messages.ERROR, 'Cannot Schedule this far in the future')
+                return redirect('/HealthNet/'+ user_name + '/' + doctor_name + '/' + apoitment_id+'/appoitment/views/edit/',permement=True)
+            #update for doctor first
+            try:
+                time = request.POST.get('time',None)
+                hour = int(time.split(":")[0])
+                minute = int(time.split(":")[1])
+            except time is None:
+                messages.add_message(request, messages.ERROR, 'Please enter a valid time')
+                return redirect('/HealthNet/'+ user_name + '/' + doctor_name + '/' + apoitment_id+'/appoitment/views/edit/',permement=True)
+            try:
+                reason = request.POST.get('reason',None)
+            except len(reason) is 0:
+                messages.add_message(request, messages.ERROR, 'Please enter a reason')
+                return redirect('/HealthNet/'+ user_name + '/' + doctor_name + '/' + apoitment_id+'/appoitment/views/edit/',permement=True)
+            date_to_compare = datetime.datetime(year,month,day,hour,minute)
+            user_apoitment = Patient.objects.get(user_name=user_name)
+            doctor = Doctor.objects.get(username=doctor_name)
+            patient_apoitment = Apoitment.objects.get(id=apoitment_id)
+            doctor_apoitment_id = 0
+            for doctor_ap in Doctor.objects.get(username=doctor_name).apoitment_list.all():
+                if doctor_ap.date == patient_apoitment.date:
+                    doctor_apoitment_id = doctor_ap.id
+            doctor_apoitment = Apoitment.objects.get(id=doctor_apoitment_id)
+            patient_apoitment.delete()
+            doctor_apoitment.delete()
+            patient_apoitment.save()
+            doctor_apoitment.save()
+            doctor_new_apoitment = Apoitment(date=date_to_compare,name=user_name,reason=reason)
+            doctor_new_apoitment.save()
+            doctor = Doctor.objects.get(username=doctor_name)
+            doctor.apoitment_list.add(doctor_new_apoitment)
+            doctor.save()
 
-        doctor_apoitment = None
-        for patient_ap in doctor.apoitment_list.all():
-            if patient_ap.date.year == year and patient_ap.date.month==month \
-                and patient_ap.date.day==day and patient_ap.date.hour == hour and patient_ap.date.minute == minute:
-                doctor_apoitment = patient_ap
 
-    return HttpResponse("You edited")
-=======
-        patient_apoitment = Apoitment.objects.get(id=apoitment_id)
-        doctor_apoitment_id = 0
-        for doctor_ap in Doctor.objects.get(username=doctor_name).apoitment_list.all():
-            if doctor_ap.date == patient_apoitment.date:
-                doctor_apoitment_id = doctor_ap.id
-        doctor_apoitment = Apoitment.objects.get(id=doctor_apoitment_id)
-        patient_apoitment.delete()
-        doctor_apoitment.delete()
-        patient_apoitment.save()
-        doctor_apoitment.save()
-        doctor_new_apoitment = Apoitment(date=date_to_compare,name=user_name,reason=reason)
-        doctor_new_apoitment.save()
-        doctor = Doctor.objects.get(username=doctor_name)
-        doctor.apoitment_list.add(doctor_new_apoitment)
-        doctor.save()
-        patient_new_apoitment = Apoitment(date=date_to_compare,name=doctor_name,reason=reason)
-        patient_new_apoitment.save()
-        patient = Patient.objects.get(user_name=user_name)
-        patient.appointments.add(patient_new_apoitment)
-        patient.save()
-        return redirect('/HealthNet/%s'%user_name)
->>>>>>> 7df8dfee6e35ca3a9ffaeab65bb508f0e5b5425a
+            patient_new_apoitment = Apoitment(date=date_to_compare,name=doctor_name,reason=reason)
+            patient_new_apoitment.save()
+            patient = Patient.objects.get(user_name=user_name)
+            patient.appointments.add(patient_new_apoitment)
+            patient.save()
+
+            return redirect('/HealthNet/%s'%user_name)
+        except year is None or month is None or day is None:
+            messages.add_message(request, messages.ERROR, 'Please enter a valid time')
+            return redirect('/HealthNet/'+ user_name + '/' + doctor_name + '/' + apoitment_id+'/appoitment/views/edit/',permement=True)
+
 #end of appointments
 def profile_edit(request,user_name):
     try:
@@ -872,7 +874,7 @@ def appoitment(request,user_name):
     try:
         doctor = Doctor.objects.get(username=patient._doctor)
     except Doctor.DoesNotExist:
-        return redirect("/HealthNet/"+user_name+"/",permentant=True)    
+        return redirect("/HealthNet/"+user_name+"/",permentant=True)
     hospital = Hospital.objects.get(hospital_name=doctor.hospital_name)
     hospitl_list = []
     for hosp in hospital.doctors.all():
