@@ -1005,6 +1005,19 @@ def doctor_apoitment_view_edit_submit(request,doctor_name,user_name,apoitment_id
         patient.appointments.add(patient_new_apoitment)
         patient.save()
         return redirect('/HealthNet/doctor/%s'%doctor_name)
+
+def doctor_apoitment_view_delete(request,doctor_name,user_name,apoitment_id):
+    doctor_apoitment = Apoitment.objects.get(id=apoitment_id)
+    patient_apoitment_id = 0
+    for patient_ap in Patient.objects.get(user_name=user_name).appointments.all():
+        if patient_ap.date == doctor_apoitment.date:
+            patient_apoitment_id = patient_ap.id
+    patient_apoitment = Apoitment.objects.get(id=patient_apoitment_id)
+    patient_apoitment.delete()
+    doctor_apoitment.delete()
+    patient_apoitment.save()
+    doctor_apoitment.save()
+    return redirect('/HealthNet/doctor/%s'%doctor_name)
 #loading appointment page
 
 def appoitment(request,user_name):
@@ -1029,7 +1042,6 @@ def appoitment(request,user_name):
         'hospital_list':hospitl_list
     }
     return HttpResponse(appoitment_template.render(context,request))
-
 
 
 
