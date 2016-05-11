@@ -1317,12 +1317,34 @@ def statistics(request,admin_name):
 def nurse_profile(request,nurse_user_name):
     nurse_template = loader.get_template('HealthNet/nurses/profile.html')
     nurse = Nurse.objects.get(username=nurse_user_name)
-    hospital_name = nurse.hospital_name
+
+    print nurse.hospital_name
+    patients = []
+    hospital = Hospital.objects.get(hospital_name=nurse.hospital_name)
+    for patient in hospital.patients_list.all():
+        patients.append(patient)
+    patient_appoitment = []
+    for patient in patients:
+        for apoitment in patient.appointments.all():
+            patient_appoitment.append(apoitment)
+    apoitment_list = []
+    for apoitment in patient_appoitment:
+        year = str(apoitment.date.year)
+        month = str(apoitment.date.month)
+        day = str(apoitment.date.day)
+        hour = str(apoitment.date.hour)
+        minute = str(apoitment.date.minute)
+        date = {
+            'start':year+"-"+month+"-"+day+" "+hour+":"+minute,
+            'title':str(apoitment.reason)
+            }
+        apoitment_list.append(date)
+
     context = {
         'nurse':nurse,
-        'hospital_name':hospital_name,
+        'hospital_name':nurse.hospital_name,
         'patient_list':patients,
-        #'apoitments':apoitment_list,
+        'apoitments':apoitment_list
         #'count':count
     }
     logs = Logs(date=timezone.now(),action=nurse_user_name + " loaded profile",who_did="%s"%nurse_user_name)
