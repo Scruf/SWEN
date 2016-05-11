@@ -62,6 +62,7 @@ urlpatterns =[
     url(r'^doctor/(?P<doctor_user_name>\w+)/patients/(?P<patient_uesr_name>\w+)/add/confirm/$',views.addPrescription,name='addPrescription'),
     url(r'^doctor/(?P<doctor_user_name>\w+)/patients/(?P<patient_uesr_name>\w+)/viewprescriptions/$',views.viewPrescriptions,name='viewprescriptions'),
     url(r'^doctor/(?P<doctor_user_name>\w+)/patients/(?P<patient_uesr_name>\w+)/viewprescriptions/(?P<medicine_id>[0-9]+)/$',views.deletePrescription,name='deleteprescription'),
+    url(r'^doctor/(?P<doctor_user_name>\w+)/(?P<user_name>\w+)/discharge/',views.discharge,name='discharge'),
     #urls for doctors go above
 
     #nurses

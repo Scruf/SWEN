@@ -89,7 +89,7 @@ def api_messages_send(request):
                     print ("Maybe Admin")
         if sending_person=='Doctor' and receiveing_person=='Doctor':
             sender_message = Messages(sender=_sender,receiver=_receiver,text_body=text_body)
-            
+
             print _receiver
         return HttpResponse("WOPOPO")
 def api_messages(request,user_name):
@@ -1726,3 +1726,16 @@ def patient_view_prescriptions(request,user_name):
            'prescriptions':pres
        }
        return HttpResponse(template.render(context,request))
+
+
+def discharge(request,doctor_user_name,user_name):
+    hospital = Patient.objects.get(user_name=user_name).hospital_name
+    doctor = Doctor.objects.get(username=doctor_user_name)
+    patient = Patient.objects.get(user_name)
+
+    #removing from hospital and from doctor list
+    patientid = patient.id
+    Patients.objects.get(id=patientid).delete()
+
+
+    return redirect('/HealthNet/doctor/' + doctor_user_name + '/',permentent=True)
