@@ -1842,11 +1842,15 @@ def patient_view_prescriptions(request,user_name):
 def discharge(request,doctor_user_name,user_name):
     hospital = Patient.objects.get(user_name=user_name).hospital_name
     doctor = Doctor.objects.get(username=doctor_user_name)
-    patient = Patient.objects.get(user_name)
-
+    patient = Patient.objects.get(user_name=user_name)
+    patient.delete()
+    for apoitment in Apoitment.objects.all():
+        if apoitment.name == user_name:
+            apoitment.delete()
+            apoitment.save()
+    patient.save()
     #removing from hospital and from doctor list
-    patientid = patient.id
-    Patients.objects.get(id=patientid).delete()
+ 
 
 
     return redirect('/HealthNet/doctor/' + doctor_user_name + '/',permentent=True)
